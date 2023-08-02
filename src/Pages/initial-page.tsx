@@ -6,7 +6,7 @@ export function InitialPage () {
     const navigate = useNavigate()
     return (<div className={"page"}>
         <div className={"modal"}>
-            <Button>Website</Button>
+            <Button onClick={()=> {navigate('/admin')}}>Website</Button>
             <Button onClick={()=> {navigate('/app')}}>App</Button>
         </div>
 

@@ -1,11 +1,12 @@
 import {ConfigInput} from "../components/config-input";
-import {Button, Input} from "@mui/material";
+import {Button, Input, Select} from "@mui/material";
 import {useNavigate} from "react-router";
 import {useContext, useEffect, useState} from "react";
 import {doc, getDoc, updateDoc} from "firebase/firestore";
 import {MainContext} from "../contexts";
-import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {storage} from "../App";
+import {Preview} from "./admin";
 
 
 export interface Product {
@@ -14,7 +15,8 @@ export interface Product {
     adress: string,
     email: string,
     phoneNumber: string,
-    unlockcode: string
+    unlockcode: string,
+    preview: Preview
 
 }
 
@@ -54,7 +56,8 @@ export function ManageDevice() {
         adress: "",
         email: "",
         phoneNumber: "",
-        unlockcode: ""
+        unlockcode: "",
+        preview: Preview.BUSINESS_CARD
     })
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>)
     const {db} = useContext(MainContext)

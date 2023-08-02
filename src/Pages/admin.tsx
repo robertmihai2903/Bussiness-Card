@@ -5,6 +5,10 @@ import {useContext, useEffect, useState} from "react";
 import {MainContext} from "../contexts";
 import {doc, setDoc, addDoc, collection, query, where, getDocs} from "firebase/firestore";
 
+export enum Preview {
+    BUSINESS_CARD = 'business_card',
+    CUSTOM_LINK = 'custom_link'
+}
 
 const random_hex_code = () => {
     let n = (Math.random() * 0xfffff * 1000000).toString(16);
@@ -23,7 +27,8 @@ export function AdminPage() {
             await addDoc(collection(db, 'products'), {
                 activated: false,
                 unlockCode: hexCode,
-                name:"New Product"
+                name: "New Product",
+                preview: Preview.BUSINESS_CARD
             })
         }
 

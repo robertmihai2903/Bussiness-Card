@@ -1,4 +1,3 @@
-import {ConfigInput} from "../components/config-input";
 import {Button} from "@mui/material";
 import {useNavigate} from "react-router";
 import {useContext, useEffect, useState} from "react";
@@ -7,6 +6,7 @@ import {Product} from "./manage-device";
 import {MainContext} from "../contexts";
 import {getDownloadURL, ref} from "firebase/storage";
 import {storage} from "../App";
+import {Preview} from "./admin";
 
 export function ShowProduct() {
     const navigate = useNavigate()
@@ -16,7 +16,8 @@ export function ShowProduct() {
         adress: "",
         email: "",
         phoneNumber: "",
-        unlockcode: ""
+        unlockcode: "",
+        preview: Preview.BUSINESS_CARD
     })
     const urlParams = new URLSearchParams(window.location.search)
     const productId = urlParams.get('product_id')
@@ -28,8 +29,12 @@ export function ShowProduct() {
                 const productRef = doc(db, 'products', productId)
                 const docSnap = await getDoc(productRef);
                 if (docSnap.exists()) {
-                    if (!docSnap.data().activated) navigate('/app')
+                    if (!docSnap.data().activated) {
+                        navigate('/app')
+                    }
                     setProduct({...docSnap.data() as Product})
+                } else {
+                    navigate('/app')
                 }
             }
         })()
@@ -39,11 +44,17 @@ export function ShowProduct() {
         const documentRef = ref(storage, `documents/${productId}` )
         getDownloadURL(documentRef)
             .then(url => {
-                console.log('url')
+                console.log(url);
+                // This can be downloaded directly:
                 const xhr = new XMLHttpRequest();
                 xhr.responseType = 'blob';
-                xhr.onload = (event) => {
+                xhr.onload = function () {
                     const blob = xhr.response;
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `${productId} - CV`;
+                    link.click();
+                    URL.revokeObjectURL(link.href);
                 };
                 xhr.open('GET', url);
                 xhr.send();
