@@ -1,0 +1,7 @@
+.admin-products {
+    height: 70%;
+    overflow: scroll;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
