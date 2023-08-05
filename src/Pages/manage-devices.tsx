@@ -69,13 +69,18 @@ export function ManageDevices() {
 
     const activateProduct = () => {
         const newProduct = availableProducts.find((product) => product.unlockCode === newProductCode)
+        console.log(newProductCode)
+        console.log(availableProducts)
+        console.log(newProduct)
+        console.log(userId)
         if (newProduct && userId) {
             const newProductRef = doc(db, "products", newProduct.id);
             updateDoc(newProductRef, {activated: true})
-            const userRef = doc(db, "users", state?.userId)
+            const userRef = doc(db, "users", userId)
             updateDoc(userRef, {
                 products: arrayUnion(newProduct.id)
             })
+            setUserProducts((prev: any) => [...prev, newProduct.id])
         }
     }
 
