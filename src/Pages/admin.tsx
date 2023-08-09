@@ -8,7 +8,8 @@ import './admin.css'
 
 export enum Preview {
     BUSINESS_CARD = 'business_card',
-    CUSTOM_LINK = 'custom_link'
+    CUSTOM_LINK = 'custom_link',
+    UPLOAD_FILE = 'upload_file'
 }
 
 const random_hex_code = () => {
@@ -43,7 +44,7 @@ export function AdminPage() {
     }
 
     const copyLink = (productId: string) => {
-        navigator.clipboard.writeText(`https://bussiness-card-bda7f.firebaseapp.com/show-product?product_id=${productId}`)
+        navigator.clipboard.writeText(`https://flexpayz.com/show-product?product_id=${productId}`)
     }
 
     useEffect(() => {

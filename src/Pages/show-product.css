@@ -1,0 +1,158 @@
+.page-show-product {
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #859BA6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-picture-container {
+    height: 30vh;
+    width: 100vw;
+    position: relative;
+}
+
+.profile-picture {
+    display: block;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+.share-button {
+    background-color: #4D6161;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    height: 50px;
+}
+
+.profile-data {
+    position: absolute;
+    bottom: 0;
+    height: 60px;
+    width: 100%;
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 12px;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.name-title {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    border-radius: 12px;
+}
+
+.logo-profile {
+    height: 100%;
+    width: 40%;
+}
+
+.name-container {
+    color: white;
+    font-size: 24px;
+}
+
+.title-container {
+    color: white;
+    font-size: 12px;
+}
+
+.social-media-bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 35px;
+    margin: 20px 0;
+}
+
+.file-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 25vh;
+}
+
+.file-container span {
+    font-size: 30px;
+}
+
+.download-button {
+    background-color: #A63B3B;
+    height: 35px;
+    text-align: center;
+    min-width: 80px;
+    max-width: 50%;
+    font-size: 16px;
+    color: white;
+    border: solid #979797 1px;
+    margin-top: 12px;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.share-button {
+    background-color: #3B8FA6;
+    height: 40px;
+    width: 100%;
+    text-align: center;
+    min-width: 80px;
+    font-size: 16px;
+    color: white;
+    border: solid #979797 1px;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.share-icon {
+    height: 100%;
+    object-fit: cover;
+    fill: white;
+}
+
+.data-selectors {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    color: white;
+    padding: 20px;
+}
+
+.data-line {
+    margin: 4px;
+}
+
+.about-me-title {
+    color: white;
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.about-me-text {
+    color: white;
+    font-size: 12px;
+    text-align: justify;
+}
+
+.about-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 20px;
+}

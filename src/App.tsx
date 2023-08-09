@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import './App.css';
+import './Pages/basic.css';
 import {Route, Routes} from "react-router";
-import {FirstPage, FirstPageWrapper} from "./Pages/first-page";
+import {LoginPage, FirstPageWrapper} from "./Pages/login-page";
 import {LoginFormContext, MainContext, RegisterFormContext} from "./contexts";
 import {InitialPage} from "./Pages/initial-page";
 import {initializeApp} from 'firebase/app';
@@ -40,6 +41,9 @@ function App() {
 
     return (
         <div className="App">
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>
+                <link rel="preconnect" href="https://fonts.gstatic.com"/>
+                    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
             <MainContext.Provider value={{state, setState, db}}>
                 <Routes>
                     <Route path={'/'} element={<InitialPage/>}/>

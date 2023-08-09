@@ -1,0 +1,213 @@
+.page-manager {
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #4CD8EA;
+    padding-top: 30px;
+    display: flex;
+}
+
+
+.preview-side {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background: linear-gradient(#216C8F, rgb(76, 216, 234));;
+    height: 100vh;
+}
+
+
+.show-on-device {
+    margin-bottom: 20px;
+    font-size: 14px;
+    background-color: white;
+    width: 100%;
+    padding: 8px;
+
+}
+.preview-option{
+    margin-left: 12px;
+    margin-right: 12px ;
+}
+
+.preview-option input:checked {
+    border-color: red;
+    background-color:red;
+}
+
+.main-manager {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.header-selector {
+    height: 35px;
+    width: 100%;
+    display: flex;
+}
+
+.business-card-header {
+    flex: 1 1 auto;
+    height: 100%;
+    background-color: white;
+    justify-content: center;
+    align-content: center;
+    /*font-size: 1.3rem;*/
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.custom-link-header {
+    flex: 1 1 auto;
+    background-color: #F6F6F6;
+    justify-content: center;
+    align-content: center;
+    /*font-size: 1.3rem;*/
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.file-upload-header {
+    flex: 1 1 auto;
+    background-color: #82CBD4;
+    justify-content: center;
+    align-content: center;
+    /*font-size: 1.3rem;*/
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.form {
+    flex: 1 1 auto;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: 100%;
+}
+
+.form-manager-input {
+    border-radius: 19px;
+    border:solid grey 1px;
+    padding-left: 8px;
+    height: 30px;
+    width: 80%;
+    margin: 8px 4px;
+}
+
+.personal-side {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.company-side {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.form-custom-link {
+    flex: 1 1 auto;
+    background-color: #F6F6F6;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-file-upload {
+    background-color: #82CBD4;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 100%;
+}
+
+.profile-thumbnail {
+    object-fit: cover;
+    width: 150px;
+    height: 150px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.custom-file-input {
+    color: transparent;
+}
+.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+}
+.custom-file-input::before {
+    content: 'Select file';
+    color: black;
+    display: inline-block;
+    background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+}
+.custom-file-input:hover::before {
+    border-color: black;
+}
+.custom-file-input:active {
+    outline: 0;
+}
+.custom-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+.preview-button {
+    background-color: rgba(246,	246, 246, 0.7);
+    padding: 8px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 16px;
+}
+
+.preview-logo {
+    height: 90%;
+    margin-right: 8px;
+}
+
+.form-file-upload {
+    flex: 1 1 auto;
+    height: 92vh;
+    background-color:  #82CBD4;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-side span{
+    font-size: 15px;
+    color: white;
+}

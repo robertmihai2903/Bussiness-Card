@@ -25,7 +25,7 @@ export const ConfigInput = ({
     }, []);
 
     return (
-        <div style={{ marginBottom: "24px" }} className={className}>
+        <div style={{ marginBottom: "20px", width: '70%' }} className={className}>
             {/*{label && <InputLabel>{label}</InputLabel>}*/}
             <TextField
                 value={value}
@@ -37,7 +37,8 @@ export const ConfigInput = ({
                 style={{ width: "100%" }}
                 placeholder={placeholder}
                 type={type}
-                sx={inputColor ? { input: { color: inputColor } } : {}}
+                variant="standard"
+                sx={ { input: { color: '#fff' , borderColor: '#fff'}, color: '#fff', borderColor: '#fff' }}
             />
         </div>
     );

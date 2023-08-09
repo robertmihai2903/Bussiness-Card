@@ -16,6 +16,10 @@ import {
 } from "firebase/firestore";
 import {MainContext} from "../contexts";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
+import './manage-devices.css'
+import Logo from '../assets/flexpayz-logo.svg'
+import AddDevice from '../assets/add-device.svg'
+import ManageDevicesLogo from '../assets/manage-devices.svg'
 
 export function ManageDevices() {
     const [newProductCode, setNewProductCode] = useState("")
@@ -69,10 +73,6 @@ export function ManageDevices() {
 
     const activateProduct = () => {
         const newProduct = availableProducts.find((product) => product.unlockCode === newProductCode)
-        console.log(newProductCode)
-        console.log(availableProducts)
-        console.log(newProduct)
-        console.log(userId)
         if (newProduct && userId) {
             const newProductRef = doc(db, "products", newProduct.id);
             updateDoc(newProductRef, {activated: true})
@@ -80,17 +80,44 @@ export function ManageDevices() {
             updateDoc(userRef, {
                 products: arrayUnion(newProduct.id)
             })
-            setUserProducts((prev: any) => [...prev, newProduct.id])
+            // setUserProducts((prev: any) => [...prev, newProduct.id])
+            navigate(`/manage-device?product_id=${newProduct.id}`)
         }
     }
 
+    const [open, setOpen] = useState(false)
+    const [showAddDevice, setShowAddDevice] = useState(false)
 
     const navigate = useNavigate()
-    return (<div className={"page"}>
-        <div className={"modal"}>
-            <Button onClick={activateProduct}>Add device</Button>
-            <Input value={newProductCode} onChange={(e) => setNewProductCode(e.target.value)}></Input>
-            {userProducts.map((id: string) => (<ProductButton id={id}/>))}
+    return (<div className={"page-devices"}>
+        <div className={'header-devices'}>
+            <img className={'logo-devices'} src={Logo} alt={'logo'}/>
+        </div>
+        <div className={'main-devices'}>
+            {!showAddDevice && <div className={'left-container-devices'}>
+                <span className={'helpers'}>
+Locate your stored devices within this section. Effortlessly update or alter previously stored information about your devices. This feature lets you maintain accurate and current details for all your devices with ease.</span>
+                <div className={'button-manage-devices'} onClick={() => {
+                    setOpen((prev: boolean) => !prev)
+                }}>
+                    <img className={'new-device-img'} src={ManageDevicesLogo}/> Manage Devices
+                </div>
+                {open && <div className={'manage-devices-selector'}>
+                    {userProducts.map((id: string) => (<ProductButton id={id}/>))}
+                </div>}
+                <span className={'helpers'}>Begin by inputting the code provided in your package. Once done, proceed to enter your personal details. This step allows you to seamlessly set up your new device and make it uniquely yours.</span>
+                <div className={'button-add-new-devices'} onClick={() => {
+                    setShowAddDevice(true)
+                }}>
+                    <img className={'new-device-img'} src={AddDevice}/> Add new device
+                </div>
+
+            </div>}
+            {showAddDevice && <div className={'left-container-devices'}>
+                <input className={'add-device-input'} placeholder={'Enter unlock code'} value={newProductCode}
+                       onChange={(e) => setNewProductCode(e.target.value.toUpperCase())}></input>
+                <button className={'go-button-devices'} onClick={activateProduct}>Go</button>
+            </div>}
         </div>
 
 
@@ -115,5 +142,5 @@ const ProductButton = ({id}: { id: string }) => {
         navigate(`/manage-device?product_id=${id}`)
     }
 
-    return (<Button onClick={openProduct}>{product.name}</Button>)
+    return (<div className={'product-devices'} onClick={openProduct}>{product.name}</div>)
 }

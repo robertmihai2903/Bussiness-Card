@@ -10,8 +10,8 @@ export function InitialPage () {
         <div className={"modal-initial"}>
             <img src={Logo} alt={'logo'} className={'flexpayz-logo'}/>
             <div className={'buttons-container'}>
-            {/*<button className={'website-button'} onClick={()=> {navigate('/admin')}}>Payment's Wearable</button>*/}
-            <button className={'app-button'} onClick={()=> {navigate('/app')}}>Business Cards & Smart Gifts</button>
+                <button className={'website-button'} onClick={()=> {navigate('/admin')}}>Payment's Wearable</button>
+                <button className={'app-button'} onClick={()=> {navigate('/app')}}>Business Cards & Smart Gifts</button>
             </div>
         </div>
 
