@@ -8,6 +8,7 @@ import {storage} from "../App";
 import {Preview} from "./admin";
 import './manager.css'
 import PreviewLogo from '../assets/preview.svg'
+import {notify} from "./login-page";
 export const defaultProduct: Product = {
     activated: true,
     preview: Preview.BUSINESS_CARD,
@@ -328,6 +329,7 @@ export function ManageDevice() {
         if (productId) {
             const productRef = doc(db, 'products', productId)
             await updateDoc(productRef, {...productState, activated: true})
+            notify('Saved modifications')
         }
     }
     const [imageUpload, setImageUpload] = useState(null)
@@ -417,6 +419,7 @@ export function ManageDevice() {
             const productRef = doc(db, 'products', productId)
             await updateDoc(productRef, {preview: Preview.BUSINESS_CARD})
             // setProductState((prev: Product) => ({...prev, preview: Preview.BUSINESS_CARD}))
+            notify('Changed the public page.')
         }
     }
 
@@ -426,6 +429,7 @@ export function ManageDevice() {
         if (productId) {
             const productRef = doc(db, 'products', productId)
             await updateDoc(productRef, {preview: Preview.CUSTOM_LINK})
+            notify('Changed the public page.')
 
         }
     }
@@ -436,6 +440,7 @@ export function ManageDevice() {
             const productRef = doc(db, 'products', productId)
             await updateDoc(productRef, {preview: Preview.UPLOAD_FILE})
             setProductState((prev: Product) => ({...prev, preview: Preview.UPLOAD_FILE}))
+            notify('Changed the public page.')
         }
     }
 

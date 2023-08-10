@@ -12,6 +12,8 @@ import {ManageDevices} from "./Pages/manage-devices";
 import {ManageDevice} from "./Pages/manage-device";
 import {getStorage, ref} from "firebase/storage";
 import {ShowProduct} from "./Pages/show-product";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
 const firebaseConfig = {
     apiKey: "AIzaSyD95KPFA7TG3QepgOl8iJdUM3c9RnEM11Q",
@@ -54,6 +56,7 @@ function App() {
                     <Route path={'/show-product'} element={<ShowProduct/>}/>
                 </Routes>
             </MainContext.Provider>
+            <ToastContainer />
         </div>
     );
 }

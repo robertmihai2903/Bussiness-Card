@@ -9,6 +9,20 @@ import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} fro
 import { doc, setDoc } from "firebase/firestore";
 import {useNavigate} from "react-router";
 import Logo from "../assets/flexpayz-logo.svg";
+import {toast} from "react-toastify";
+
+export const notify = (message?: string) => toast(message, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+});
+
+
 export function FirstPageWrapper() {
     const loginForm = useLogin()
     const registerForm = useRegisterForm()
@@ -28,6 +42,7 @@ export function LoginPage() {
     const {email, password, confirmPassword, country} = useContext(RegisterFormContext)
     const navigate = useNavigate()
 
+
     const isLoginDisabled = state.invalidFields.has('emailLog') || state.invalidFields.has('passwordLog')
     const isRegisterDisabled = state.invalidFields.has('email') || state.invalidFields.has('password') || state.invalidFields.has('confirmPassword') || state.invalidFields.has('country') || !acceptedTerms
 
@@ -42,13 +57,19 @@ export function LoginPage() {
                 navigate('/manage-devices')
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorCode, errorMessage)
-                // ..
+                console.log(error.code)
+                notify(ErrorCodes.get(error.code))
             });
 
     }
+
+    const ErrorCodes = new Map([
+        ['auth/wrong-password', 'Wrong password'],
+        ['auth/user-not-found', 'User not found'],
+        ['auth/invalid-email', 'Invalid email'],
+        ['auth/weak-password', 'Password should be at least 6 characters'],
+        ['auth/email-already-in-use', 'Email already used']
+    ])
 
     const logInUser = () => {
         const auth = getAuth();
@@ -60,9 +81,8 @@ export function LoginPage() {
                 navigate('/manage-devices')
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorCode, errorMessage)
+                console.log(error.code)
+                notify(ErrorCodes.get(error.code))
             });
 
     }

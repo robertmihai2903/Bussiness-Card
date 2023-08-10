@@ -5,6 +5,7 @@ import {useContext, useEffect, useState} from "react";
 import {MainContext} from "../contexts";
 import {doc, setDoc, addDoc, collection, query, where, getDocs} from "firebase/firestore"
 import './admin.css'
+import {notify} from "./login-page";
 
 export enum Preview {
     BUSINESS_CARD = 'business_card',
@@ -40,6 +41,7 @@ export function AdminPage() {
                 }])
             })
         }
+        notify(`You created ${orderedProducts} products.`)
 
     }
 
