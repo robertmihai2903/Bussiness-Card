@@ -10,6 +10,7 @@ import './manager.css'
 import PreviewLogo from '../assets/preview.svg'
 import {notify} from "./login-page";
 export const defaultProduct: Product = {
+    name: '',
     activated: true,
     preview: Preview.BUSINESS_CARD,
     unlockcode: '',
@@ -45,6 +46,7 @@ export const defaultProduct: Product = {
 }
 
 export interface Product {
+    name: string
     activated: boolean,
     preview: Preview
     unlockcode: string,
@@ -81,6 +83,12 @@ export interface Product {
 
 const useEditState = (state: Product, setState: React.Dispatch<React.SetStateAction<Product>>, invalidFields: Map<string, string>) => {
     return {
+        name: {
+            value: state.name,
+            onChange: (name: string) => {
+                setState((prev: Product) => ({...prev, name}))
+            }
+        },
         firstName: {
             value: state.firstName,
             onChange: (firstName: string) => {
@@ -287,7 +295,8 @@ export function ManageDevice() {
         filename1,
         filename2,
         filename3,
-        website
+        website,
+        name
     } = useEditState(productState, setProductState, invalidFields)
     const urlParams = new URLSearchParams(window.location.search)
     const productId = urlParams.get('product_id')
@@ -470,6 +479,8 @@ export function ManageDevice() {
             </div>
             {showSection === 'bussines-card' && <div className={'form'}>
                 <div className={'personal-side'}>
+                    <input placeholder={'Device Name'} className={'form-manager-input'} value={name.value}
+                           onChange={onChangeWrapper(name)}/>
                     <input placeholder={'First Name'} className={'form-manager-input'} value={firstName.value}
                            onChange={onChangeWrapper(firstName)}/>
                     <input placeholder={'Last Name'} className={'form-manager-input'} value={lastName.value}
