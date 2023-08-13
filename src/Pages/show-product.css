@@ -5,6 +5,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+}
+
+.page-show-product-business {
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #859BA6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .profile-picture-container {
@@ -155,4 +165,10 @@
     justify-content: flex-start;
     width: 100%;
     padding: 20px;
+}
+
+.youtube iframe{
+    width: 90vw;
+    aspect-ratio: 1.77;
+    height: auto;
 }

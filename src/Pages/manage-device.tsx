@@ -9,6 +9,8 @@ import {Preview} from "./admin";
 import './manager.css'
 import PreviewLogo from '../assets/preview.svg'
 import {notify} from "./login-page";
+import axios from "axios";
+// import {google} from "googleapis";
 export const defaultProduct: Product = {
     name: '',
     activated: true,
@@ -42,7 +44,8 @@ export const defaultProduct: Product = {
     filename2: '',
     filename3: '',
     cv: false,
-    website: ''
+    website: '',
+    youtubeLink: ''
 }
 
 export interface Product {
@@ -78,7 +81,8 @@ export interface Product {
     filename2: string,
     filename3: string,
     cv: boolean,
-    website: string
+    website: string,
+    youtubeLink: string
 }
 
 const useEditState = (state: Product, setState: React.Dispatch<React.SetStateAction<Product>>, invalidFields: Map<string, string>) => {
@@ -258,6 +262,12 @@ const useEditState = (state: Product, setState: React.Dispatch<React.SetStateAct
                 setState((prev: Product) => ({...prev, website}))
             }
         },
+        youtubeLink: {
+            value: state?.youtubeLink,
+            onChange: (youtubeLink: string) => {
+                setState((prev: Product) => ({...prev, youtubeLink}))
+            }
+        },
     }
 }
 
@@ -296,7 +306,8 @@ export function ManageDevice() {
         filename2,
         filename3,
         website,
-        name
+        name,
+        youtubeLink
     } = useEditState(productState, setProductState, invalidFields)
     const urlParams = new URLSearchParams(window.location.search)
     const productId = urlParams.get('product_id')
@@ -413,6 +424,19 @@ export function ManageDevice() {
             console.log('document uploaded')
         }
     }
+    //
+    // const uploadVideo = async (e: any) => {
+    //     const KEY = "AIzaSyDImWdobJArKrP4fN5S4VfY9gokWCH3gOk"
+    //
+    //     // const video = e.target.files[0]
+    //     // console.log(video)
+    //     axios.post(`https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet?key=${KEY}`).then((res) => {
+    //         console.log(res)
+    //     }).catch((error) => {
+    //         console.log(error)
+    //
+    //     })
+    // }
 
     const onChangeWrapper = (key: any) => {
         return (e: any) => {
@@ -453,6 +477,16 @@ export function ManageDevice() {
         }
     }
 
+    const setPreviewUploadVideo = async () => {
+        setProductState((prev: Product) => ({...prev, preview: Preview.UPLOAD_VIDEO}))
+        if (productId) {
+            const productRef = doc(db, 'products', productId)
+            await updateDoc(productRef, {preview: Preview.UPLOAD_VIDEO})
+            setProductState((prev: Product) => ({...prev, preview: Preview.UPLOAD_VIDEO}))
+            notify('Changed the public page.')
+        }
+    }
+
     return (<div className={"page-manager"}>
         <div className={'preview-side'}>
             <div className={'show-on-device'}>Show on Device</div>
@@ -468,6 +502,11 @@ export function ManageDevice() {
                 <span>Upload File</span>
                 <input type={'checkbox'} checked={productState.preview === Preview.UPLOAD_FILE} onChange={setPreviewUploadFile}/>
             </div>
+            <div className={'preview-option'}>
+                <span>Upload Video</span>
+                <input type={'checkbox'} checked={productState.preview === Preview.UPLOAD_VIDEO}
+                       onChange={setPreviewUploadVideo}/>
+            </div>
             <div className={'preview-button'} onClick={() => {navigate(`/show-product?product_id=${productId}`)}}> <img className={'preview-logo'} src={PreviewLogo} alt={'preview'}/>Preview</div>
         </div>
         <div className={'main-manager'}>
@@ -476,6 +515,7 @@ export function ManageDevice() {
                 </div>
                 <div className={'custom-link-header'} onClick={() => setShowSection('custom-link')}>Custom Link</div>
                 <div className={'file-upload-header'} onClick={() => setShowSection('upload-file')}>File Upload</div>
+                <div className={'file-upload-header'} onClick={() => setShowSection('upload-video')}>Video Upload</div>
             </div>
             {showSection === 'bussines-card' && <div className={'form'}>
                 <div className={'personal-side'}>
@@ -545,7 +585,7 @@ export function ManageDevice() {
                 <Button onClick={saveProductData}>Save</Button>
             </div>}
             {showSection === 'upload-file' && <div className={'form-file-upload'}>
-                <input className={'custom-file-input'} type={'file'} onChange={uploadFile1} accept={'.pdf'}/>
+                <input className={'custom-file-input'} type={'file'} onChange={uploadFile1} accept={'.pdf, .vcf'}/>
                 <input placeholder={`Filename 1`} className={'form-manager-input'} value={filename1.value}
                        onChange={onChangeWrapper(filename1)}/>
                 <input className={'custom-file-input'} type={'file'} onChange={uploadFile2} accept={'.pdf'}/>
@@ -555,6 +595,13 @@ export function ManageDevice() {
                 <input placeholder={`Filename 3`} className={'form-manager-input'} value={filename3.value}
                        onChange={onChangeWrapper(filename3)}/>
                 <Button onClick={saveProductData}>Save</Button>
+            </div>}
+
+            {showSection === "upload-video" && <div className={'form-file-upload'}>
+                <input placeholder={'Video Youtube Link'} className={'form-manager-input'} value={youtubeLink.value}
+                       onChange={onChangeWrapper(youtubeLink)}/>
+                <Button onClick={saveProductData}>Save</Button>
+
             </div>}
         </div>
 

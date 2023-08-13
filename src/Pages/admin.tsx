@@ -10,7 +10,8 @@ import {notify} from "./login-page";
 export enum Preview {
     BUSINESS_CARD = 'business_card',
     CUSTOM_LINK = 'custom_link',
-    UPLOAD_FILE = 'upload_file'
+    UPLOAD_FILE = 'upload_file',
+    UPLOAD_VIDEO = "upload_video"
 }
 
 const random_hex_code = () => {
@@ -31,13 +32,15 @@ export function AdminPage() {
                 activated: false,
                 unlockCode: hexCode,
                 name: "New Product",
-                preview: Preview.BUSINESS_CARD
+                preview: Preview.BUSINESS_CARD,
+                processed: false
             }).then((data) => {
                 setProducts((prev) => [...prev, {
                     id: data.id, activated: false,
                     unlockCode: hexCode,
                     name: "New Product",
-                    preview: Preview.BUSINESS_CARD
+                    preview: Preview.BUSINESS_CARD,
+                    processed: false
                 }])
             })
         }

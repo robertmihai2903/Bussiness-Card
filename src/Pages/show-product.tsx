@@ -12,6 +12,7 @@ import Logo from '../assets/flexpayz-logo.svg'
 import InstagramLogo from '../assets/instagram.svg'
 import FacebookLogo from '../assets/facebook.svg'
 import LinkedInLogo from '../assets/linkedin.svg'
+import YouTube from "react-youtube";
 
 export function ShowProduct() {
     const navigate = useNavigate()
@@ -212,8 +213,16 @@ export function ShowProduct() {
                 }
             });
     }
+
+    const post = product.youtubeLink
+    const youtubeID = post?.split('v=')[1];
+    const onReady = (event: any) => {
+        console.log(event.target)
+        event.target.playVideo();
+    };
+
     return (<>
-        {product.preview === Preview.BUSINESS_CARD && <div className={"page-show-product"}>
+        {product.preview === Preview.BUSINESS_CARD && <div className={"page-show-product-business"}>
             <div className={'profile-picture-container'}>
                 <img className={'profile-picture'} src={profileImageURL}/>
                 <div className={'profile-data'}>
@@ -264,6 +273,21 @@ export function ShowProduct() {
                 <div className={'download-button'} onClick={downloadFile3}>Download</div>
                 {/*<div className={'share-button'} onClick={shareFile3}>Share</div>*/}
             </div>}
+        </div>}
+        {product.preview === Preview.UPLOAD_VIDEO && <div className={'page-show-product'}>
+            <YouTube className={'youtube'} videoId={youtubeID} onReady={onReady} opts={
+                {
+                    playerVars: {
+                        start: 0,
+                        autoplay: 1,
+                        color: 'white',
+                        modestbranding: 1,
+                        controls: 1,
+                        rel: 0,
+                        loop: 1
+                    }
+                }
+            }/>
         </div>}
     </>)
 
