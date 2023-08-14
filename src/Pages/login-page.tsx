@@ -91,7 +91,7 @@ export function LoginPage() {
             <img src={Logo} alt={'logo'} className={'flexpayz-logo'}/>
             <ConfigInput label={"Email"} value={emailLog.value} onChange={emailLog.onChange}
                          error={emailLog.error}></ConfigInput>
-            <ConfigInput label={'Password'} value={passwordLog.value} onChange={passwordLog.onChange}
+            <ConfigInput label={'Password'} type={'password'} value={passwordLog.value} onChange={passwordLog.onChange}
                          error={passwordLog.error}></ConfigInput>
             <button className={'button-login'} onClick={logInUser} disabled={isLoginDisabled}>Log in</button>
             <div className={'no-account'} onClick={() => {
@@ -103,9 +103,9 @@ export function LoginPage() {
             <img src={Logo} alt={'logo'} className={'flexpayz-logo'}/>
             <ConfigInput label={"Email"} value={email.value} onChange={email.onChange}
                          error={email.error}></ConfigInput>
-            <ConfigInput label={"Password"} value={password.value} onChange={password.onChange}
+            <ConfigInput label={"Password"} type={'password'} value={password.value} onChange={password.onChange}
                          error={password.error}></ConfigInput>
-            <ConfigInput label={"Confirm Password"} value={confirmPassword.value} onChange={confirmPassword.onChange}
+            <ConfigInput label={"Confirm Password"} type={'password'} value={confirmPassword.value} onChange={confirmPassword.onChange}
                          error={confirmPassword.error}></ConfigInput>
             <ConfigInput label={"Country"} value={country.value} onChange={country.onChange}
                          error={country.error}></ConfigInput>

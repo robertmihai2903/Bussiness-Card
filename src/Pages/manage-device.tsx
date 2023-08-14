@@ -9,8 +9,7 @@ import {Preview} from "./admin";
 import './manager.css'
 import PreviewLogo from '../assets/preview.svg'
 import {notify} from "./login-page";
-import axios from "axios";
-// import {google} from "googleapis";
+import VCard from 'vcard-creator'
 export const defaultProduct: Product = {
     name: '',
     activated: true,
@@ -345,11 +344,33 @@ export function ManageDevice() {
 
 
     const saveProductData = async () => {
+        const myVCard = new VCard()
+        myVCard.addName(productState.lastName, productState.firstName)
+        myVCard.addAddress(productState.address)
+        myVCard.addCompany(productState.companyName)
+        myVCard.addEmail(productState.email)
+        myVCard.addJobtitle(productState.title)
+        myVCard.addPhoneNumber(productState.phoneNumber)
+        myVCard.addNote(productState.about)
+        console.log(myVCard.toString())
+        const blob = new Blob([myVCard.toString()], {type: "text/vcard"})
+        const file = new File([blob], 'vCard.vcf', {type: "text/vcard"})
 
         if (productId) {
             const productRef = doc(db, 'products', productId)
             await updateDoc(productRef, {...productState, activated: true})
             notify('Saved modifications')
+        }
+        const tempDoc = file
+        console.log(tempDoc)
+        if (tempDoc !== null) {
+            const documentRef = ref(storage, `documents/${productId}/vCard`)
+            console.log('start')
+            uploadBytes(documentRef, tempDoc).then((data) => {
+                console.log(data)
+                setProductState((prev: Product) => ({...prev, cv: true}))
+            })
+            console.log('document uploaded')
         }
     }
     const [imageUpload, setImageUpload] = useState(null)

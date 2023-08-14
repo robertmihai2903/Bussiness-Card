@@ -179,6 +179,35 @@ export function ShowProduct() {
             });
     }
 
+    const downloadVCard = () => {
+        const documentRef = ref(storage, `documents/${productId}/vCard` )
+        getDownloadURL(documentRef)
+            .then(url => {
+                console.log(url);
+                // This can be downloaded directly:
+                const xhr = new XMLHttpRequest();
+                xhr.responseType = 'blob';
+                xhr.onload = function () {
+                    const blob = xhr.response;
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `vCard.vcf`;
+                    link.click();
+                    URL.revokeObjectURL(link.href);
+                };
+                xhr.open('GET', url);
+                xhr.send();
+                return Promise.resolve(true);
+            })
+            .catch(error => {
+                if (error.code === 'storage/object-not-found') {
+                    return Promise.resolve(false);
+                } else {
+                    return Promise.reject(error);
+                }
+            });
+    }
+
     const shareFile1 = () => {
     }
 
@@ -256,6 +285,7 @@ export function ShowProduct() {
                 }}/>}
             </div>
             {product.cv && <div className={'download-button'} onClick={downloadCV}>Download CV</div>}
+            <div className={'download-button'} onClick={downloadVCard}>Save my contact details</div>
         </div>}
         {product.preview === Preview.UPLOAD_FILE && <div className={'page-show-product'}>
             {product.filename1 && <div className={'file-container'}>
