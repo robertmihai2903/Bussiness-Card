@@ -1,11 +1,12 @@
 import {ConfigInput} from "../components/config-input";
-import {Button, Input} from "@mui/material";
+import {Button, Checkbox, Input} from "@mui/material";
 import {useNavigate} from "react-router";
 import {useContext, useEffect, useState} from "react";
 import {MainContext} from "../contexts";
-import {doc, setDoc, addDoc, collection, query, where, getDocs} from "firebase/firestore"
+import {doc, setDoc, addDoc, collection, query, where, getDocs, updateDoc} from "firebase/firestore"
 import './admin.css'
 import {notify} from "./login-page";
+import {db} from "../App";
 
 export enum Preview {
     BUSINESS_CARD = 'business_card',
@@ -48,9 +49,7 @@ export function AdminPage() {
 
     }
 
-    const copyLink = (productId: string) => {
-        navigator.clipboard.writeText(`https://flexpayz.com/show-product?product_id=${productId}`)
-    }
+
 
     useEffect(() => {
         (async () => {
@@ -71,21 +70,47 @@ console.log(products)
             }}/>
             <Button onClick={createProducts}>get products</Button>
             <div className={"admin-products"}>
-            {products.map((product) => (
-                <div>
-                    <span>{product.id}</span>
-                    <br/>
-                    <span>{product.unlockCode}</span>
-                    <Button onClick={() => {
-                        copyLink(product.id)
-                    }}>Link</Button>
-                    <br/>
-                    <br/>
-                </div>
+                {products.map((product) => (<Product key={`product-${product.id}`} product={product}/>
+
             ))}
             </div>
         </div>
 
 
+    </div>)
+}
+
+
+const Product = ({product}: any) => {
+    const copyLink = (productId: string) => {
+        navigator.clipboard.writeText(`https://flexpayz.com/show-product?product_id=${productId}`)
+    }
+    const [processed, setProcessed] = useState(false)
+
+    useEffect(() => {
+        setProcessed(product.processed)
+        console.log(product.processed, '222')
+    }, []);
+
+    const onProcessedProduct = async (e: any) => {
+        if (product.id) {
+            const productRef = doc(db, 'products', product.id)
+            console.log(e.target.checked, 'here22')
+            await updateDoc(productRef, {processed: e.target.checked})
+            console.log(e.target.checked, 'here')
+            setProcessed((prevState: boolean) => !prevState)
+        }
+    }
+
+    return (<div>
+        <span>{product.id}</span>
+        <br/>
+        <span>{product.unlockCode}</span>
+        <Button onClick={() => {
+            copyLink(product.id)
+        }}>Link</Button>
+        <Checkbox checked={processed} onChange={onProcessedProduct}/>
+        <br/>
+        <br/>
     </div>)
 }
