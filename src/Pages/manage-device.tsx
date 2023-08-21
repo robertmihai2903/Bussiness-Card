@@ -10,6 +10,7 @@ import './manager.css'
 import PreviewLogo from '../assets/preview.svg'
 import {notify} from "./login-page";
 import VCard from 'vcard-creator'
+import ImageUpload from "../components/image-upload";
 export const defaultProduct: Product = {
     name: '',
     activated: true,
@@ -591,9 +592,9 @@ export function ManageDevice() {
                     <input placeholder={`About`} className={'form-manager-input'} value={companyAbout.value}
                            onChange={onChangeWrapper(companyAbout)}/>
                     <h6>Give your profile a face: Set a current portrait as your first profile photo. Smile please</h6>
-                    <input className={'custom-file-input'} type={'file'} accept={'.jpg, .jpeg, .png'}
-                           onChange={uploadImage}/>
-                    <img className={'profile-thumbnail'} src={imageURL}/>
+                    <div className={'image-upload-wrapper'}>
+                     <ImageUpload/>
+                    </div>
                     <h6>Upload your CV</h6>
                     <input className={'custom-file-input'} type={'file'} onChange={uploadCV} accept={'.pdf'}/>
 
