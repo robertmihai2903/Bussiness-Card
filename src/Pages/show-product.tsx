@@ -13,6 +13,9 @@ import InstagramLogo from '../assets/instagram.svg'
 import FacebookLogo from '../assets/facebook.svg'
 import LinkedInLogo from '../assets/linkedin.svg'
 import YouTube from "react-youtube";
+import WorkIcon from '../assets/work-icon.svg'
+import LocationIcon from '../assets/location-icon.svg'
+import WebsiteIcon from '../assets/website-icon.svg'
 
 export function ShowProduct() {
     const navigate = useNavigate()
@@ -77,7 +80,7 @@ export function ShowProduct() {
                     const blob = xhr.response;
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
-                    link.download = `${product.lastName} ${product.firstName} - CV`;
+                    link.download = `${product.lastName} ${product.firstName} - document`;
                     link.click();
                     URL.revokeObjectURL(link.href);
                 };
@@ -264,9 +267,13 @@ export function ShowProduct() {
             </div>
             <div className={'share-button'} onClick={share}><img className={'share-icon'} src={ShareButton}/></div>
             <div className={'data-selectors'}>
-                <div className={'data-line'}><img/>{product.companyName}</div>
-                <div className={'data-line'}><img/>{product.city}</div>
-                <div className={'data-line'}><img/>{product.website}</div>
+                <div className={'data-line'}><img src={WorkIcon} className={'presentation-icon'}/>{product.companyName}
+                </div>
+                <div className={'data-line'}><img src={LocationIcon} className={'presentation-icon'}/>{product.city}
+                </div>
+                <div className={'data-line'} onClick={() => {
+                    window.location.replace(product.website)
+                }}><img src={WebsiteIcon} className={'presentation-icon'}/>{product.website}</div>
             </div>
             <div className={'about-container'}>
                 <div className={'about-me-title'}>About me</div>
@@ -277,15 +284,15 @@ export function ShowProduct() {
                 {product.instagram && <img src={InstagramLogo} onClick={() => {
                     window.location.replace(product.instagram)
                 }}/>}
-                {product.facebook && <img src={LinkedInLogo} onClick={() => {
-                    window.location.replace(product.linkedIn)
-                }}/>}
-                {product.linkedIn && <img src={FacebookLogo} onClick={() => {
+                {product.facebook && <img src={FacebookLogo} onClick={() => {
                     window.location.replace(product.facebook)
                 }}/>}
+                {product.linkedIn && <img src={LinkedInLogo} onClick={() => {
+                    window.location.replace(product.linkedIn)
+                }}/>}
             </div>
-            {product.cv && <div className={'download-button'} onClick={downloadCV}>Download CV</div>}
-            <div className={'download-button'} onClick={downloadVCard}>Save my contact details</div>
+            {product.cv && <div className={'download-button-profile'} onClick={downloadCV}>Download Document</div>}
+            <div className={'download-button-profile'} onClick={downloadVCard}>Save my contact details</div>
         </div>}
         {product.preview === Preview.UPLOAD_FILE && <div className={'page-show-product'}>
             {product.filename1 && <div className={'file-container'}>

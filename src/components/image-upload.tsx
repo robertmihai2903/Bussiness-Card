@@ -4,6 +4,8 @@ import ImageCropper from './image-cropper'
 import './image-upload.css'
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {storage} from "../App";
+import {Button} from "@mui/material";
+import {notify} from "../Pages/login-page";
 
 const ImageUpload = () => {
     const [blob, setBlob] = useState<Blob | null>(null)
@@ -61,6 +63,7 @@ const ImageUpload = () => {
         getDownloadURL(imageRef)
             .then(url => {
                 setInputImg(url)
+                notify('Image has been cropped')
                 return Promise.resolve(true);
             })
             .catch(error => {
@@ -76,6 +79,7 @@ const ImageUpload = () => {
     return (
         <form onSubmit={handleSubmitImage}>
             <input
+                className={'custom-file-input'}
                 type='file'
                 accept='image/*'
                 onChange={onInputChange}
@@ -90,7 +94,7 @@ const ImageUpload = () => {
                     </div>
                 )
             }
-            <button type='submit'>Submit</button>
+            <Button  type='submit'>crop</Button>
         </form>
     )
 }

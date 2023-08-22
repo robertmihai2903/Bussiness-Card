@@ -96,7 +96,7 @@ export function LoginPage() {
             <button className={'button-login'} onClick={logInUser} disabled={isLoginDisabled}>Log in</button>
             <div className={'no-account'} onClick={() => {
                 setHasAccount(false)
-            }}>Don't have account?
+            }}>If you are not registered Sign up
             </div>
         </div>}
         {!hasAccount && <div className={"modal-login"}>

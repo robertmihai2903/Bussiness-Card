@@ -17,6 +17,20 @@
     align-items: center;
 }
 
+.download-button-profile {
+    background-color: #3B8FA6;
+    height: 35px;
+    text-align: center;
+    min-width: 80px;
+    max-width: 50%;
+    font-size: 16px;
+    color: white;
+    border: solid #979797 1px;
+    margin-top: 12px;
+    padding: 4px;
+    border-radius: 8px;
+}
+
 .profile-picture-container {
     height: 30vh;
     width: 100vw;
@@ -171,4 +185,10 @@
     width: 90vw;
     aspect-ratio: 1.77;
     height: auto;
+}
+
+.presentation-icon{
+    height: 15px;
+    margin-right: 8px;
+
 }

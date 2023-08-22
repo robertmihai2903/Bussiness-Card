@@ -352,7 +352,7 @@ export function ManageDevice() {
         myVCard.addEmail(productState.email)
         myVCard.addJobtitle(productState.title)
         myVCard.addPhoneNumber(productState.phoneNumber)
-        myVCard.addNote(productState.about)
+        myVCard.addNote(productState.companyAbout)
         console.log(myVCard.toString())
         const blob = new Blob([myVCard.toString()], {type: "text/vcard"})
         const file = new File([blob], 'vCard.vcf', {type: "text/vcard"})
@@ -511,6 +511,10 @@ export function ManageDevice() {
 
     return (<div className={"page-manager"}>
         <div className={'preview-side'}>
+            <div className={'preview-button'} onClick={() => {
+                navigate(`/manage-devices`)
+            }}>Menu
+            </div>
             <div className={'show-on-device'}>Show on Device</div>
             <div className={'preview-option'}>
                 <span>Business Card</span>
