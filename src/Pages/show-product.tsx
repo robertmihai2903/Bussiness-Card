@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router";
-import {useContext, useEffect, useState} from "react";
+import {CSSProperties, useContext, useEffect, useMemo, useState} from "react";
 import {doc, getDoc} from "firebase/firestore";
 import {defaultProduct, Product} from "./manage-device";
 import {MainContext} from "../contexts";
@@ -67,6 +67,8 @@ export function ShowProduct() {
             }).catch(console.error)
         }
     }
+
+    console.log(product.color, product.color2)
 
     const downloadCV = () => {
         const documentRef = ref(storage, `documents/${productId}/CV` )
@@ -253,8 +255,16 @@ export function ShowProduct() {
         event.target.playVideo();
     };
 
+    const colorsStyle = useMemo(() => {
+        return {
+            "--color1": product.color,
+            "--color2": product.color2
+        };
+    }, [product]) as CSSProperties;
+
     return (<>
-        {product.preview === Preview.BUSINESS_CARD && <div className={"page-show-product-business"}>
+        {product.preview === Preview.BUSINESS_CARD &&
+            <div style={colorsStyle} className={"page-show-product-business"}>
             <div className={'profile-picture-container'}>
                 <img className={'profile-picture'} src={profileImageURL}/>
                 <div className={'profile-data'}>

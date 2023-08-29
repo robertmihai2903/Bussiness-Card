@@ -11,6 +11,7 @@ import PreviewLogo from '../assets/preview.svg'
 import {notify} from "./login-page";
 import VCard from 'vcard-creator'
 import ImageUpload from "../components/image-upload";
+import {HexAlphaColorPicker, HexColorInput, HexColorPicker} from "react-colorful";
 export const defaultProduct: Product = {
     name: '',
     activated: true,
@@ -45,7 +46,9 @@ export const defaultProduct: Product = {
     filename3: '',
     cv: false,
     website: '',
-    youtubeLink: ''
+    youtubeLink: '',
+    color: '#ffffff',
+    color2: '#ffffff',
 }
 
 export interface Product {
@@ -82,7 +85,9 @@ export interface Product {
     filename3: string,
     cv: boolean,
     website: string,
-    youtubeLink: string
+    youtubeLink: string,
+    color?: string,
+    color2?: string
 }
 
 const useEditState = (state: Product, setState: React.Dispatch<React.SetStateAction<Product>>, invalidFields: Map<string, string>) => {
@@ -276,6 +281,8 @@ export function ManageDevice() {
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>)
     const {db} = useContext(MainContext)
     const [imageURL, setImageURL] = useState("")
+    const [color, setColor] = useState('#ffffff88')
+    const [color2, setColor2] = useState('#ffffff88')
 
     const {
         firstName,
@@ -322,7 +329,12 @@ export function ManageDevice() {
                 const productRef = doc(db, 'products', productId)
                 const docSnap = await getDoc(productRef);
                 if (docSnap.exists()) {
-                    setProductState({...docSnap.data() as Product})
+                    const {color: colorTemp, color2: colorTemp2, ...product} = docSnap.data()
+                    setProductState({...product as Product})
+                    if (colorTemp && colorTemp2) {
+                        setColor(colorTemp)
+                        setColor2(colorTemp2)
+                    }
                 }
             }
             getDownloadURL(imageRef)
@@ -359,7 +371,7 @@ export function ManageDevice() {
 
         if (productId) {
             const productRef = doc(db, 'products', productId)
-            await updateDoc(productRef, {...productState, activated: true})
+            await updateDoc(productRef, {...productState, activated: true, color, color2})
             notify('Saved modifications')
         }
         const tempDoc = file
@@ -509,6 +521,7 @@ export function ManageDevice() {
         }
     }
 
+
     return (<div className={"page-manager"}>
         <div className={'preview-side'}>
             <div className={'preview-button'} onClick={() => {
@@ -601,6 +614,14 @@ export function ManageDevice() {
                     </div>
                     <h6>Upload your CV</h6>
                     <input className={'custom-file-input'} type={'file'} onChange={uploadCV} accept={'.pdf'}/>
+                    <div style={{marginTop: '20px'}}>
+                        <HexAlphaColorPicker style={{marginTop: '24px'}} color={color} onChange={setColor}/>
+                        <HexColorInput style={{marginTop: '10px'}} color={color} onChange={setColor}
+                                       placeholder="Type a color" prefixed alpha/>
+                        <HexAlphaColorPicker style={{marginTop: '24px'}} color={color2} onChange={setColor2}/>
+                        <HexColorInput style={{marginTop: '10px'}} color={color2} onChange={setColor2}
+                                       placeholder="Type a color" prefixed alpha/>
+                    </div>
 
                     <Button onClick={saveProductData}>Save</Button>
                 </div>

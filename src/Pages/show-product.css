@@ -11,7 +11,7 @@
 .page-show-product-business {
     min-height: 100vh;
     width: 100vw;
-    background-color: #859BA6;
+    background:linear-gradient(var(--color1), var(--color2));
     display: flex;
     flex-direction: column;
     align-items: center;
