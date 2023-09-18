@@ -1,3 +1,7 @@
+*{
+    box-sizing: border-box;
+}
+
 .page-devices {
     height: 100vh;
     width: 100vw;
@@ -7,14 +11,15 @@
 }
 
 .header-devices {
-    height: 10vh;
-    min-height: 100px;
-    width: 100%;
+    margin-top: 20px;
+    height: 6vh;
     display: flex;
-    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 16px;
 }
 .logo-devices {
-    height: 80%;
+    height: 100%;
 }
 
 .button-add-new-devices {
