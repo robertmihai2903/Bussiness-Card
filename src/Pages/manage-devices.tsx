@@ -20,6 +20,7 @@ import './manage-devices.css'
 import Logo from '../assets/flexpayz-logo.svg'
 import AddDevice from '../assets/add-device.svg'
 import ManageDevicesLogo from '../assets/manage-devices.svg'
+import BackArrowIcon from "../assets/back_arrow_icon.svg";
 
 export function ManageDevices() {
     const [newProductCode, setNewProductCode] = useState("")
@@ -91,6 +92,9 @@ export function ManageDevices() {
     const navigate = useNavigate()
     return (<div className={"page-devices"}>
         <div className={'header-devices'}>
+            {showAddDevice && <img className={'back-button'} onClick={() => {
+                setShowAddDevice(false)
+            }} src={BackArrowIcon}/>}
             <img className={'logo-devices'} src={Logo} alt={'logo'}/>
         </div>
         <div className={'main-devices'}>

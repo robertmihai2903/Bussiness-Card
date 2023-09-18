@@ -94,7 +94,7 @@ const ImageUpload = () => {
                     </div>
                 )
             }
-            <Button  type='submit'>crop</Button>
+            <button className={'blue-crop-button'}  type='submit'>Crop</button>
         </form>
     )
 }

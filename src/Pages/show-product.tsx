@@ -1,7 +1,6 @@
 import {useNavigate} from "react-router";
-import {useContext, useEffect, useState} from "react";
+import {CSSProperties, useContext, useEffect, useMemo, useState} from "react";
 import {doc, getDoc} from "firebase/firestore";
-import {defaultProduct, Product} from "./manage-device";
 import {MainContext} from "../contexts";
 import {getDownloadURL, ref} from "firebase/storage";
 import {storage} from "../App";
@@ -12,10 +11,15 @@ import Logo from '../assets/flexpayz-logo.svg'
 import InstagramLogo from '../assets/instagram.svg'
 import FacebookLogo from '../assets/facebook.svg'
 import LinkedInLogo from '../assets/linkedin.svg'
+import YoutubeLogo from '../assets/youtube-svgrepo-com.svg'
 import YouTube from "react-youtube";
 import WorkIcon from '../assets/work-icon.svg'
 import LocationIcon from '../assets/location-icon.svg'
 import WebsiteIcon from '../assets/website-icon.svg'
+import TikTokLogo from '../assets/tiktok-square-icon.svg'
+import {defaultProduct, Product} from "../control-state";
+import {TextField} from "@mui/material";
+import {onChangeWrapper} from "../utils";
 
 export function ShowProduct() {
     const navigate = useNavigate()
@@ -24,6 +28,11 @@ export function ShowProduct() {
     const productId = urlParams.get('product_id')
     const {db} = useContext(MainContext)
     const [profileImageURL, setProfileImageURL] = useState('')
+
+    const [passwordProtected, setPasswordProtected] = useState(false)
+    const [password, setPassword] = useState('')
+    const [loaded, setLoaded] = useState(false)
+
 
     useEffect(() => {
         (async () => {
@@ -35,6 +44,8 @@ export function ShowProduct() {
                         navigate('/app')
                     }
                     setProduct({...docSnap.data() as Product})
+                    setPasswordProtected((docSnap.data() as Product).publicPagePasswordActivated)
+                    setLoaded(true)
                     if (docSnap.data().preview === Preview.CUSTOM_LINK) {
                         window.location.replace(docSnap.data().customLink)
                     }
@@ -253,8 +264,26 @@ export function ShowProduct() {
         event.target.playVideo();
     };
 
-    return (<>
-        {product.preview === Preview.BUSINESS_CARD && <div className={"page-show-product-business"}>
+    console.log(product.color1, product.color2)
+
+    const colorsStyle = {
+        "--color1": product.color1 || '#467083',
+        "--color2": product.color2 || "#A3B0B5"
+
+    } as CSSProperties;
+
+    return (<div style={colorsStyle}>
+        {passwordProtected && <div className={'password-page'}>
+            <TextField label={'Unlock page'} type={'password'} className={'form-manager-input'} value={password}
+                       onChange={(e) => {
+                           setPassword(e.target.value)
+                           if (e.target.value === product.publicPagePassword) {
+                               setPasswordProtected(false)
+                           }
+                       }} variant={"outlined"} size={"small"}/>
+        </div>}
+        {loaded && !passwordProtected && product.preview === Preview.BUSINESS_CARD &&
+            <div className={"page-show-product-business"}>
             <div className={'profile-picture-container'}>
                 <img className={'profile-picture'} src={profileImageURL}/>
                 <div className={'profile-data'}>
@@ -290,11 +319,19 @@ export function ShowProduct() {
                 {product.linkedIn && <img src={LinkedInLogo} onClick={() => {
                     window.location.replace(product.linkedIn)
                 }}/>}
+                {product.youtube && <img src={YoutubeLogo} onClick={() => {
+                    window.location.replace(product.youtube)
+                }}/>}
+                {product.tiktok && <img src={TikTokLogo} onClick={() => {
+                    window.location.replace(product.tiktok)
+                }}/>}
+
             </div>
-            {product.cv && <div className={'download-button-profile'} onClick={downloadCV}>Download Document</div>}
+                {!passwordProtected && product.cv &&
+                    <div className={'download-button-profile'} onClick={downloadCV}>Download Document</div>}
             <div className={'download-button-profile'} onClick={downloadVCard}>Save my contact details</div>
         </div>}
-        {product.preview === Preview.UPLOAD_FILE && <div className={'page-show-product'}>
+        {!passwordProtected && product.preview === Preview.UPLOAD_FILE && <div className={'page-show-product'}>
             {product.filename1 && <div className={'file-container'}>
                 <span>{product.filename1}</span>
                 <div className={'download-button'} onClick={downloadFile1}>Download</div>
@@ -311,7 +348,7 @@ export function ShowProduct() {
                 {/*<div className={'share-button'} onClick={shareFile3}>Share</div>*/}
             </div>}
         </div>}
-        {product.preview === Preview.UPLOAD_VIDEO && <div className={'page-show-product'}>
+        {!passwordProtected && product.preview === Preview.UPLOAD_VIDEO && <div className={'page-show-product'}>
             <YouTube className={'youtube'} videoId={youtubeID} onReady={onReady} opts={
                 {
                     playerVars: {
@@ -326,6 +363,6 @@ export function ShowProduct() {
                 }
             }/>
         </div>}
-    </>)
+    </div>)
 
 }
