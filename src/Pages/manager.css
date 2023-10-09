@@ -126,6 +126,12 @@
     margin-bottom: 24px !important;
 }
 
+.edit-name-input {
+    width: 60%;
+    margin: 24px 8px;
+
+}
+
 .personal-side {
     height: 100%;
     width: 65vw;
@@ -266,8 +272,23 @@
     top: 15%;
 }
 
+.logout-button {
+    height: 70%;
+    position: absolute;
+    right: 20px;
+    top: 15%;
+}
+
 .device-name {
     color: white;
+    width: 60%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: large;
 }
 
 .check-show-text {
@@ -347,7 +368,19 @@
 .blue-crop-button {
     margin-top: 12px;
     margin-bottom: 24px;
-    width: 100px;
+    min-width: 100px;
+    height: 40px;
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+    background:  linear-gradient(to right, #148BD6, #0A1656);
+    border: 1px solid #979797;
+    border-radius: 12px;
+}
+
+.blue-edit-name-button {
+    margin-bottom: 24px;
+    min-width: 100px;
     height: 40px;
     font-weight: 700;
     font-size: 16px;
@@ -358,7 +391,7 @@
 }
 
 .green-publish-button {
-    width: 100px;
+    min-width: 100px;
     height: 40px;
     font-weight: 700;
     font-size: 16px;
@@ -390,4 +423,84 @@
     width: 80%;
     color: white;
     margin-bottom: 24px;
+}
+
+.logo-upload-wrapper{
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-upload-wrapper img {
+    max-width: 40vw;
+    margin-top: 15px;
+    object-fit: contain;
+}
+
+.device-name-container{
+    display: flex;
+    width: 100%;
+    height: 60px;
+    justify-content: center;
+    padding: 0 8px;
+}
+
+.inside-modal{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70vw;
+    height: 50vh;
+    max-width: 600px;
+    max-height: 600px;
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: #4D6161;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 24px;
+}
+
+.modal-buttons{
+    height: 30%;
+    min-height: 60px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.modal-text {
+    font-size: 20px;
+    text-align: justify;
+    padding: 10px;
+    color: white;
+}
+
+
+.cancel-button {
+    min-width: 100px;
+    height: 40px;
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+    background:  linear-gradient(to right, #148BD6, #0A1656);
+    border: 1px solid #979797;
+    border-radius: 12px;
+}
+
+.reset-button {
+    min-width: 100px;
+    height: 40px;
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+    background:  linear-gradient(to right, #E10000, #a81d1d);
+    border: 1px solid #979797;
+    border-radius: 12px;
 }

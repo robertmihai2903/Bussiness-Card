@@ -28,11 +28,14 @@ export function ShowProduct() {
     const productId = urlParams.get('product_id')
     const {db} = useContext(MainContext)
     const [profileImageURL, setProfileImageURL] = useState('')
+    const [logoImageURL, setLogoImageURL] = useState('')
 
     const [passwordProtected, setPasswordProtected] = useState(false)
     const [password, setPassword] = useState('')
     const [loaded, setLoaded] = useState(false)
 
+
+    getYoutubeLink('//https://youtu.be/GF8hpmGhBtI?si=W3ww_cb9OBGhuBIO')
 
     useEffect(() => {
         (async () => {
@@ -56,6 +59,19 @@ export function ShowProduct() {
                 getDownloadURL(imageRef)
                     .then(url => {
                         setProfileImageURL(url)
+                        return Promise.resolve(true);
+                    })
+                    .catch(error => {
+                        if (error.code === 'storage/object-not-found') {
+                            return Promise.resolve(false);
+                        } else {
+                            return Promise.reject(error);
+                        }
+                    });
+                const logoRef = ref(storage, `images/logo-${productId}`)
+                getDownloadURL(logoRef)
+                    .then(url => {
+                        setLogoImageURL(url)
                         return Promise.resolve(true);
                     })
                     .catch(error => {
@@ -257,7 +273,7 @@ export function ShowProduct() {
             });
     }
 
-    const post = product.youtubeLink
+    const post = getYoutubeLink(product.youtubeLink)
     const youtubeID = post?.split('v=')[1];
     const onReady = (event: any) => {
         console.log(event.target)
@@ -268,8 +284,7 @@ export function ShowProduct() {
 
     const colorsStyle = {
         "--color1": product.color1 || '#467083',
-        "--color2": product.color2 || "#A3B0B5"
-
+        "--color2": product.color2 || "#A3B0B5",
     } as CSSProperties;
 
     return (<div style={colorsStyle}>
@@ -291,7 +306,7 @@ export function ShowProduct() {
                         <div className={'name-container'}>{product.firstName} {product.lastName}</div>
                         <div className={'title-container'}>{product.title}</div>
                     </div>
-                    <img className={'logo-profile'} src={Logo}/>
+                    {logoImageURL && <img className={'logo-profile'} src={logoImageURL}/>}
                 </div>
             </div>
             <div className={'share-button'} onClick={share}><img className={'share-icon'} src={ShareButton}/></div>
@@ -365,4 +380,21 @@ export function ShowProduct() {
         </div>}
     </div>)
 
+}
+
+
+//https://www.youtube.com/watch?v=_NbdmiAS0J4
+//https://youtu.be/_NbdmiAS0J4?si=x_QhRN-t96Ca_JDc
+//https://youtu.be/_NbdmiAS0J4?si=x_QhRN-t96Ca_JDc
+//https://youtu.be/GF8hpmGhBtI?si=W3ww_cb9OBGhuBIO
+
+const getYoutubeLink = (link: string) => {
+    const mobileStartPosition =link?.search('youtu.be')
+    if( mobileStartPosition > -1) {
+       const mobileEndPosition = link?.search('si=')
+        const videoCode = link?.substring(mobileStartPosition + 9, mobileEndPosition-1)
+        return `https://www.youtube.com/watch?v=${videoCode}`
+    } else {
+        return link
+    }
 }

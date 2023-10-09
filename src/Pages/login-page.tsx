@@ -13,7 +13,7 @@ import {toast} from "react-toastify";
 
 export const notify = (message?: string) => toast(message, {
     position: "top-right",
-    autoClose: 5000,
+    autoClose: 2500,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -88,7 +88,11 @@ export function LoginPage() {
     }
     return (<div className={"page-login"}>
         {hasAccount && <div className={"modal-login"}>
+            <div>
             <img src={Logo} alt={'logo'} className={'flexpayz-logo'}/>
+            <a className={'how-to-text'} href={'https://www.flexpayz.se/pages/get-started'}>How-to-use guide</a>
+
+            </div>
             <ConfigInput label={"Email"} value={emailLog.value} onChange={emailLog.onChange}
                          error={emailLog.error}></ConfigInput>
             <ConfigInput label={'Password'} type={'password'} value={passwordLog.value} onChange={passwordLog.onChange}
