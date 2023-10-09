@@ -1,4 +1,4 @@
-import {ref, uploadBytes} from "firebase/storage";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {db, storage} from "./App";
 import {Product} from "./control-state";
 import {useContext} from "react";
@@ -9,6 +9,7 @@ import {notify} from "./Pages/login-page";
 
 export const onChangeWrapper = (key: any) => {
     return (e: any) => {
+        e.preventDefault()
         key.onChange(e.target.value)
     }
 }
@@ -27,6 +28,26 @@ export function useUploadFile(filename: string, fileID?: keyof Product) {
                 if (fileID) {
                     setProductState((prev: Product) => ({...prev, [fileID]: true}))
                 }
+            })
+            console.log('document uploaded')
+        }
+    }
+}
+
+export function useUploadLogo() {
+    const productId = getProductIdFromURL()
+    const {setProductState} = useContext(ManageProductContext)
+
+    return async (e: any) => {
+        const tempDoc = e.target.files[0]
+        if (tempDoc !== null) {
+            const documentRef = ref(storage, `images/logo-${productId}`)
+            console.log('start')
+            uploadBytes(documentRef, tempDoc).then((data) => {
+                console.log(data)
+                getDownloadURL(documentRef).then((url) => {
+                setProductState((prev: Product) => ({...prev, logo: url}))
+                })
             })
             console.log('document uploaded')
         }

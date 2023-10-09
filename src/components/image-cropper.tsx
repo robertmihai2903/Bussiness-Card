@@ -3,9 +3,8 @@ import React, { useState } from 'react'
 import Cropper from 'react-easy-crop'
 import { getCroppedImg } from './crop-imgae'
 
-const ImageCropper = ({ getBlob, inputImg }: any) => {
+const ImageCropper = ({ getBlob, inputImg, zoom, setZoom}: any) => {
     const [crop, setCrop] = useState({ x: 0, y: 0 })
-    const [zoom, setZoom] = useState(1)
 
     /* onCropComplete() will occur each time the user modifies the cropped area,
     which isn't ideal. A better implementation would be getting the blob

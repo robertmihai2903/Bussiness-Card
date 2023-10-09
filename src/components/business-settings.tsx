@@ -1,23 +1,28 @@
 import {Product, useEditState} from "../control-state";
 import ImageUpload from "./image-upload";
 import {Button, TextField} from "@mui/material";
-import {onChangeWrapper, useUploadFile} from "../utils";
+import {getProductIdFromURL, onChangeWrapper, useUploadFile, useUploadLogo} from "../utils";
 import {useSaveProductData} from "../useProductData";
 import {useContext, useEffect, useState} from "react";
 import {doc, getDoc} from "firebase/firestore";
-import {db} from "../App";
+import {db, storage} from "../App";
 import {ManageProductContext} from "../contexts";
-import {HexAlphaColorPicker, HexColorInput} from "react-colorful";
+import {HexAlphaColorPicker, HexColorInput, HexColorPicker} from "react-colorful";
+import {getDownloadURL, ref} from "firebase/storage";
 
 export function BusinessSettings() {
-    const {setProductState} = useContext(ManageProductContext)
+    const {setProductState, productState} = useContext(ManageProductContext)
     const {
         firstName,
         lastName,
         title,
         email,
+        email2,
+        email3,
         about,
         phoneNumber,
+        phoneNumber2,
+        phoneNumber3,
         website,
         address,
         address2,
@@ -44,6 +49,25 @@ export function BusinessSettings() {
     const saveProductData = useSaveProductData()
 
     const uploadCV = useUploadFile('CV', 'cv')
+    const uploadLogo = useUploadLogo()
+    const productId = getProductIdFromURL()
+    const [logoImageURL, setLogoImageURL] = useState( '')
+
+    useEffect(() => {
+        const logoRef = ref(storage, `images/logo-${productId}`)
+        getDownloadURL(logoRef)
+            .then(url => {
+                setProductState((prev:Product) => ({...prev, logo: url}))
+                return Promise.resolve(true);
+            })
+            .catch(error => {
+                if (error.code === 'storage/object-not-found') {
+                    return Promise.resolve(false);
+                } else {
+                    return Promise.reject(error);
+                }
+            });
+    }, []);
 
     return <div className={'basic-page'}>
         <div className={'section-title'}>Business Card</div>
@@ -58,12 +82,24 @@ export function BusinessSettings() {
         <TextField label={'Email'} value={email.value}
                    onChange={onChangeWrapper(email)} variant={"outlined"} size={"small"}
                    className={'form-manager-input'} sx={{input: {color: 'white'}}}/>
+        <TextField label={'Email'} value={email2.value}
+                   onChange={onChangeWrapper(email2)} variant={"outlined"} size={"small"}
+                   className={'form-manager-input'} sx={{input: {color: 'white'}}}/>
+        <TextField label={'Email'} value={email3.value}
+                   onChange={onChangeWrapper(email3)} variant={"outlined"} size={"small"}
+                   className={'form-manager-input'} sx={{input: {color: 'white'}}}/>
         <TextField label={'About'} value={about.value}
                    onChange={onChangeWrapper(about)} variant={"outlined"} size={"small"}
                    className={'form-manager-input'} multiline={true} minRows={3} maxRows={5}
                    sx={{textarea: {color: 'white'}}}/>
         <TextField label={'Phone Number'} value={phoneNumber.value}
                    onChange={onChangeWrapper(phoneNumber)} variant={"outlined"} size={"small"}
+                   className={'form-manager-input'} sx={{input: {color: 'white'}}}/>
+        <TextField label={'Phone Number'} value={phoneNumber2.value}
+                   onChange={onChangeWrapper(phoneNumber2)} variant={"outlined"} size={"small"}
+                   className={'form-manager-input'} sx={{input: {color: 'white'}}}/>
+        <TextField label={'Phone Number'} value={phoneNumber3.value}
+                   onChange={onChangeWrapper(phoneNumber3)} variant={"outlined"} size={"small"}
                    className={'form-manager-input'} sx={{input: {color: 'white'}}}/>
         <TextField label={'Website'} value={website.value}
                    onChange={onChangeWrapper(website)} variant={"outlined"} size={"small"}
@@ -121,6 +157,11 @@ export function BusinessSettings() {
         <div className={'image-upload-wrapper'}>
             <ImageUpload/>
         </div>
+        <div className={'explanation-text-small'}>Upload your Logo</div>
+        <div className={'logo-upload-wrapper'}>
+            <input className={'custom-file-input'} type={'file'} onChange={uploadLogo} accept={'image/*'}/>
+            {productState.logo && <img src={productState.logo}/>}
+        </div>
         <div className={'explanation-text-small'}>Upload your CV</div>
         <input className={'custom-file-input'} type={'file'} onChange={uploadCV} accept={'.pdf'}/>
         <div className={'explanation-text'} style={{marginTop: '24px'}}>Express your emotions through your profile by
@@ -128,12 +169,12 @@ export function BusinessSettings() {
             identity.
         </div>
         <div>
-            <HexAlphaColorPicker style={{marginTop: '24px', marginBottom: '12px'}} color={color1.value}
+            <HexColorPicker style={{marginTop: '24px', marginBottom: '12px'}} color={color1.value}
                                  onChange={color1.onChange}/>
             <TextField label={`Color`} className={'form-manager-input'} value={color1.value}
                        onChange={onChangeWrapper(color1)} variant={"outlined"} size={"small"}
                        sx={{input: {color: 'white'}}}/>
-            <HexAlphaColorPicker style={{marginTop: '24px', marginBottom: '12px'}} color={color2.value}
+            <HexColorPicker style={{marginTop: '24px', marginBottom: '12px'}} color={color2.value}
                                  onChange={color2.onChange}/>
             <TextField label={`Color`} className={'form-manager-input'} value={color2.value}
                        onChange={onChangeWrapper(color2)} variant={"outlined"} size={"small"}

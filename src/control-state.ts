@@ -6,12 +6,16 @@ export const defaultProduct: Product = {
     name: '',
     activated: true,
     preview: Preview.BUSINESS_CARD,
-    unlockcode: '',
+    unlockCode: '',
     firstName: '',
     lastName: '',
     title: '',
     email: '',
+    email2: '',
+    email3: '',
     phoneNumber: '',
+    phoneNumber2: '',
+    phoneNumber3: '',
     country: '',
     address: '',
     address2: '',
@@ -36,23 +40,29 @@ export const defaultProduct: Product = {
     filename3: '',
     cv: false,
     website: '',
+    website2: '',
     youtubeLink: '',
     publicPagePassword: '',
     publicPagePasswordActivated: false,
-    color1: '#ffffff',
-    color2: '#ffffff',
+    color1: '#467083',
+    color2: '#A3B0B5',
+    logo: ''
 }
 
 export interface Product {
     name: string
     activated: boolean,
     preview: Preview
-    unlockcode: string,
+    unlockCode: string,
     firstName: string,
     lastName: string,
     title: string,
     email: string,
+    email2: string,
+    email3: string,
     phoneNumber: string,
+    phoneNumber2: string
+    phoneNumber3: string
     country: string,
     address: string,
     address2: string,
@@ -77,11 +87,14 @@ export interface Product {
     filename3: string,
     cv: boolean,
     website: string,
+    website2: string,
     youtubeLink: string
     publicPagePassword: string,
     publicPagePasswordActivated: boolean,
     color1: string,
-    color2: string
+    color2: string,
+    logo: string,
+
 }
 
 export const useEditState = () => {
@@ -124,10 +137,34 @@ export const useEditState = () => {
                 setState((prev: Product) => ({...prev, email}))
             }
         },
+        email2: {
+            value: state.email2,
+            onChange: (email2: string) => {
+                setState((prev: Product) => ({...prev, email2}))
+            }
+        },
+        email3: {
+            value: state.email3,
+            onChange: (email3: string) => {
+                setState((prev: Product) => ({...prev, email3}))
+            }
+        },
         phoneNumber: {
             value: state.phoneNumber,
             onChange: (phoneNumber: string) => {
                 setState((prev: Product) => ({...prev, phoneNumber}))
+            }
+        },
+        phoneNumber2: {
+            value: state.phoneNumber2,
+            onChange: (phoneNumber2: string) => {
+                setState((prev: Product) => ({...prev, phoneNumber2}))
+            }
+        },
+        phoneNumber3: {
+            value: state.phoneNumber3,
+            onChange: (phoneNumber3: string) => {
+                setState((prev: Product) => ({...prev, phoneNumber3}))
             }
         },
         country: {
@@ -261,6 +298,12 @@ export const useEditState = () => {
             value: state.website,
             onChange: (website: string) => {
                 setState((prev: Product) => ({...prev, website}))
+            }
+        },
+        website2: {
+            value: state.website2,
+            onChange: (website2: string) => {
+                setState((prev: Product) => ({...prev, website2}))
             }
         },
         youtubeLink: {

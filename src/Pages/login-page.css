@@ -76,3 +76,9 @@
 .terms-text {
     color: white;
 }
+
+.how-to-text{
+    display: block;
+    color: white;
+    text-decoration: none;
+}

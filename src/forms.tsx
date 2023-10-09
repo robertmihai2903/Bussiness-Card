@@ -35,12 +35,12 @@ const Fields = {
 
 export function required(value:any) {
     const valid = !!value;
-    return [valid, valid ? "" : "Câmpul este obligatoriu!"];
+    return [valid, valid ? "" : "Field is required!"];
 }
 
 const minThreeLetters = (value: string) => {
     const valid = value.length >= 3;
-    return [valid, valid ? "" : "Câmpul trebuie să aibă minim 3 litere!"];
+    return [valid, valid ? "" : "Minimum 3 letters!"];
 };
 
 // const emailValidation = (value) => {
@@ -56,7 +56,7 @@ const phoneValidation = (value: any) => {
     const phoneFormat =
         /^(\+4|)?(07[0-8]{1}[0-9]{1}|02[0-9]{2}|03[0-9]{2}){1}?(\s|\.|\-)?([0-9]{3}(\s|\.|\-|)){2}$/;
     const valid = value.match(phoneFormat);
-    return [valid, valid ? "" : "Formatul telefonului este gresit!"];
+    return [valid, valid ? "" : "Phone format is wrong!"];
 };
 
 export function useRegisterForm() {
@@ -64,7 +64,7 @@ export function useRegisterForm() {
 
     const sameAsPassword = (value:any) => {
         const valid = value === state.register.password;
-        return [valid, valid ? "" : "Câmpul trebuie să fie la fel ca parola!"];
+        return [valid, valid ? "" : "It has to match password!"];
     };
 
     useEffect(() => {
