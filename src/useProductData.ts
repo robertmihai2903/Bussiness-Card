@@ -122,6 +122,7 @@ export function useSaveProductData () {
         const blob = new Blob([myVCard.toString()], {type: "text/vcard"})
         const file = new File([blob], 'vCard.vcf', {type: "text/vcard"})
 
+
         if (productId) {
             const productRef = doc(db, 'products', productId)
             await updateDoc(productRef, {...productState, activated: true})

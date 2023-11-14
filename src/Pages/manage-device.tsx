@@ -19,12 +19,17 @@ import {useResetDevice, useSaveName} from "../useProductData";
 import {Simulate} from "react-dom/test-utils";
 import reset = Simulate.reset;
 import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {UploadSongsSettings} from "../components/upload-songs-settings";
+import {SharedContacts} from "../components/shared-contacts";
 
 const enum Section {
     BUSINESS_CARD = 'business_card',
     CUSTOM_LINK = 'custom_link',
     UPLOAD_FILE = 'upload_file',
-    UPLOAD_VIDEO = "upload_video"
+    UPLOAD_VIDEO = "upload_video",
+    UPLOAD_SONGS = "upload_songs",
+    SHARED_CONTACTS = 'shared_contacts',
+    PHOTO_GALLERY = 'photo_gallery'
 }
 
 function ResetProduct () {
@@ -135,11 +140,19 @@ const navigate = useNavigate()
                 <div className={'video-upload-header'} onClick={() => setShowSection(Section.UPLOAD_VIDEO)}>Video
                     Upload
                 </div>
+                <div className={'songs-upload-header'} onClick={() => setShowSection(Section.UPLOAD_SONGS)}>Songs
+                    Upload
+                </div>
+                <div className={'songs-upload-header'} onClick={() => setShowSection(Section.SHARED_CONTACTS)}>Shared Contacts
+                </div>
             </div>}
             {showSection === Section.BUSINESS_CARD && <BusinessSettings/>}
             {showSection === Section.CUSTOM_LINK && <CustomLinkSettings/>}
             {showSection === Section.UPLOAD_FILE && <UploadFileSettings/>}
             {showSection === Section.UPLOAD_VIDEO && <UploadVideoSettings/>}
+            {showSection === Section.UPLOAD_SONGS && <UploadSongsSettings/>}
+            {showSection === Section.SHARED_CONTACTS && <SharedContacts/>}
+            {/*{showSection === Section.PHOTO_GALLERY && <PhotoGallery/>}*/}
         </ManageProductContext.Provider>
     </div>)
 }

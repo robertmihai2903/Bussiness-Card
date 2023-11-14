@@ -10,7 +10,7 @@ export function UploadVideoSettings() {
 
     return (<div className={'basic-page'}>
         <div className={'section-title'}>Video Upload</div>
-        <div className={'explanation-text'}>Open Youtube page and not the Youtube application, choose the video you want
+        <div className={'explanation-text'}>Open Youtube page and choose the video you want
             to publish on device, and copy the link from browser page address.
         </div>
         <TextField label={'Youtube Link'} value={youtubeLink.value} onChange={onChangeWrapper(youtubeLink)}

@@ -42,7 +42,8 @@ export function BusinessSettings() {
         companyName,
         zipCode,
         color1,
-        color2
+        color2,
+        businessFile
     } = useEditState()
 
 
@@ -162,7 +163,12 @@ export function BusinessSettings() {
             <input className={'custom-file-input'} type={'file'} onChange={uploadLogo} accept={'image/*'}/>
             {productState.logo && <img src={productState.logo}/>}
         </div>
-        <div className={'explanation-text-small'}>Upload your CV</div>
+
+
+        <div className={'explanation-text-small'}>Upload your Business File</div>
+        <TextField label={`File name`} className={'form-manager-input'}
+                   value={businessFile.value} onChange={onChangeWrapper(businessFile)}
+                   variant={"outlined"} size={"small"} sx={{input: {color: 'white'}}}/>
         <input className={'custom-file-input'} type={'file'} onChange={uploadCV} accept={'.pdf'}/>
         <div className={'explanation-text'} style={{marginTop: '24px'}}>Express your emotions through your profile by
             selecting a background that resonates with your
