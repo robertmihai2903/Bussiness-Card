@@ -23,6 +23,8 @@ export function PreviewSettings({setShowSection}: any) {
     const setPreviewCustomLink = useSetPreview(Preview.CUSTOM_LINK)
     const setPreviewUploadFile = useSetPreview(Preview.UPLOAD_FILE)
     const setPreviewUploadVideo = useSetPreview(Preview.UPLOAD_VIDEO)
+    const setPreviewUploadSongs = useSetPreview(Preview.UPLOAD_SONGS)
+
     useEffect(() => {
         setShowPassword(productState.publicPagePasswordActivated)
     }, [])
@@ -72,6 +74,11 @@ export function PreviewSettings({setShowSection}: any) {
                            onChange={setPreviewUploadVideo}/>
                     <span>Upload Video</span>
                 </div>
+                <div className={'preview-option'}>
+                    <input type={'checkbox'} checked={productState.preview === Preview.UPLOAD_SONGS}
+                           onChange={setPreviewUploadSongs}/>
+                    <span>Upload Songs</span>
+                </div>
                 <div className={'preview-button'} onClick={() => {
                     navigate(`/show-product?product_id=${productId}`)
                 }}><img className={'preview-logo'} src={PreviewLogo} alt={'preview'}/>Preview
@@ -96,14 +103,4 @@ export function PreviewSettings({setShowSection}: any) {
         </div>
     </div>
 
-
-    // return <div className={'preview-side'}>
-    // <div className={'preview-button'} onClick={() => {
-    //         navigate(`/manage-devices`)
-    //     }}>Menu
-    //     </div>
-    //     <div className={'show-on-device'}>Show on Device</div>
-
-    //
-    // </div>
 }

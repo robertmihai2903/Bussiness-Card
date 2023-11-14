@@ -34,6 +34,26 @@ export function useUploadFile(filename: string, fileID?: keyof Product) {
     }
 }
 
+export function useUploadAudio(filename: string, fileID?: keyof Product) {
+    const productId = getProductIdFromURL()
+    const {setProductState} = useContext(ManageProductContext)
+
+    return async (e: any) => {
+        const tempDoc = e.target.files[0]
+        if (tempDoc !== null) {
+            const documentRef = ref(storage, `audio/${productId}/${filename}`)
+            console.log('start')
+            uploadBytes(documentRef, tempDoc).then((data) => {
+                console.log(data)
+                if (fileID) {
+                    setProductState((prev: Product) => ({...prev, [fileID]: true}))
+                }
+            })
+            console.log('document uploaded')
+        }
+    }
+}
+
 export function useUploadLogo() {
     const productId = getProductIdFromURL()
     const {setProductState} = useContext(ManageProductContext)

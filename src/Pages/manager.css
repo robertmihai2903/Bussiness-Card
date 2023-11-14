@@ -110,6 +110,17 @@
     padding-top: 3px;
 }
 
+.songs-upload-header {
+    height: 35px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: white;
+    background: linear-gradient(to right, #5F0241, #997EB3);
+    border-radius: 15px 15px 0px 0px;
+    padding-top: 3px;
+}
+
 .form {
     flex: 1 1 auto;
     background-color: white;
@@ -267,16 +278,10 @@
 .back-button {
     height: 70%;
     object-fit: cover;
-    position: absolute;
-    left: 20px;
-    top: 15%;
 }
 
 .logout-button {
     height: 70%;
-    position: absolute;
-    right: 20px;
-    top: 15%;
 }
 
 .device-name {
@@ -466,6 +471,24 @@
     border-radius: 24px;
 }
 
+.inside-modal-2{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70vw;
+    height: 50vh;
+    max-width: 600px;
+    max-height: 600px;
+    background-color: rgba(11, 178, 180, 0.89);
+    box-shadow: #4D6161;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 24px;
+}
+
 .modal-buttons{
     height: 30%;
     min-height: 60px;
@@ -503,4 +526,33 @@
     background:  linear-gradient(to right, #E10000, #a81d1d);
     border: 1px solid #979797;
     border-radius: 12px;
+}
+
+.contact-box{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.contact-box button {
+    min-width: 100px;
+    height: 30px;
+    font-weight: 600;
+    font-size: 12px;
+    color: white;
+    background:  linear-gradient(to right, #148BD6, #0A1656);
+    border: 1px solid #979797;
+    border-radius: 12px;
+}
+
+
+.contact-box span {
+    display: block;
+    font-size: 18px;
+
+    color: white;
+
 }

@@ -14,9 +14,10 @@
     margin-top: 20px;
     height: 6vh;
     display: flex;
-    justify-content: center;
-    position: relative;
+    justify-content: space-around;
     margin-bottom: 16px;
+    align-items: center;
+
 }
 .logo-devices {
     height: 100%;

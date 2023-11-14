@@ -46,7 +46,12 @@ export const defaultProduct: Product = {
     publicPagePasswordActivated: false,
     color1: '#467083',
     color2: '#A3B0B5',
-    logo: ''
+    logo: '',
+    song1: '',
+    song2: '',
+    song3: '',
+    businessFile: '',
+    sharedContacts: []
 }
 
 export interface Product {
@@ -94,6 +99,11 @@ export interface Product {
     color1: string,
     color2: string,
     logo: string,
+    song1: string,
+    song2: string,
+    song3: string,
+    businessFile: string,
+    sharedContacts: any[]
 
 }
 
@@ -328,6 +338,30 @@ export const useEditState = () => {
             value: state?.color2,
             onChange: (color2: string) => {
                 setState((prev: Product) => ({...prev, color2}))
+            }
+        },
+        song1: {
+            value: state?.song1,
+            onChange: (song1: string) => {
+                setState((prev: Product) => ({...prev, song1}))
+            }
+        },
+        song2: {
+            value: state?.song2,
+            onChange: (song2: string) => {
+                setState((prev: Product) => ({...prev, song2}))
+            }
+        },
+        song3: {
+            value: state?.song3,
+            onChange: (song3: string) => {
+                setState((prev: Product) => ({...prev, song3}))
+            }
+        },
+        businessFile: {
+            value: state?.businessFile,
+            onChange: (businessFile: string) => {
+                setState((prev: Product) => ({...prev, businessFile}))
             }
         }
 

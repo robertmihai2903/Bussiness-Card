@@ -1,9 +1,9 @@
 import {useNavigate} from "react-router";
 import {CSSProperties, useContext, useEffect, useMemo, useState} from "react";
-import {doc, getDoc} from "firebase/firestore";
-import {MainContext} from "../contexts";
+import {arrayUnion, doc, getDoc, updateDoc} from "firebase/firestore";
+import {MainContext, ManageProductContext} from "../contexts";
 import {getDownloadURL, ref} from "firebase/storage";
-import {storage} from "../App";
+import {db, storage} from "../App";
 import {Preview} from "./admin";
 import './show-product.css'
 import ShareButton from '../assets/share.svg'
@@ -18,8 +18,69 @@ import LocationIcon from '../assets/location-icon.svg'
 import WebsiteIcon from '../assets/website-icon.svg'
 import TikTokLogo from '../assets/tiktok-square-icon.svg'
 import {defaultProduct, Product} from "../control-state";
-import {TextField} from "@mui/material";
-import {onChangeWrapper} from "../utils";
+import {Box, Modal, TextField} from "@mui/material";
+import {getProductIdFromURL, onChangeWrapper} from "../utils";
+import {AudioPage} from "../components/audio-page";
+import {useResetDevice} from "../useProductData";
+import {notify} from "./login-page";
+
+
+function GetContact() {
+    const [showModal, setShowModal] = useState(false)
+    const onResetProduct = useResetDevice()
+    const handleCloseModal = () => {
+        setShowModal(false)
+    }
+
+    const handleOpenModal = () => {
+        setShowModal(true)
+    }
+
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState("")
+
+    const {productState, setProductState} = useContext(ManageProductContext)
+    const handleShareContact = async () => {
+        const productId = getProductIdFromURL()
+        const date = Date.now()
+        if (productId) {
+            const productRef = doc(db, 'products', productId)
+            await updateDoc(productRef, {sharedContacts: arrayUnion({name, email, phone, date})})
+            notify('Shared contact')
+            handleCloseModal()
+        }
+
+    }
+
+    return (<div className={'reset-product-container'}>
+        <button style={{marginBottom: '12px', marginTop: '12px'}} className={'reset-button'}
+                onClick={handleOpenModal}>Share your contact with me
+        </button>
+        <Modal open={showModal} onClose={handleCloseModal}>
+            <Box className={'inside-modal-2'}>
+                <div className={'modal-inputs'}>
+                    <TextField label={'Name'} type={'text'} className={'form-manager-input'} value={name}
+                               onChange={(e) => {
+                                   setName(e.target.value)
+                               }} variant={"outlined"} size={"small"} sx={{textarea: {color: 'white'}}}/>
+                    <TextField label={'Phone'} type={'text'} value={phone} className={'form-manager-input'}
+                               onChange={(e) => {
+                                   setPhone(e.target.value)
+                               }} variant={"outlined"} size={"small"}/>
+                    <TextField label={'Email'} type={'email'} className={'form-manager-input'} value={email}
+                               onChange={(e) => {
+                                   setEmail(e.target.value)
+                               }} variant={"outlined"} size={"small"}/>
+                </div>
+                <button style={{marginBottom: '12px'}} className={'reset-button'} onClick={handleShareContact}>Share
+                </button>
+
+            </Box>
+
+        </Modal>
+    </div>)
+}
 
 export function ShowProduct() {
     const navigate = useNavigate()
@@ -33,6 +94,7 @@ export function ShowProduct() {
     const [passwordProtected, setPasswordProtected] = useState(false)
     const [password, setPassword] = useState('')
     const [loaded, setLoaded] = useState(false)
+    const [songs, setSongs] = useState<any[]>([])
 
 
     getYoutubeLink('//https://youtu.be/GF8hpmGhBtI?si=W3ww_cb9OBGhuBIO')
@@ -52,6 +114,46 @@ export function ShowProduct() {
                     if (docSnap.data().preview === Preview.CUSTOM_LINK) {
                         window.location.replace(docSnap.data().customLink)
                     }
+                    const song1Ref = ref(storage, `audio/${productId}/song1`)
+                    const song2Ref = ref(storage, `audio/${productId}/song2`)
+                    const song3Ref = ref(storage, `audio/${productId}/song3`)
+                    getDownloadURL(song1Ref)
+                        .then(url => {
+                            setSongs((prev) => [...prev, {title: docSnap.data().song1, src: url}])
+                            return Promise.resolve(true);
+                        })
+                        .catch(error => {
+                            if (error.code === 'storage/object-not-found') {
+                                return Promise.resolve(false);
+                            } else {
+                                return Promise.reject(error);
+                            }
+                        });
+                    getDownloadURL(song2Ref)
+                        .then(url => {
+                            console.log('song2', product.song2)
+                            setSongs((prev) => [...prev, {title: docSnap.data().song2, src: url}])
+                            return Promise.resolve(true);
+                        })
+                        .catch(error => {
+                            if (error.code === 'storage/object-not-found') {
+                                return Promise.resolve(false);
+                            } else {
+                                return Promise.reject(error);
+                            }
+                        });
+                    getDownloadURL(song3Ref)
+                        .then(url => {
+                            setSongs((prev) => [...prev, {title: docSnap.data().song3, src: url}])
+                            return Promise.resolve(true);
+                        })
+                        .catch(error => {
+                            if (error.code === 'storage/object-not-found') {
+                                return Promise.resolve(false);
+                            } else {
+                                return Promise.reject(error);
+                            }
+                        });
                 } else {
                     navigate('/app')
                 }
@@ -81,6 +183,8 @@ export function ShowProduct() {
                             return Promise.reject(error);
                         }
                     });
+
+
             }
         })()
     }, [])
@@ -107,7 +211,7 @@ export function ShowProduct() {
                     const blob = xhr.response;
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
-                    link.download = `${product.lastName} ${product.firstName} - document`;
+                    link.download = `${product.businessFile}`;
                     link.click();
                     URL.revokeObjectURL(link.href);
                 };
@@ -280,6 +384,7 @@ export function ShowProduct() {
         event.target.playVideo();
     };
 
+    console.log('product, product', product)
     console.log(product.color1, product.color2)
 
     const colorsStyle = {
@@ -316,7 +421,7 @@ export function ShowProduct() {
                 <div className={'data-line'}><img src={LocationIcon} className={'presentation-icon'}/>{product.city}
                 </div>
                 <div className={'data-line'} onClick={() => {
-                    window.location.replace(product.website)
+                    window.open(product.website)
                 }}><img src={WebsiteIcon} className={'presentation-icon'}/>{product.website}</div>
             </div>
             <div className={'about-container'}>
@@ -345,6 +450,7 @@ export function ShowProduct() {
                 {!passwordProtected && product.cv &&
                     <div className={'download-button-profile'} onClick={downloadCV}>Download Document</div>}
             <div className={'download-button-profile'} onClick={downloadVCard}>Save my contact details</div>
+                <GetContact/>
         </div>}
         {!passwordProtected && product.preview === Preview.UPLOAD_FILE && <div className={'page-show-product'}>
             {product.filename1 && <div className={'file-container'}>
@@ -378,15 +484,12 @@ export function ShowProduct() {
                 }
             }/>
         </div>}
+        {!passwordProtected && product.preview === Preview.UPLOAD_SONGS && <div className={'page-show-product'}>
+            <AudioPage songs={songs}/>
+        </div>}
     </div>)
 
 }
-
-
-//https://www.youtube.com/watch?v=_NbdmiAS0J4
-//https://youtu.be/_NbdmiAS0J4?si=x_QhRN-t96Ca_JDc
-//https://youtu.be/_NbdmiAS0J4?si=x_QhRN-t96Ca_JDc
-//https://youtu.be/GF8hpmGhBtI?si=W3ww_cb9OBGhuBIO
 
 const getYoutubeLink = (link: string) => {
     const mobileStartPosition =link?.search('youtu.be')
