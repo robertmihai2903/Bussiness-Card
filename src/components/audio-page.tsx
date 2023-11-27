@@ -4,7 +4,7 @@ import {AudioPlayer} from './audio-player';
 import './box.css'
 import React from "react";
 
-export  function AudioPage({songs}: any) {
+export  function AudioPage({songs, language}: any) {
     const [currentSongIndex, setCurrentSongIndex] = React.useState(-1);
 
     const currentSong = songs[currentSongIndex];
@@ -38,6 +38,7 @@ export  function AudioPage({songs}: any) {
             </div>
             <div className="mt-auto">
                 <AudioPlayer
+                    language={language}
                     key={currentSongIndex}
                     currentSong={currentSong}
                     songCount={songs.length}

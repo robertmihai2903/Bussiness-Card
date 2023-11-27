@@ -4,15 +4,16 @@ import {useNavigate} from "react-router";
 import {useContext, useEffect, useState} from "react";
 import {ManageProductContext} from "../contexts";
 import {getProductIdFromURL, onChangeWrapper, useSetPreview} from "../utils";
-import {Product, useEditState} from "../control-state";
+import {Product, useEditState, useProductInformation} from "../control-state";
 import {Button, TextField} from "@mui/material";
 import {doc, updateDoc} from "firebase/firestore";
 import {db} from "../App";
 import {notify} from "../Pages/login-page";
 import BurgerMenuIcon from "../assets/burger-menu.svg"
+import {SelectLanguage} from "../Pages/manage-device";
 
-export function PreviewSettings({setShowSection}: any) {
-    const {productState, setProductState} = useContext(ManageProductContext)
+export function PreviewSettings() {
+    const {productState, setProductState} = useProductInformation()
     const {publicPagePassword} = useEditState()
     const [showPassword, setShowPassword] = useState(false)
 
@@ -46,61 +47,53 @@ export function PreviewSettings({setShowSection}: any) {
         }
     }
 
-    console.log('hello', productState?.publicPagePasswordActivated)
-
     return <div className={'preview-container'}>
-        <div className={'check-show-text'}>Check to show on device</div>
+        <div className={'check-show-text'}>CHECK TO SHOW ON DEVICE</div>
         <div className={'checkbox-container'}>
             <div className={'left-checkbox-container'}>
                 <div className={'preview-option'}>
                     <input type={'checkbox'} checked={productState.preview === Preview.BUSINESS_CARD}
                            onChange={setPreviewBusiness}/>
-                    <span>Business Card</span>
+                    <span>BUSINESS CARD</span>
                 </div>
                 <div className={'preview-option'}>
                     <input type={'checkbox'} checked={productState.preview === Preview.CUSTOM_LINK}
                            onChange={setPreviewCustomLink}/>
-                    <span>Custom Link</span>
+                    <span>CUSTOM LINK</span>
                 </div>
                 <div className={'preview-option'}>
                     <input type={'checkbox'} checked={productState.preview === Preview.UPLOAD_FILE}
                            onChange={setPreviewUploadFile}/>
-                    <span>Upload File</span>
+                    <span>UPLOAD FILES</span>
                 </div>
             </div>
             <div className={'right-checkbox-container'}>
                 <div className={'preview-option'}>
                     <input type={'checkbox'} checked={productState.preview === Preview.UPLOAD_VIDEO}
                            onChange={setPreviewUploadVideo}/>
-                    <span>Upload Video</span>
+                    <span>UPLOAD VIDEO</span>
                 </div>
                 <div className={'preview-option'}>
                     <input type={'checkbox'} checked={productState.preview === Preview.UPLOAD_SONGS}
                            onChange={setPreviewUploadSongs}/>
-                    <span>Upload Songs</span>
-                </div>
-                <div className={'preview-button'} onClick={() => {
-                    navigate(`/show-product?product_id=${productId}`)
-                }}><img className={'preview-logo'} src={PreviewLogo} alt={'preview'}/>Preview
+                    <span>UPLOAD SONGS</span>
                 </div>
             </div>
         </div>
+        <div className={'check-show-text'}>PROTECT YOU PUBLIC PAGE</div>
         <div className={'password-container'}>
             <TextField type={"password"} label={'Password'} value={publicPagePassword.value}
                        onChange={onChangeWrapper(publicPagePassword)}
                        variant={"outlined"} size={"small"} className={'password-input'} sx={{ input: { color: 'white' } }}/>
             <button className={'green-publish-button'} onClick={onSavePublicPage}>Save</button>
         </div>
-        <div className={'burger-container'}>
-            <div className={'password-checkbox-container'}>
-                <input type={'checkbox'} checked={productState.publicPagePasswordActivated}
-                       onChange={onActivatePasswordPublicPage}/>
-                <span>Password on public page</span>
-            </div>
-            <img className={'burger-icon'} src={BurgerMenuIcon}
-                 onClick={() => setShowSection((prev: boolean) => !prev)}/>
-
+        <div className={'password-checkbox-container'}>
+            <input type={'checkbox'} checked={productState.publicPagePasswordActivated}
+                   onChange={onActivatePasswordPublicPage}/>
+            <span>Password on public page</span>
         </div>
+        <div className={'check-show-text'}>CHANGE LANGUAGE ON YOUR PUBLIC PAGE</div>
+        <SelectLanguage/>
     </div>
 
 }

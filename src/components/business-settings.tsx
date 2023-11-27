@@ -1,4 +1,4 @@
-import {Product, useEditState} from "../control-state";
+import {Product, useEditState, useProductInformation} from "../control-state";
 import ImageUpload from "./image-upload";
 import {Button, TextField} from "@mui/material";
 import {getProductIdFromURL, onChangeWrapper, useUploadFile, useUploadLogo} from "../utils";
@@ -9,9 +9,13 @@ import {db, storage} from "../App";
 import {ManageProductContext} from "../contexts";
 import {HexAlphaColorPicker, HexColorInput, HexColorPicker} from "react-colorful";
 import {getDownloadURL, ref} from "firebase/storage";
+import BackArrowIcon from "../assets/back_arrow_icon.svg";
+import Logo from "../assets/flexpayz-logo.svg";
+import {useNavigate} from "react-router";
+import {SettingsHeader} from "../Pages/manage-device";
 
 export function BusinessSettings() {
-    const {setProductState, productState} = useContext(ManageProductContext)
+    const {setProductState, productState} = useProductInformation()
     const {
         firstName,
         lastName,
@@ -45,6 +49,7 @@ export function BusinessSettings() {
         color2,
         businessFile
     } = useEditState()
+    const navigate = useNavigate()
 
 
     const saveProductData = useSaveProductData()
@@ -70,8 +75,10 @@ export function BusinessSettings() {
             });
     }, []);
 
-    return <div className={'basic-page'}>
-        <div className={'section-title'}>Business Card</div>
+    return <div className={'settings-page'}>
+        <SettingsHeader/>
+        <div className={'section-title'}>BUSINESS CARD</div>
+        <h2 className={'pinline'}><span>PAGES</span></h2>
         <TextField label={'First name'} value={firstName.value} onChange={onChangeWrapper(firstName)}
                    variant={"outlined"} size={"small"} className={'form-manager-input'} sx={{input: {color: 'white'}}}/>
         <TextField label={'Last Name'} value={lastName.value}
@@ -152,24 +159,26 @@ export function BusinessSettings() {
         <TextField label={`About`} className={'form-manager-input'} value={companyAbout.value}
                    onChange={onChangeWrapper(companyAbout)} variant={"outlined"} size={"small"} multiline={true}
                    minRows={3} sx={{textarea: {color: 'white'}}}/>
+        <h2 className={'pinline'}><span>PROFILE IMAGE</span></h2>
         <div className={'explanation-text'}>Give your profile a face: Set a current portrait as your first profile
             photo. Smile please
         </div>
         <div className={'image-upload-wrapper'}>
             <ImageUpload/>
         </div>
+        <h2 className={'pinline'}><span>LOGO</span></h2>
         <div className={'explanation-text-small'}>Upload your Logo</div>
         <div className={'logo-upload-wrapper'}>
             <input className={'custom-file-input'} type={'file'} onChange={uploadLogo} accept={'image/*'}/>
             {productState.logo && <img src={productState.logo}/>}
         </div>
-
-
+        <h2 className={'pinline'}><span>BUSINESS FILE</span></h2>
         <div className={'explanation-text-small'}>Upload your Business File</div>
         <TextField label={`File name`} className={'form-manager-input'}
                    value={businessFile.value} onChange={onChangeWrapper(businessFile)}
                    variant={"outlined"} size={"small"} sx={{input: {color: 'white'}}}/>
         <input className={'custom-file-input'} type={'file'} onChange={uploadCV} accept={'.pdf'}/>
+        <h2 className={'pinline'}><span>CUSTOMISE BACKGROUND</span></h2>
         <div className={'explanation-text'} style={{marginTop: '24px'}}>Express your emotions through your profile by
             selecting a background that resonates with your
             identity.

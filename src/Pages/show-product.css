@@ -23,10 +23,10 @@
 }
 
 .download-button-profile {
+    min-width: fit-content;
     background-color: #3B8FA6;
     height: 35px;
     text-align: center;
-    min-width: 80px;
     max-width: 50%;
     font-size: 16px;
     color: white;

@@ -11,6 +11,7 @@ import { CgSpinner } from 'react-icons/cg';
 import {IconButton} from "./icon-button";
 import {AudioProgressBar} from './audio-progress-bar';
 import {VolumeInput} from './volume-input';
+import {Languages, translatedText} from "../languages";
 
 function formatDurationDisplay(duration: number) {
     const min = Math.floor(duration / 60);
@@ -27,6 +28,7 @@ interface AudioPlayerProps {
     songCount: number;
     onNext: () => void;
     onPrev: () => void;
+    language: Languages;
 }
 
 export function AudioPlayer({
@@ -35,6 +37,7 @@ export function AudioPlayer({
                                         songIndex,
                                         onNext,
                                         onPrev,
+                                language,
                                     }: AudioPlayerProps) {
     const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
@@ -155,7 +158,7 @@ export function AudioPlayer({
             <div className="box-9">
                 <div className="box-10">
                     <p className="box-11">
-                        {currentSong?.title ?? 'Select a song'}
+                        {currentSong?.title ?? translatedText[language]?.["Select a song"]}
                     </p>
                 </div>
             </div>

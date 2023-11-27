@@ -1,9 +1,9 @@
-import {useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {doc, getDoc, updateDoc} from "firebase/firestore";
 import {ManageProductContext} from "../contexts";
 import {db} from "../App";
 import './manager.css'
-import {defaultProduct, Product, useEditState} from "../control-state";
+import {defaultProduct, Product, useEditState, useProductInformation} from "../control-state";
 import {BusinessSettings} from "../components/business-settings";
 import {CustomLinkSettings} from "../components/custom-link-settings";
 import {UploadFileSettings} from "../components/upload-file-settings";
@@ -12,8 +12,8 @@ import {PreviewSettings} from "../components/preview-settings";
 import Logo from '../assets/flexpayz-logo.svg'
 import BackArrowIcon from '../assets/back_arrow_icon.svg'
 import {useNavigate} from "react-router";
-import {Box, Modal, TextField} from "@mui/material";
-import {onChangeWrapper} from "../utils";
+import {Box, InputLabel, MenuItem, Modal, Select, TextField} from "@mui/material";
+import {getProductIdFromURL, onChangeWrapper, useSaveLanguage} from "../utils";
 import {notify} from "./login-page";
 import {useResetDevice, useSaveName} from "../useProductData";
 import {Simulate} from "react-dom/test-utils";
@@ -21,6 +21,13 @@ import reset = Simulate.reset;
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {UploadSongsSettings} from "../components/upload-songs-settings";
 import {SharedContacts} from "../components/shared-contacts";
+import {Languages} from "../languages";
+import {GeneralDeviceActions} from "../components/general-device-actions";
+import BusinessCardIcon from "../assets/category-business-card.svg"
+import CustomLinkIcon from "../assets/category-custom-link.svg"
+import UploadFilesIcon from "../assets/category-upload-files.svg"
+import UploadVideoIcon from "../assets/category-upload-video.svg"
+import UploadSongsIcon from "../assets/category-upload-songs.svg"
 
 const enum Section {
     BUSINESS_CARD = 'business_card',
@@ -32,7 +39,7 @@ const enum Section {
     PHOTO_GALLERY = 'photo_gallery'
 }
 
-function ResetProduct () {
+export function ResetProduct() {
     const [showModal, setShowModal] = useState(false)
     const onResetProduct = useResetDevice()
     const handleCloseModal = () => {
@@ -50,7 +57,7 @@ function ResetProduct () {
     }
 
     return(<div className={'reset-product-container'}>
-        <button style={{marginBottom: '12px'}} className={'reset-button'} onClick={handleOpenModal}>Reset device</button>
+        <button className={'reset-button'} onClick={handleOpenModal}>Reset device</button>
         <Modal open={showModal} onClose={handleCloseModal}>
             <Box className={'inside-modal'}>
                 <div className={'modal-text'}>Are you sure you want to reset device?</div>
@@ -72,7 +79,6 @@ function EditName () {
         await saveNameInDocument()
         setEditName(false)
     }
-    console.log('editName', editName)
     return (<div className={'device-name-container'}>
         {!editName && <div className={'device-name'}>{name.value}</div>}
         {editName && <TextField label={'Device Name'} value={name.value}
@@ -85,74 +91,95 @@ function EditName () {
 
 
 export function ManageDevice() {
-    const [productState, setProductState] = useState<Product>(defaultProduct)
-    const [invalidFields, setInvalidFields] = useState(new Map<string, string>)
 
-    useEffect(() => {
-
-        (async () => {
-            const auth = getAuth();
-             onAuthStateChanged(auth, (user) => {
-                if (user) {
-                } else {
-                    navigate('/app')
-                }
-            });
-
-            const urlParams = new URLSearchParams(window.location.search)
-            const productId = urlParams.get('product_id')
-            if (productId) {
-                const productRef = doc(db, 'products', productId)
-                const docSnap = await getDoc(productRef);
-                if (docSnap.exists()) {
-                    setProductState({...docSnap.data() as Product})
-
-                }
-            }
-        })()
-
-        notify(`Don't forget to save after changes`)
-    }, []);
-
-    console.log(productState)
 const navigate = useNavigate()
-    const [showSection, setShowSection] = useState(Section.BUSINESS_CARD)
-    const [showSectionSelector, setShowSectionSelector] = useState(true)
-    const [editName, setEditName] = useState(false)
-
-    return (<div className={"page-manager"}>
-        <ManageProductContext.Provider value={{productState, setProductState, invalidFields}}>
+    return (<div className={'page-manager-wrapper'}>
+        <div className={"page-manager"}>
             <div className={'manage-devices-header'}>
                 <img className={'back-button'} onClick={() => {navigate('/manage-devices')}} src={BackArrowIcon}/>
                 <img className={'manage-logo'} src={Logo}/>
             </div>
+
+            <div>
+                <GeneralDeviceActions/>
+            </div>
+            <h2 className={'pinline'}><span>DEVICE NAME</span></h2>
             <EditName/>
-            <PreviewSettings setShowSection={setShowSectionSelector}/>
-            <ResetProduct/>
-            {showSectionSelector && <div className={'header-selector'}>
-                <div className={'business-card-header'} onClick={() => setShowSection(Section.BUSINESS_CARD)}>Business
-                    Card
-                </div>
-                <div className={'custom-link-header'} onClick={() => setShowSection(Section.CUSTOM_LINK)}>Custom Link
-                </div>
-                <div className={'file-upload-header'} onClick={() => setShowSection(Section.UPLOAD_FILE)}>File Upload
-                </div>
-                <div className={'video-upload-header'} onClick={() => setShowSection(Section.UPLOAD_VIDEO)}>Video
-                    Upload
-                </div>
-                <div className={'songs-upload-header'} onClick={() => setShowSection(Section.UPLOAD_SONGS)}>Songs
-                    Upload
-                </div>
-                <div className={'songs-upload-header'} onClick={() => setShowSection(Section.SHARED_CONTACTS)}>Shared Contacts
-                </div>
-            </div>}
-            {showSection === Section.BUSINESS_CARD && <BusinessSettings/>}
-            {showSection === Section.CUSTOM_LINK && <CustomLinkSettings/>}
-            {showSection === Section.UPLOAD_FILE && <UploadFileSettings/>}
-            {showSection === Section.UPLOAD_VIDEO && <UploadVideoSettings/>}
-            {showSection === Section.UPLOAD_SONGS && <UploadSongsSettings/>}
-            {showSection === Section.SHARED_CONTACTS && <SharedContacts/>}
-            {/*{showSection === Section.PHOTO_GALLERY && <PhotoGallery/>}*/}
-        </ManageProductContext.Provider>
+            <h2 className={'pinline'}><span>PREVIEW SETTINGS</span></h2>
+            <PreviewSettings/>
+
+            <h2 className={'pinline'}><span>PAGES</span></h2>
+
+            <div className={'page-categories'}>
+                <PageCategory destination={'business-card'} color={'#8e936dff'} icon={BusinessCardIcon}
+                              title={'Business Card'} description={'Fill out your contact details'}/>
+                <PageCategory destination={'custom-link'} color={'#8e936dff'} icon={CustomLinkIcon}
+                              title={'Custom Link'} description={'Fill out your contact details'}/>
+                <PageCategory destination={'upload-files'} color={'#8e936dff'} icon={UploadFilesIcon}
+                              title={'Upload Files'} description={'Fill out your contact details'}/>
+                <PageCategory destination={'upload-video'} color={'#8e936dff'} icon={UploadVideoIcon}
+                              title={'Upload Video'} description={'Fill out your contact details'}/>
+                <PageCategory destination={'upload-songs'} color={'#8e936dff'} icon={UploadSongsIcon}
+                              title={'Upload Songs'} description={'Fill out your contact details'}/>
+            </div>
+            <h2 className={'pinline'}><span>CONTACTS</span></h2>
+            <div className={'page-categories'}>
+                <PageCategory destination={'shared-contacts'} color={'#8e936dff'} icon={UploadSongsIcon}
+                              title={'Shared Contacts'} description={'Fill out your contact details'}/>
+            </div>
+        </div>
+    </div>)
+}
+
+
+export function SelectLanguage() {
+    const {previewLanguage} = useEditState()
+    const onChangeSelect = useSaveLanguage()
+    return (<div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+        <Select className={'select-language'} style={{width: '50%', margin: '10px 0'}}
+                onChange={onChangeSelect} value={previewLanguage.value}>
+            {Object.values(Languages).map((key) => {
+                return (<MenuItem value={key}>{key.toLocaleUpperCase()}</MenuItem>)
+            })}
+        </Select>
+    </div>)
+}
+
+interface PageCategoryProps {
+    color: string,
+    icon: string,
+    title: string,
+    description: string,
+    destination: string
+}
+
+function PageCategory({color, icon, title, description, destination}: PageCategoryProps) {
+    const productId = getProductIdFromURL()
+    const navigate = useNavigate()
+    const goToSettings = useCallback(() => {
+        navigate(`/manage-device/${destination}?product_id=${productId}`)
+    }, [navigate, destination])
+    return (<div className={'page-category-box'} onClick={goToSettings}>
+        <div style={{backgroundColor: color}} className={'page-category-icon-wrapper'}>
+            <img src={icon} className={'page-category-icon'}/>
+        </div>
+        <div className={'page-category-text-wrapper'}>
+            <h4>{title}</h4>
+            <span>{description}</span>
+        </div>
+        <div className={'page-category-arrow-wrapper'}>
+            <img src={BackArrowIcon} className={'page-category-next-icon'}/>
+        </div>
+    </div>)
+}
+
+export function SettingsHeader() {
+    const productId = getProductIdFromURL()
+    const navigate = useNavigate()
+    return (<div className={'manage-devices-header'}>
+        <img className={'back-button'} onClick={() => {
+            navigate(`/manage-device?product_id=${productId}`)
+        }} src={BackArrowIcon}/>
+        <img className={'manage-logo'} src={Logo}/>
     </div>)
 }

@@ -2,11 +2,15 @@ import {onChangeWrapper} from "../utils";
 import {Button, TextField} from "@mui/material";
 import {useEditState} from "../control-state";
 import {useSaveProductData} from "../useProductData";
+import BackArrowIcon from "../assets/back_arrow_icon.svg";
+import Logo from "../assets/flexpayz-logo.svg";
+import {SettingsHeader} from "../Pages/manage-device";
 
 export function CustomLinkSettings() {
     const {customLink} = useEditState()
     const saveProductData = useSaveProductData()
-    return <div className={'basic-page'}>
+    return <div className={'settings-page'}>
+        <SettingsHeader/>
         <div className={'section-title'}>Custom Link</div>
         <div className={'explanation-text'}>Introduce any URL link in this format https://……
             you can copy from the browser address page and paste in the field.

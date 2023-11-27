@@ -2,6 +2,7 @@ import {useEditState} from "../control-state";
 import {useSaveProductData} from "../useProductData";
 import {TextField} from "@mui/material";
 import {onChangeWrapper, useUploadAudio} from "../utils";
+import {SettingsHeader} from "../Pages/manage-device";
 
 export function UploadSongsSettings() {
 
@@ -11,7 +12,8 @@ export function UploadSongsSettings() {
     const uploadSong2 = useUploadAudio('song2')
     const uploadSong3 = useUploadAudio('song3')
 
-    return (<div className={'basic-page'}>
+    return (<div className={'settings-page'}>
+        <SettingsHeader/>
         <div className={'section-title'}>Song Upload</div>
         {/*<div className={'explanation-text'}>Upload your PDF files,  rename the uploaded files, save and when you share with your partners you will have possibilty to share the documents directly.</div>*/}
 

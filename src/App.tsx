@@ -14,6 +14,12 @@ import {getStorage, ref} from "firebase/storage";
 import {ShowProduct} from "./Pages/show-product";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
+import {BusinessSettings} from "./components/business-settings";
+import {CustomLinkSettings} from "./components/custom-link-settings";
+import {UploadFileSettings} from "./components/upload-file-settings";
+import {UploadVideoSettings} from "./components/upload-video-settings";
+import {UploadSongsSettings} from "./components/upload-songs-settings";
+import {SharedContacts} from "./components/shared-contacts";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD95KPFA7TG3QepgOl8iJdUM3c9RnEM11Q",
@@ -53,6 +59,12 @@ function App() {
                     <Route path={'/admin'} element={<AdminPage/>}/>
                     <Route path={'/manage-devices'} element={<ManageDevices/>}/>
                     <Route path={'/manage-device'} element={<ManageDevice/>}/>
+                    <Route path={'/manage-device/business-card'} element={<BusinessSettings/>}/>
+                    <Route path={'/manage-device/custom-link'} element={<CustomLinkSettings/>}/>
+                    <Route path={'/manage-device/upload-files'} element={<UploadFileSettings/>}/>
+                    <Route path={'/manage-device/upload-video'} element={<UploadVideoSettings/>}/>
+                    <Route path={'/manage-device/upload-songs'} element={<UploadSongsSettings/>}/>
+                    <Route path={'/manage-device/shared-contacts'} element={<SharedContacts/>}/>
                     <Route path={'/show-product'} element={<ShowProduct/>}/>
                 </Routes>
             </MainContext.Provider>
