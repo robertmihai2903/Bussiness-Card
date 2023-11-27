@@ -2,6 +2,7 @@ import {onChangeWrapper, useUploadFile} from "../utils";
 import {Button, TextField} from "@mui/material";
 import {useEditState} from "../control-state";
 import {useSaveProductData} from "../useProductData";
+import {SettingsHeader} from "../Pages/manage-device";
 
 export function UploadFileSettings() {
 
@@ -11,7 +12,8 @@ export function UploadFileSettings() {
     const uploadFile3 = useUploadFile('file3')
     const saveProductData = useSaveProductData()
 
-    return <div className={'basic-page'}>
+    return <div className={'settings-page'}>
+        <SettingsHeader/>
         <div className={'section-title'}>PDF Upload</div>
         <div className={'explanation-text'}>Upload your PDF files,  rename the uploaded files, save and when you share with your partners you will have possibilty to share the documents directly.</div>
 

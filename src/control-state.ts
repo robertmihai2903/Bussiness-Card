@@ -1,6 +1,12 @@
 import {Preview} from "./Pages/admin";
-import {useContext} from "react";
+import {useContext, useEffect, useState} from "react";
 import {ManageProductContext} from "./contexts";
+import {Languages} from "./languages";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {doc, getDoc} from "firebase/firestore";
+import {db} from "./App";
+import {notify} from "./Pages/login-page";
+import {useNavigate} from "react-router";
 
 export const defaultProduct: Product = {
     name: '',
@@ -51,7 +57,8 @@ export const defaultProduct: Product = {
     song2: '',
     song3: '',
     businessFile: '',
-    sharedContacts: []
+    sharedContacts: [],
+    previewLanguage: Languages.ENGLISH
 }
 
 export interface Product {
@@ -103,13 +110,45 @@ export interface Product {
     song2: string,
     song3: string,
     businessFile: string,
-    sharedContacts: any[]
+    sharedContacts: any[],
+    previewLanguage: Languages
 
 }
 
-export const useEditState = () => {
-    const {productState: state, setProductState: setState, invalidFields} = useContext(ManageProductContext)
 
+export const useProductInformation = () => {
+    const [productState, setProductState] = useState<Product>(defaultProduct)
+    const [invalidFields, setInvalidFields] = useState(new Map<string, string>)
+    const navigate = useNavigate()
+    useEffect(() => {
+
+        (async () => {
+            const auth = getAuth();
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                } else {
+                    navigate('/app')
+                }
+            });
+
+            const urlParams = new URLSearchParams(window.location.search)
+            const productId = urlParams.get('product_id')
+            if (productId) {
+                const productRef = doc(db, 'products', productId)
+                const docSnap = await getDoc(productRef);
+                if (docSnap.exists()) {
+                    setProductState((prev: Product) => ({...prev, ...docSnap.data() as Product}))
+
+                }
+            }
+        })()
+
+        // notify(`Don't forget to save after changes`)
+    }, []);
+    return {productState, setProductState, invalidFields}
+}
+export const useEditState = () => {
+    const {productState: state, setProductState: setState, invalidFields} = useProductInformation()
     return {
         name: {
             value: state.name,
@@ -362,6 +401,12 @@ export const useEditState = () => {
             value: state?.businessFile,
             onChange: (businessFile: string) => {
                 setState((prev: Product) => ({...prev, businessFile}))
+            }
+        },
+        previewLanguage: {
+            value: state?.previewLanguage,
+            onChange: (previewLanguage: Languages) => {
+                setState((prev: Product) => ({...prev, previewLanguage}))
             }
         }
 

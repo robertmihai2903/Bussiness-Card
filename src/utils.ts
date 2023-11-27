@@ -1,6 +1,6 @@
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {db, storage} from "./App";
-import {Product} from "./control-state";
+import {Product, useProductInformation} from "./control-state";
 import {useContext} from "react";
 import {ManageProductContext} from "./contexts";
 import {Preview} from "./Pages/admin";
@@ -16,7 +16,8 @@ export const onChangeWrapper = (key: any) => {
 
 export function useUploadFile(filename: string, fileID?: keyof Product) {
     const productId = getProductIdFromURL()
-    const {setProductState} = useContext(ManageProductContext)
+    // const {setProductState} = useContext(ManageProductContext)
+    const {setProductState} = useProductInformation()
 
     return async (e: any) => {
         const tempDoc = e.target.files[0]
@@ -34,9 +35,23 @@ export function useUploadFile(filename: string, fileID?: keyof Product) {
     }
 }
 
+export function useSaveLanguage() {
+    const productId = getProductIdFromURL()
+    // const {setProductState} = useContext(ManageProductContext)
+    const {setProductState} = useProductInformation()
+    return async (e: any) => {
+        setProductState((prev: Product) => ({...prev, previewLanguage: e.target.value}))
+        if (productId) {
+            const productRef = doc(db, 'products', productId)
+            await updateDoc(productRef, {previewLanguage: e.target.value})
+            notify('Changed the preview language.')
+        }
+    }
+}
+
 export function useUploadAudio(filename: string, fileID?: keyof Product) {
     const productId = getProductIdFromURL()
-    const {setProductState} = useContext(ManageProductContext)
+    const {setProductState} = useProductInformation()
 
     return async (e: any) => {
         const tempDoc = e.target.files[0]
@@ -56,7 +71,8 @@ export function useUploadAudio(filename: string, fileID?: keyof Product) {
 
 export function useUploadLogo() {
     const productId = getProductIdFromURL()
-    const {setProductState} = useContext(ManageProductContext)
+    // const {setProductState} = useContext(ManageProductContext)
+    const {setProductState} = useProductInformation()
 
     return async (e: any) => {
         const tempDoc = e.target.files[0]
@@ -75,7 +91,8 @@ export function useUploadLogo() {
 }
 
 export function useSetPreview(preview: Preview) {
-    const {setProductState} = useContext(ManageProductContext)
+    // const {setProductState} = useContext(ManageProductContext)
+    const {setProductState} = useProductInformation()
     const productId = getProductIdFromURL()
 
     return async () => {

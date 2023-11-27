@@ -23,15 +23,17 @@ import {getProductIdFromURL, onChangeWrapper} from "../utils";
 import {AudioPage} from "../components/audio-page";
 import {useResetDevice} from "../useProductData";
 import {notify} from "./login-page";
+import {translatedText} from "../languages";
 
 
-function GetContact() {
+
+function GetContact({product}: { product: Product }) {
     const [showModal, setShowModal] = useState(false)
     const onResetProduct = useResetDevice()
     const handleCloseModal = () => {
         setShowModal(false)
     }
-
+    console.log('product', product.previewLanguage)
     const handleOpenModal = () => {
         setShowModal(true)
     }
@@ -40,7 +42,6 @@ function GetContact() {
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState("")
 
-    const {productState, setProductState} = useContext(ManageProductContext)
     const handleShareContact = async () => {
         const productId = getProductIdFromURL()
         const date = Date.now()
@@ -54,8 +55,8 @@ function GetContact() {
     }
 
     return (<div className={'reset-product-container'}>
-        <button style={{marginBottom: '12px', marginTop: '12px'}} className={'reset-button'}
-                onClick={handleOpenModal}>Share your contact with me
+        <button className={'reset-button'}
+                onClick={handleOpenModal}>{translatedText[product.previewLanguage]["Share your contact with me"]}
         </button>
         <Modal open={showModal} onClose={handleCloseModal}>
             <Box className={'inside-modal-2'}>
@@ -73,7 +74,8 @@ function GetContact() {
                                    setEmail(e.target.value)
                                }} variant={"outlined"} size={"small"}/>
                 </div>
-                <button style={{marginBottom: '12px'}} className={'reset-button'} onClick={handleShareContact}>Share
+                <button style={{marginBottom: '12px'}} className={'reset-button'}
+                        onClick={handleShareContact}>{translatedText[product.previewLanguage].Share}
                 </button>
 
             </Box>
@@ -108,7 +110,7 @@ export function ShowProduct() {
                     if (!docSnap.data().activated) {
                         navigate('/app')
                     }
-                    setProduct({...docSnap.data() as Product})
+                    setProduct((prev: Product) => ({...prev, ...docSnap.data() as Product}))
                     setPasswordProtected((docSnap.data() as Product).publicPagePasswordActivated)
                     setLoaded(true)
                     if (docSnap.data().preview === Preview.CUSTOM_LINK) {
@@ -425,7 +427,7 @@ export function ShowProduct() {
                 }}><img src={WebsiteIcon} className={'presentation-icon'}/>{product.website}</div>
             </div>
             <div className={'about-container'}>
-                <div className={'about-me-title'}>About me</div>
+                <div className={'about-me-title'}>{translatedText[product.previewLanguage]["About me"]}</div>
                 <div className={'about-me-text'}>{product.about}</div>
             </div>
 
@@ -448,24 +450,29 @@ export function ShowProduct() {
 
             </div>
                 {!passwordProtected && product.cv &&
-                    <div className={'download-button-profile'} onClick={downloadCV}>Download Document</div>}
-            <div className={'download-button-profile'} onClick={downloadVCard}>Save my contact details</div>
-                <GetContact/>
+                    <div className={'download-button-profile'}
+                         onClick={downloadCV}>{translatedText[product.previewLanguage]['Download document']}</div>}
+                <div className={'download-button-profile'}
+                     onClick={downloadVCard}>{translatedText[product.previewLanguage]["Save my contact details"]}</div>
+                <GetContact product={product}/>
         </div>}
         {!passwordProtected && product.preview === Preview.UPLOAD_FILE && <div className={'page-show-product'}>
             {product.filename1 && <div className={'file-container'}>
                 <span>{product.filename1}</span>
-                <div className={'download-button'} onClick={downloadFile1}>Download</div>
+                <div className={'download-button'}
+                     onClick={downloadFile1}>{translatedText[product.previewLanguage].Download}</div>
                 {/*<div className={'share-button'} onClick={shareFile1}>Share</div>*/}
             </div>}
             {product.filename2 && <div className={'file-container'}>
                 <span>{product.filename2}</span>
-                <div className={'download-button'} onClick={downloadFile2}>Download</div>
+                <div className={'download-button'}
+                     onClick={downloadFile2}>{translatedText[product.previewLanguage].Download}</div>
                 {/*<div className={'share-button'} onClick={shareFile2}>Share</div>*/}
             </div>}
             {product.filename3 && <div className={'file-container'}>
                 <span>{product.filename3}</span>
-                <div className={'download-button'} onClick={downloadFile3}>Download</div>
+                <div className={'download-button'}
+                     onClick={downloadFile3}>{translatedText[product.previewLanguage].Download}</div>
                 {/*<div className={'share-button'} onClick={shareFile3}>Share</div>*/}
             </div>}
         </div>}
@@ -485,7 +492,7 @@ export function ShowProduct() {
             }/>
         </div>}
         {!passwordProtected && product.preview === Preview.UPLOAD_SONGS && <div className={'page-show-product'}>
-            <AudioPage songs={songs}/>
+            <AudioPage songs={songs} language={product.previewLanguage}/>
         </div>}
     </div>)
 

@@ -1,10 +1,11 @@
 import {onChangeWrapper} from "../utils";
 import {Button, TextField} from "@mui/material";
-import {useEditState} from "../control-state";
+import {useEditState, useProductInformation} from "../control-state";
 import {useSaveProductData} from "../useProductData";
 import {useContext} from "react";
 import {ManageProductContext} from "../contexts";
 import VCard from "vcard-creator";
+import {SettingsHeader} from "../Pages/manage-device";
 
 function Contact({contact}: any) {
     const saveContact = () => {
@@ -34,13 +35,14 @@ function Contact({contact}: any) {
 
 export function SharedContacts() {
 
-    const {productState} = useContext(ManageProductContext)
-    console.log('hello shared', productState?.sharedContacts)
+    // const {productState} = useContext(ManageProductContext)
+    const {productState} = useProductInformation()
     const contacts = productState?.sharedContacts || []
     const contactsExist = contacts.length > 0
 
 
-    return (<div className={'basic-page'}>
+    return (<div className={'settings-page'}>
+        <SettingsHeader/>
         <div className={'section-title'}>Shared Contacts</div>
         {!contactsExist && <div className={'explanation-text'}> You have no shared contacts yet.</div>}
         {contacts.map((contact) => (<Contact contact={contact}/>))}

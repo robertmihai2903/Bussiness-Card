@@ -6,11 +6,11 @@ import {db, storage} from "./App";
 import {useContext, useState} from "react";
 import {ManageProductContext} from "./contexts";
 import {getProductIdFromURL} from "./utils";
-import {defaultProduct, Product} from "./control-state";
+import {defaultProduct, Product, useProductInformation} from "./control-state";
 
 
 export function useResetDevice() {
-    const {productState, setProductState} = useContext(ManageProductContext)
+    const {productState, setProductState} = useProductInformation()
     const productId = getProductIdFromURL()
     const newProduct: Product = {
         ...defaultProduct,
@@ -41,7 +41,8 @@ return async () =>{
 }
 
 export function useSaveName() {
-    const {productState, setProductState} = useContext(ManageProductContext)
+    // const {productState, setProductState} = useContext(ManageProductContext)
+    const {productState, setProductState} = useProductInformation()
     const productId = getProductIdFromURL()
     return async () => {
         if (productId) {
@@ -54,7 +55,8 @@ export function useSaveName() {
 
 }
 export function useSaveProductData () {
-    const {productState, setProductState} = useContext(ManageProductContext)
+    // const {productState, setProductState} = useContext(ManageProductContext)
+    const {productState, setProductState} = useProductInformation()
     const urlParams = new URLSearchParams(window.location.search)
     const productId = urlParams.get('product_id')
     const logoRef = ref(storage, `images/logo-${productId}`)
