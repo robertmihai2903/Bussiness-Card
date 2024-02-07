@@ -75,6 +75,7 @@ h2.pinline {
 h2.pinline span {
     position: relative;
     display: inline-block;
+    color: white;
     line-height: 1;
 }
 
@@ -84,7 +85,7 @@ h2.pinline span:after {
     position: absolute;
     top: 50%;
     height: 1px;
-    background: #000;
+    background: #fff;
     width: 99999px;
 }
 
@@ -130,6 +131,7 @@ h2.pinline span:after {
     width: 20px;
     appearance: none;
     background-color: white;
+    cursor: pointer;
 }
 
 .preview-option span {
@@ -315,6 +317,48 @@ h2.pinline span:after {
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 
+.custom-file-input-replace {
+    color: transparent;
+    width: 150px;
+}
+
+.custom-file-input-replace::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+.custom-file-input-replace::before {
+    content: 'Replace file';
+    color: black;
+    display: inline-block;
+    box-sizing: border-box;
+    background: -webkit-linear-gradient(right, #DBDCDE, #FFFFFF);
+    border: 1px solid #979797;
+    text-align: center;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+    width: 150px;
+    height: 35px;
+}
+
+.custom-file-input-replace:hover::before {
+    border-color: black;
+}
+
+.custom-file-input-replace:active {
+    outline: 0;
+}
+
+.custom-file-input-replace:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
 .general-device-actions-box {
     display: flex;
     justify-content: center;
@@ -322,8 +366,9 @@ h2.pinline span:after {
 }
 
 .preview-button {
+    cursor: pointer;
     min-width: 100px;
-    background-color: rgba(246,	246, 246, 0.7);
+    background-color: #F5F6F7;
     font-weight: 700;
     font-size: 16px;
     padding: 8px;
@@ -333,10 +378,18 @@ h2.pinline span:after {
     justify-content: center;
     align-items: center;
     height: 40px;
-    cursor: pointer;
     border-radius: 12px;
     margin: 8px;
 }
+
+.preview-button:hover {
+    background-color: #EAECEE
+}
+
+.preview-button:active {
+    background-color: #D5DADD;
+}
+
 
 .reset-product-container {
     width: 40%;
@@ -344,6 +397,7 @@ h2.pinline span:after {
 }
 
 .reset-button {
+    cursor: pointer;
     min-width: 100px;
     max-width: 250px;
     width: 100%;
@@ -351,10 +405,18 @@ h2.pinline span:after {
     font-weight: 700;
     font-size: 16px;
     color: white;
-    background: linear-gradient(to right, #E10000, #a81d1d);
+    background: linear-gradient(to right, #D20A0A, #AA0808);
     border: 1px solid #979797;
     border-radius: 12px;
     margin: 8px;
+}
+
+.reset-button:hover {
+    background: #AA0808;
+}
+
+.reset-button:active {
+    background: #840606;
 }
 
 
@@ -426,7 +488,7 @@ h2.pinline span:after {
     font-size: 17px;
     margin-top: 20px;
     margin-bottom: 10px;
-    color: #005367;
+    color: #fff;
 }
 
 .checkbox-container {
@@ -443,7 +505,7 @@ h2.pinline span:after {
 }
 
 .password-container {
-    margin: 10px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: center;
 }
@@ -491,11 +553,20 @@ h2.pinline span:after {
     font-weight: 700;
     font-size: 16px;
     color: white;
-    background-color: #E10000;
+    background: linear-gradient(to right, #256F3A, #1E592F);
     border: 1px solid #979797;
     border-radius: 12px;
     align-self: center;
     justify-self: flex-end;
+    cursor: pointer;
+}
+
+.red-save-button:hover {
+    background: #1E592F;
+}
+
+.red-save-button:active {
+    background: #164323;
 }
 
 .blue-crop-button {
@@ -506,10 +577,20 @@ h2.pinline span:after {
     font-weight: 700;
     font-size: 16px;
     color: white;
-    background:  linear-gradient(to right, #148BD6, #0A1656);
+    background: linear-gradient(to right, #0057D2, #0040B0);
     border: 1px solid #979797;
     border-radius: 12px;
+    cursor: pointer;
 }
+
+.blue-crop-button:hover {
+    background: #0040B0;
+}
+
+.blue-crop-button:active {
+    background: #002A86;
+}
+
 
 .blue-edit-name-button {
     min-width: 100px;
@@ -517,10 +598,20 @@ h2.pinline span:after {
     font-weight: 700;
     font-size: 16px;
     color: white;
-    background:  linear-gradient(to right, #148BD6, #0A1656);
+    background: linear-gradient(to right, #0057D2, #0040B0);
     border: 1px solid #979797;
     border-radius: 12px;
+    cursor: pointer;
 }
+
+.blue-edit-name-button:hover {
+    background: #0040B0;
+}
+
+.blue-edit-name-button:active {
+    background: #002A86;
+}
+
 
 .green-publish-button {
     min-width: 100px;
@@ -528,10 +619,19 @@ h2.pinline span:after {
     font-weight: 700;
     font-size: 16px;
     color: white;
-    background:  #22DC85;
+    background: linear-gradient(to right, #256F3A, #1E592F);
     border: 1px solid #979797;
     border-radius: 12px;
     margin-left: 20px;
+    cursor: pointer;
+}
+
+.green-publish-button:hover {
+    background: #1E592F;
+}
+
+.green-publish-button:active {
+    background: #164323;
 }
 
 .section-title {
@@ -543,12 +643,23 @@ h2.pinline span:after {
 
 .explanation-text {
     text-align: justify;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 600;
     width: 80%;
     color: white;
     margin-bottom: 24px;
     margin-top: 20px;
 }
+
+.explanation-text-preview {
+    text-align: justify;
+    font-size: 15px;
+    font-weight: 600;
+    width: 80%;
+    color: white;
+    margin-bottom: 24px;
+}
+
 
 .explanation-text-small {
     text-align: center;
@@ -678,6 +789,7 @@ h2.pinline span:after {
 .select-language {
     height: 40px;
     max-width: 400px;
+    width: 50%;
 }
 
 .page-categories {
@@ -693,12 +805,14 @@ h2.pinline span:after {
     width: 80%;
     max-width: 400px;
     height: 70px;
-    background-color: rgba(77, 97, 97, 0.7);
+    background: linear-gradient(to right, #4DB1FF, #61D4F2);
     border-radius: 10px;
     display: flex;
     margin-bottom: 15px;
     cursor: pointer;
 }
+
+
 
 .page-category-icon-wrapper{
     flex: 0 0 70px;
@@ -706,7 +820,6 @@ h2.pinline span:after {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 .page-category-text-wrapper {
     flex: 1 1 100px;
@@ -714,7 +827,6 @@ h2.pinline span:after {
     flex-direction: column;
     justify-content: center;
     padding-left: 10px;
-
 }
 
 .page-category-text-wrapper h4 {
@@ -757,4 +869,86 @@ h2.pinline span:after {
     flex-direction: column;
     align-items: center;
     background: linear-gradient(#4CD8EA, #3189C5);
+}
+
+.custom-link-background-color {
+    background: linear-gradient(to right, #A345C5, #510080);
+}
+
+.upload-songs-background-color {
+    background: linear-gradient(to right, #FA4F96, #71014B);
+}
+
+.upload-video-background-color {
+    background: linear-gradient(to right, #B13A89, #510136);
+}
+
+.upload-files-background-color {
+    background: linear-gradient(to right, #7858FF, #1C0C6E);
+}
+
+.business-card-background-color {
+    background: linear-gradient(to right, #2E8DE7, #002A86);
+}
+
+.shared-contacts-background-color {
+    background: linear-gradient(to right, #1B90FF, #002A86);
+}
+
+
+.file-upload-action-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-file-wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100px;
+}
+
+.upload-file-filled {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-delete-button {
+    width: 150px;
+    height: 35px;
+    background-color: #ff2d55;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.file-upload-empty {
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/*.page-category-box .page-category-box {*/
+/*    background: #AA0808;*/
+/*}*/
+
+.preview-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.shared-contacts .shared-contacts  {
+    /*background: linear-gradient(to right, #002A86, #00144A);*/
+    background: #AA0808;
 }

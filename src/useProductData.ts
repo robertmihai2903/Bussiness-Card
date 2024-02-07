@@ -41,8 +41,7 @@ return async () =>{
 }
 
 export function useSaveName() {
-    // const {productState, setProductState} = useContext(ManageProductContext)
-    const {productState, setProductState} = useProductInformation()
+    const {productState, setProductState} = useContext(ManageProductContext)
     const productId = getProductIdFromURL()
     return async () => {
         if (productId) {
@@ -55,8 +54,9 @@ export function useSaveName() {
 
 }
 export function useSaveProductData () {
-    // const {productState, setProductState} = useContext(ManageProductContext)
-    const {productState, setProductState} = useProductInformation()
+    const {productState, setProductState} = useContext(ManageProductContext)
+    console.log('save, business', productState.businessFile
+    )
     const urlParams = new URLSearchParams(window.location.search)
     const productId = urlParams.get('product_id')
     const logoRef = ref(storage, `images/logo-${productId}`)

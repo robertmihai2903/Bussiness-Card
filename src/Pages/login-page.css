@@ -32,7 +32,7 @@
 
 
 .button-login {
-    background-color: #0F4D9D;
+    background: #0040B0;
     width: 280px;
     height: 45px;
     max-width: 80%;
@@ -46,6 +46,14 @@
 }
 .button-login :disabled {
     cursor: default;
+}
+
+.button-login:hover {
+    background: #002A86 ;
+}
+
+.button-login :active{
+    background: #00144A;
 }
 
 .button-signup {

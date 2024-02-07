@@ -24,8 +24,8 @@
 
 .download-button-profile {
     min-width: fit-content;
-    background-color: #3B8FA6;
-    height: 35px;
+    background: #3B8FA6;
+    min-height: 40px;
     text-align: center;
     max-width: 50%;
     font-size: 16px;
@@ -34,6 +34,44 @@
     margin-top: 12px;
     padding: 4px;
     border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.download-button-profile:hover {
+    background: #2e6f80;
+}
+
+.download-button-profile:active {
+    background: #275e6e;
+}
+
+.share-contact-with-me {
+    min-width: fit-content;
+    background: #AA0808;
+    min-height: 40px;
+    text-align: center;
+    max-width: 50%;
+    font-size: 16px;
+    color: white;
+    border: solid #979797 1px;
+    margin-top: 12px;
+    padding: 4px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.share-contact-with-me :hover {
+    background: #5A0404;
+}
+
+.share-contact-with-me :active {
+    background: #5A0404;
 }
 
 .profile-picture-container {

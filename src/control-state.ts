@@ -127,7 +127,7 @@ export const useProductInformation = () => {
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                 } else {
-                    navigate('/app')
+                    // navigate('/app')
                 }
             });
 
@@ -145,10 +145,11 @@ export const useProductInformation = () => {
 
         // notify(`Don't forget to save after changes`)
     }, []);
+    console.log({productState, setProductState})
     return {productState, setProductState, invalidFields}
 }
 export const useEditState = () => {
-    const {productState: state, setProductState: setState, invalidFields} = useProductInformation()
+    const {productState: state, setProductState: setState, invalidFields} = useContext(ManageProductContext)
     return {
         name: {
             value: state.name,

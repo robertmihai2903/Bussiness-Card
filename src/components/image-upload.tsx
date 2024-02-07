@@ -100,7 +100,7 @@ const ImageUpload = () => {
                     </div>
                 )
             }
-            <button className={'blue-crop-button'}  type='submit'>Crop & Save</button>
+            {inputImg && <button className={'blue-crop-button'} type='submit'>Crop & Save</button>}
         </form>
     )
 }

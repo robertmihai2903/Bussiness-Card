@@ -14,11 +14,11 @@ import {getStorage, ref} from "firebase/storage";
 import {ShowProduct} from "./Pages/show-product";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
-import {BusinessSettings} from "./components/business-settings";
-import {CustomLinkSettings} from "./components/custom-link-settings";
-import {UploadFileSettings} from "./components/upload-file-settings";
-import {UploadVideoSettings} from "./components/upload-video-settings";
-import {UploadSongsSettings} from "./components/upload-songs-settings";
+import {BusinessSettings, BusinessSettingsWrapper} from "./components/business-settings";
+import {CustomLinkSettings, CustomLinkSettingsWrapper} from "./components/custom-link-settings";
+import {UploadFileSettings, UploadFileSettingsWrapper} from "./components/upload-file-settings";
+import {UploadVideoSettings, UploadVideoSettingsWrapper} from "./components/upload-video-settings";
+import {UploadSongsSettings, UploadSongsSettingsWrapper} from "./components/upload-songs-settings";
 import {SharedContacts} from "./components/shared-contacts";
 
 const firebaseConfig = {
@@ -59,11 +59,11 @@ function App() {
                     <Route path={'/admin'} element={<AdminPage/>}/>
                     <Route path={'/manage-devices'} element={<ManageDevices/>}/>
                     <Route path={'/manage-device'} element={<ManageDevice/>}/>
-                    <Route path={'/manage-device/business-card'} element={<BusinessSettings/>}/>
-                    <Route path={'/manage-device/custom-link'} element={<CustomLinkSettings/>}/>
-                    <Route path={'/manage-device/upload-files'} element={<UploadFileSettings/>}/>
-                    <Route path={'/manage-device/upload-video'} element={<UploadVideoSettings/>}/>
-                    <Route path={'/manage-device/upload-songs'} element={<UploadSongsSettings/>}/>
+                    <Route path={'/manage-device/business-card'} element={<BusinessSettingsWrapper/>}/>
+                    <Route path={'/manage-device/custom-link'} element={<CustomLinkSettingsWrapper/>}/>
+                    <Route path={'/manage-device/upload-files'} element={<UploadFileSettingsWrapper/>}/>
+                    <Route path={'/manage-device/upload-video'} element={<UploadVideoSettingsWrapper/>}/>
+                    <Route path={'/manage-device/upload-songs'} element={<UploadSongsSettingsWrapper/>}/>
                     <Route path={'/manage-device/shared-contacts'} element={<SharedContacts/>}/>
                     <Route path={'/show-product'} element={<ShowProduct/>}/>
                 </Routes>

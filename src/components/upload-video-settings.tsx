@@ -1,8 +1,17 @@
 import {onChangeWrapper} from "../utils";
 import {Button, TextField} from "@mui/material";
-import {useEditState} from "../control-state";
+import {useEditState, useProductInformation} from "../control-state";
 import {useSaveProductData} from "../useProductData";
 import {SettingsHeader} from "../Pages/manage-device";
+import {ManageProductContext} from "../contexts";
+import {BusinessSettings} from "./business-settings";
+
+export function UploadVideoSettingsWrapper() {
+    const value = useProductInformation()
+    return (<ManageProductContext.Provider value={value}>
+        <UploadVideoSettings/>
+    </ManageProductContext.Provider>)
+}
 
 export function UploadVideoSettings() {
 

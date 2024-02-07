@@ -13,9 +13,18 @@ import BackArrowIcon from "../assets/back_arrow_icon.svg";
 import Logo from "../assets/flexpayz-logo.svg";
 import {useNavigate} from "react-router";
 import {SettingsHeader} from "../Pages/manage-device";
+import {FileUpload} from "./file-upload";
+
+export function BusinessSettingsWrapper() {
+    const value = useProductInformation()
+    return (<ManageProductContext.Provider value={value}>
+        <BusinessSettings/>
+    </ManageProductContext.Provider>)
+}
 
 export function BusinessSettings() {
-    const {setProductState, productState} = useProductInformation()
+    const { productState, setProductState} = useContext(ManageProductContext)
+    console.log('after', setProductState, productState)
     const {
         firstName,
         lastName,
@@ -174,10 +183,7 @@ export function BusinessSettings() {
         </div>
         <h2 className={'pinline'}><span>BUSINESS FILE</span></h2>
         <div className={'explanation-text-small'}>Upload your Business File</div>
-        <TextField label={`File name`} className={'form-manager-input'}
-                   value={businessFile.value} onChange={onChangeWrapper(businessFile)}
-                   variant={"outlined"} size={"small"} sx={{input: {color: 'white'}}}/>
-        <input className={'custom-file-input'} type={'file'} onChange={uploadCV} accept={'.pdf'}/>
+        <FileUpload filename={'CV'} fileId={'cv'} inputConfigs={businessFile} fileType={'.pdf'}/>
         <h2 className={'pinline'}><span>CUSTOMISE BACKGROUND</span></h2>
         <div className={'explanation-text'} style={{marginTop: '24px'}}>Express your emotions through your profile by
             selecting a background that resonates with your

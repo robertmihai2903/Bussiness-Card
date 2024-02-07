@@ -25,7 +25,13 @@ import {useResetDevice} from "../useProductData";
 import {notify} from "./login-page";
 import {translatedText} from "../languages";
 
-
+function addHttps(site: string) {
+    if (site.trim().startsWith('http')) {
+        return site
+    } else {
+        return `https://${site}`
+    }
+}
 
 function GetContact({product}: { product: Product }) {
     const [showModal, setShowModal] = useState(false)
@@ -55,7 +61,7 @@ function GetContact({product}: { product: Product }) {
     }
 
     return (<div className={'reset-product-container'}>
-        <button className={'reset-button'}
+        <button className={'share-contact-with-me'}
                 onClick={handleOpenModal}>{translatedText[product.previewLanguage]["Share your contact with me"]}
         </button>
         <Modal open={showModal} onClose={handleCloseModal}>
@@ -423,7 +429,7 @@ export function ShowProduct() {
                 <div className={'data-line'}><img src={LocationIcon} className={'presentation-icon'}/>{product.city}
                 </div>
                 <div className={'data-line'} onClick={() => {
-                    window.open(product.website)
+                    window.open(addHttps(product.website))
                 }}><img src={WebsiteIcon} className={'presentation-icon'}/>{product.website}</div>
             </div>
             <div className={'about-container'}>
