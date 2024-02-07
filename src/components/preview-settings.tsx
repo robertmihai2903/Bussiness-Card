@@ -13,7 +13,7 @@ import BurgerMenuIcon from "../assets/burger-menu.svg"
 import {SelectLanguage} from "../Pages/manage-device";
 
 export function PreviewSettings() {
-    const {productState, setProductState} = useProductInformation()
+    const {productState, setProductState} = useContext(ManageProductContext)
     const {publicPagePassword} = useEditState()
     const [showPassword, setShowPassword] = useState(false)
 
@@ -80,7 +80,8 @@ export function PreviewSettings() {
                 </div>
             </div>
         </div>
-        <div className={'check-show-text'}>PROTECT YOU PUBLIC PAGE</div>
+        <h2 className={'pinline'}><span>PRIVACY & PASSWORD</span></h2>
+        <div className={'explanation-text-preview'}>Secure the shared profile, PDF, video or songs with a password</div>
         <div className={'password-container'}>
             <TextField type={"password"} label={'Password'} value={publicPagePassword.value}
                        onChange={onChangeWrapper(publicPagePassword)}
@@ -92,7 +93,9 @@ export function PreviewSettings() {
                    onChange={onActivatePasswordPublicPage}/>
             <span>Password on public page</span>
         </div>
-        <div className={'check-show-text'}>CHANGE LANGUAGE ON YOUR PUBLIC PAGE</div>
+
+        <h2 className={'pinline'}><span>PROFILE LANGUAGE</span></h2>
+        <div className={'explanation-text-preview'}>Choose the language for the profile page</div>
         <SelectLanguage/>
     </div>
 

@@ -1,11 +1,19 @@
 import {onChangeWrapper} from "../utils";
 import {Button, TextField} from "@mui/material";
-import {useEditState} from "../control-state";
+import {useEditState, useProductInformation} from "../control-state";
 import {useSaveProductData} from "../useProductData";
 import BackArrowIcon from "../assets/back_arrow_icon.svg";
 import Logo from "../assets/flexpayz-logo.svg";
 import {SettingsHeader} from "../Pages/manage-device";
+import {ManageProductContext} from "../contexts";
+import {BusinessSettings} from "./business-settings";
 
+export function CustomLinkSettingsWrapper() {
+    const value = useProductInformation()
+    return (<ManageProductContext.Provider value={value}>
+        <CustomLinkSettings/>
+    </ManageProductContext.Provider>)
+}
 export function CustomLinkSettings() {
     const {customLink} = useEditState()
     const saveProductData = useSaveProductData()

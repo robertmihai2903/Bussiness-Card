@@ -1,8 +1,18 @@
-import {useEditState} from "../control-state";
+import {useEditState, useProductInformation} from "../control-state";
 import {useSaveProductData} from "../useProductData";
 import {TextField} from "@mui/material";
 import {onChangeWrapper, useUploadAudio} from "../utils";
 import {SettingsHeader} from "../Pages/manage-device";
+import {ManageProductContext} from "../contexts";
+import {BusinessSettings} from "./business-settings";
+import {FileUpload} from "./file-upload";
+
+export function UploadSongsSettingsWrapper() {
+    const value = useProductInformation()
+    return (<ManageProductContext.Provider value={value}>
+        <UploadSongsSettings/>
+    </ManageProductContext.Provider>)
+}
 
 export function UploadSongsSettings() {
 
@@ -15,17 +25,12 @@ export function UploadSongsSettings() {
     return (<div className={'settings-page'}>
         <SettingsHeader/>
         <div className={'section-title'}>Song Upload</div>
-        {/*<div className={'explanation-text'}>Upload your PDF files,  rename the uploaded files, save and when you share with your partners you will have possibilty to share the documents directly.</div>*/}
-
-        <input className={'custom-file-input'} type={'file'} onChange={uploadSong1} accept={'audio/*'}/>
-        <TextField style={{marginTop: '12px'}} label={'Song name'} value={song1.value} onChange={onChangeWrapper(song1)}
-                   variant={"outlined"} size={"small"} className={'form-manager-input'} sx={{input: {color: 'white'}}}/>
-        <input className={'custom-file-input'} type={'file'} onChange={uploadSong2} accept={'audio/*'}/>
-        <TextField style={{marginTop: '12px'}} label={'Song name'} value={song2.value} onChange={onChangeWrapper(song2)}
-                   variant={"outlined"} size={"small"} className={'form-manager-input'} sx={{input: {color: 'white'}}}/>
-        <input className={'custom-file-input'} type={'file'} onChange={uploadSong3} accept={'audio/*'}/>
-        <TextField style={{marginTop: '12px'}} label={'Song name'} value={song3.value} onChange={onChangeWrapper(song3)}
-                   variant={"outlined"} size={"small"} className={'form-manager-input'} sx={{input: {color: 'white'}}}/>
+        <h2 className={'pinline'}><span>Song 1</span></h2>
+        <FileUpload filename={'song1'} inputConfigs={song1} fileType={'audio/*'}/>
+        <h2 className={'pinline'}><span>Song 2</span></h2>
+        <FileUpload filename={'song2'} inputConfigs={song2} fileType={'audio/*'}/>
+        <h2 className={'pinline'}><span>Song 3</span></h2>
+        <FileUpload filename={'song3'} inputConfigs={song3} fileType={'audio/*'}/>
         <button className={'red-save-button'} onClick={saveProductData}>Save</button>
 
     </div>)

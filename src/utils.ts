@@ -14,10 +14,9 @@ export const onChangeWrapper = (key: any) => {
     }
 }
 
-export function useUploadFile(filename: string, fileID?: keyof Product) {
+export function useUploadFile(filename: string, fileID?: keyof Product, setFileUploaded?: any) {
     const productId = getProductIdFromURL()
-    // const {setProductState} = useContext(ManageProductContext)
-    const {setProductState} = useProductInformation()
+    const {setProductState} = useContext(ManageProductContext)
 
     return async (e: any) => {
         const tempDoc = e.target.files[0]
@@ -25,7 +24,7 @@ export function useUploadFile(filename: string, fileID?: keyof Product) {
             const documentRef = ref(storage, `documents/${productId}/${filename}`)
             console.log('start')
             uploadBytes(documentRef, tempDoc).then((data) => {
-                console.log(data)
+                setFileUploaded(true)
                 if (fileID) {
                     setProductState((prev: Product) => ({...prev, [fileID]: true}))
                 }
@@ -38,7 +37,7 @@ export function useUploadFile(filename: string, fileID?: keyof Product) {
 export function useSaveLanguage() {
     const productId = getProductIdFromURL()
     // const {setProductState} = useContext(ManageProductContext)
-    const {setProductState} = useProductInformation()
+    const {setProductState} = useContext(ManageProductContext)
     return async (e: any) => {
         setProductState((prev: Product) => ({...prev, previewLanguage: e.target.value}))
         if (productId) {
@@ -71,8 +70,7 @@ export function useUploadAudio(filename: string, fileID?: keyof Product) {
 
 export function useUploadLogo() {
     const productId = getProductIdFromURL()
-    // const {setProductState} = useContext(ManageProductContext)
-    const {setProductState} = useProductInformation()
+    const {setProductState} = useContext(ManageProductContext)
 
     return async (e: any) => {
         const tempDoc = e.target.files[0]
@@ -91,8 +89,7 @@ export function useUploadLogo() {
 }
 
 export function useSetPreview(preview: Preview) {
-    // const {setProductState} = useContext(ManageProductContext)
-    const {setProductState} = useProductInformation()
+    const {setProductState} = useContext(ManageProductContext)
     const productId = getProductIdFromURL()
 
     return async () => {

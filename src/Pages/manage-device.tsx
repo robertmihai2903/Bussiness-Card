@@ -28,6 +28,8 @@ import CustomLinkIcon from "../assets/category-custom-link.svg"
 import UploadFilesIcon from "../assets/category-upload-files.svg"
 import UploadVideoIcon from "../assets/category-upload-video.svg"
 import UploadSongsIcon from "../assets/category-upload-songs.svg"
+// import SharedContactsIcon from "../assets/affiliate-ui-web-svgrepo-com.svg"
+import classNames from "classnames";
 
 const enum Section {
     BUSINESS_CARD = 'business_card',
@@ -91,9 +93,10 @@ function EditName () {
 
 
 export function ManageDevice() {
-
+const value = useProductInformation()
 const navigate = useNavigate()
     return (<div className={'page-manager-wrapper'}>
+        <ManageProductContext.Provider value={value}>
         <div className={"page-manager"}>
             <div className={'manage-devices-header'}>
                 <img className={'back-button'} onClick={() => {navigate('/manage-devices')}} src={BackArrowIcon}/>
@@ -108,26 +111,27 @@ const navigate = useNavigate()
             <h2 className={'pinline'}><span>PREVIEW SETTINGS</span></h2>
             <PreviewSettings/>
 
-            <h2 className={'pinline'}><span>PAGES</span></h2>
+            <h2 className={'pinline'}><span>CONTENT PAGES</span></h2>
 
             <div className={'page-categories'}>
-                <PageCategory destination={'business-card'} color={'#8e936dff'} icon={BusinessCardIcon}
+                <PageCategory category={'business-card'} icon={BusinessCardIcon}
                               title={'Business Card'} description={'Fill out your contact details'}/>
-                <PageCategory destination={'custom-link'} color={'#8e936dff'} icon={CustomLinkIcon}
-                              title={'Custom Link'} description={'Fill out your contact details'}/>
-                <PageCategory destination={'upload-files'} color={'#8e936dff'} icon={UploadFilesIcon}
-                              title={'Upload Files'} description={'Fill out your contact details'}/>
-                <PageCategory destination={'upload-video'} color={'#8e936dff'} icon={UploadVideoIcon}
-                              title={'Upload Video'} description={'Fill out your contact details'}/>
-                <PageCategory destination={'upload-songs'} color={'#8e936dff'} icon={UploadSongsIcon}
-                              title={'Upload Songs'} description={'Fill out your contact details'}/>
+                <PageCategory category={'custom-link'} icon={CustomLinkIcon}
+                              title={'Custom Link'} description={'Introduce the URL link'}/>
+                <PageCategory category={'upload-files'} icon={UploadFilesIcon}
+                              title={'Upload Files'} description={'Introduce the Youtube link'}/>
+                <PageCategory category={'upload-video'} icon={UploadVideoIcon}
+                              title={'Upload Video'} description={'Upload 3 different PDF files '}/>
+                <PageCategory category={'upload-songs'} icon={UploadSongsIcon}
+                              title={'Upload Songs'} description={'Upload 3 different audio tracks'}/>
             </div>
-            <h2 className={'pinline'}><span>CONTACTS</span></h2>
+            <h2 className={'pinline'}><span>SHARED CONTACTS</span></h2>
             <div className={'page-categories'}>
-                <PageCategory destination={'shared-contacts'} color={'#8e936dff'} icon={UploadSongsIcon}
-                              title={'Shared Contacts'} description={'Fill out your contact details'}/>
+                <PageCategory category={'shared-contacts'} icon={BusinessCardIcon}
+                              title={'Shared Contacts'} description={'View shared contacts'}/>
             </div>
         </div>
+        </ManageProductContext.Provider>
     </div>)
 }
 
@@ -136,7 +140,7 @@ export function SelectLanguage() {
     const {previewLanguage} = useEditState()
     const onChangeSelect = useSaveLanguage()
     return (<div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-        <Select className={'select-language'} style={{width: '50%', margin: '10px 0'}}
+        <Select className={'select-language'}
                 onChange={onChangeSelect} value={previewLanguage.value}>
             {Object.values(Languages).map((key) => {
                 return (<MenuItem value={key}>{key.toLocaleUpperCase()}</MenuItem>)
@@ -146,21 +150,20 @@ export function SelectLanguage() {
 }
 
 interface PageCategoryProps {
-    color: string,
     icon: string,
     title: string,
     description: string,
-    destination: string
+    category: string
 }
 
-function PageCategory({color, icon, title, description, destination}: PageCategoryProps) {
+function PageCategory({icon, title, description, category}: PageCategoryProps) {
     const productId = getProductIdFromURL()
     const navigate = useNavigate()
     const goToSettings = useCallback(() => {
-        navigate(`/manage-device/${destination}?product_id=${productId}`)
-    }, [navigate, destination])
-    return (<div className={'page-category-box'} onClick={goToSettings}>
-        <div style={{backgroundColor: color}} className={'page-category-icon-wrapper'}>
+        navigate(`/manage-device/${category}?product_id=${productId}`)
+    }, [navigate, category])
+    return (<div className={classNames('page-category-box', category)} onClick={goToSettings}>
+        <div className={classNames(`page-category-icon-wrapper`, `${category}-background-color`)}>
             <img src={icon} className={'page-category-icon'}/>
         </div>
         <div className={'page-category-text-wrapper'}>
