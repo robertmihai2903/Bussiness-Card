@@ -113,9 +113,11 @@ export function ShowProduct() {
                 const productRef = doc(db, 'products', productId)
                 const docSnap = await getDoc(productRef);
                 if (docSnap.exists()) {
+                    console.log("it exists")
                     if (!docSnap.data().activated) {
-                        navigate('/app')
+                        // navigate('/app')
                     }
+                    console.log("is activated")
                     setProduct((prev: Product) => ({...prev, ...docSnap.data() as Product}))
                     setPasswordProtected((docSnap.data() as Product).publicPagePasswordActivated)
                     setLoaded(true)

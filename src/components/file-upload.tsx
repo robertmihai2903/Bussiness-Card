@@ -35,7 +35,7 @@ export function FileUpload({fileId, filename, inputConfigs, fileType}: UploadFil
             </div>
         </div>}
         {!fileUploaded && <div className={"file-upload-empty"}>
-            <input className={'custom-file-input'} type={'file'} onChange={uploadFile} accept={'.pdf'}/>
+            <input className={'custom-file-input'} type={'file'} onChange={uploadFile} accept={fileType}/>
         </div>}
     </div>)
 }
