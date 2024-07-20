@@ -15,11 +15,12 @@ import {
     getDoc
 } from "firebase/firestore";
 import {MainContext} from "../contexts";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {getAuth, onAuthStateChanged, signOut} from "firebase/auth";
 import './manage-devices.css'
 import Logo from '../assets/flexpayz-logo.svg'
 import AddDevice from '../assets/add-device.svg'
 import ManageDevicesLogo from '../assets/manage-devices.svg'
+import BackArrowIcon from "../assets/back_arrow_icon.svg";
 
 export function ManageDevices() {
     const [newProductCode, setNewProductCode] = useState("")
@@ -35,7 +36,7 @@ export function ManageDevices() {
                 const uid = user.uid;
                 setuserId(user.uid)
             } else {
-                //navigate to login
+                navigate('/app')
             }
         });
 
@@ -87,11 +88,24 @@ export function ManageDevices() {
 
     const [open, setOpen] = useState(false)
     const [showAddDevice, setShowAddDevice] = useState(false)
+    const onLogout = () => {
+        const auth = getAuth();
+        signOut(auth).then(() => {
+            navigate('/app')
+        }).catch((error) => {
+            console.log(error)
+        });
+    }
+
 
     const navigate = useNavigate()
     return (<div className={"page-devices"}>
         <div className={'header-devices'}>
+            {showAddDevice && <img className={'back-button'} onClick={() => {
+                setShowAddDevice(false)
+            }} src={BackArrowIcon}/>}
             <img className={'logo-devices'} src={Logo} alt={'logo'}/>
+            <button onClick={onLogout} className={'logout-button reset-button'}>Logout</button>
         </div>
         <div className={'main-devices'}>
             {!showAddDevice && <div className={'left-container-devices'}>

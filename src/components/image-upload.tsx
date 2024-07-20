@@ -52,6 +52,7 @@ const ImageUpload = () => {
         }
     }
 
+    const [zoom, setZoom] = useState(1)
     const handleSubmitImage = async (e: any) => {
         // upload blob to firebase 'images' folder with filename 'image'
         e.preventDefault()
@@ -60,10 +61,13 @@ const ImageUpload = () => {
         });
         // firebase
         await uploadBytes(imageRef, file )
+
         getDownloadURL(imageRef)
             .then(url => {
                 setInputImg(url)
+                setZoom(1)
                 notify('Image has been cropped')
+
                 return Promise.resolve(true);
             })
             .catch(error => {
@@ -90,11 +94,13 @@ const ImageUpload = () => {
                         <ImageCropper
                             getBlob={getBlob}
                             inputImg={inputImg}
+                            zoom={zoom}
+                            setZoom={setZoom}
                         />
                     </div>
                 )
             }
-            <Button  type='submit'>crop</Button>
+            {inputImg && <button className={'blue-crop-button'} type='submit'>Crop & Save</button>}
         </form>
     )
 }

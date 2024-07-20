@@ -14,6 +14,12 @@ import {getStorage, ref} from "firebase/storage";
 import {ShowProduct} from "./Pages/show-product";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
+import {BusinessSettings, BusinessSettingsWrapper} from "./components/business-settings";
+import {CustomLinkSettings, CustomLinkSettingsWrapper} from "./components/custom-link-settings";
+import {UploadFileSettings, UploadFileSettingsWrapper} from "./components/upload-file-settings";
+import {UploadVideoSettings, UploadVideoSettingsWrapper} from "./components/upload-video-settings";
+import {UploadSongsSettings, UploadSongsSettingsWrapper} from "./components/upload-songs-settings";
+import {SharedContacts} from "./components/shared-contacts";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD95KPFA7TG3QepgOl8iJdUM3c9RnEM11Q",
@@ -53,6 +59,12 @@ function App() {
                     <Route path={'/admin'} element={<AdminPage/>}/>
                     <Route path={'/manage-devices'} element={<ManageDevices/>}/>
                     <Route path={'/manage-device'} element={<ManageDevice/>}/>
+                    <Route path={'/manage-device/business-card'} element={<BusinessSettingsWrapper/>}/>
+                    <Route path={'/manage-device/custom-link'} element={<CustomLinkSettingsWrapper/>}/>
+                    <Route path={'/manage-device/upload-files'} element={<UploadFileSettingsWrapper/>}/>
+                    <Route path={'/manage-device/upload-video'} element={<UploadVideoSettingsWrapper/>}/>
+                    <Route path={'/manage-device/upload-songs'} element={<UploadSongsSettingsWrapper/>}/>
+                    <Route path={'/manage-device/shared-contacts'} element={<SharedContacts/>}/>
                     <Route path={'/show-product'} element={<ShowProduct/>}/>
                 </Routes>
             </MainContext.Provider>

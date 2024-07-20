@@ -1,7 +1,11 @@
+*{
+    box-sizing: border-box;
+}
+
 .page-show-product {
     min-height: 100vh;
     width: 100vw;
-    background-color: #859BA6;
+    background: linear-gradient(#467083, #A3B0B5);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,17 +15,18 @@
 .page-show-product-business {
     min-height: 100vh;
     width: 100vw;
-    background-color: #859BA6;
+    background: linear-gradient(var(--color1), var(--color2));
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 20px;
 }
 
 .download-button-profile {
-    background-color: #3B8FA6;
-    height: 35px;
+    min-width: fit-content;
+    background: #3B8FA6;
+    min-height: 40px;
     text-align: center;
-    min-width: 80px;
     max-width: 50%;
     font-size: 16px;
     color: white;
@@ -29,11 +34,49 @@
     margin-top: 12px;
     padding: 4px;
     border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.download-button-profile:hover {
+    background: #2e6f80;
+}
+
+.download-button-profile:active {
+    background: #275e6e;
+}
+
+.share-contact-with-me {
+    min-width: fit-content;
+    background: #AA0808;
+    min-height: 40px;
+    text-align: center;
+    max-width: 50%;
+    font-size: 16px;
+    color: white;
+    border: solid #979797 1px;
+    margin-top: 12px;
+    padding: 4px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.share-contact-with-me :hover {
+    background: #5A0404;
+}
+
+.share-contact-with-me :active {
+    background: #5A0404;
 }
 
 .profile-picture-container {
-    height: 30vh;
     width: 100vw;
+    height: calc(1.4 / 100vw);
     position: relative;
 }
 
@@ -79,6 +122,7 @@
 .logo-profile {
     height: 100%;
     width: 40%;
+    object-fit: contain;
 }
 
 .name-container {
@@ -192,3 +236,23 @@
     margin-right: 8px;
 
 }
+
+
+.password-page{
+    background-color: #4D6161;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-inputs {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+
+}
+

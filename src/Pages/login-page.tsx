@@ -5,15 +5,19 @@ import {LoginFormContext, MainContext, RegisterFormContext} from "../contexts";
 import {ConfigInput} from "../components/config-input";
 import {useLogin, useRegisterForm} from "../forms";
 import {stat} from "fs";
-import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail
+} from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import {useNavigate} from "react-router";
 import Logo from "../assets/flexpayz-logo.svg";
 import {toast} from "react-toastify";
-
 export const notify = (message?: string) => toast(message, {
     position: "top-right",
-    autoClose: 5000,
+    autoClose: 1500,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -63,12 +67,25 @@ export function LoginPage() {
 
     }
 
+    const resetPassword = () => {
+        const auth = getAuth()
+        sendPasswordResetEmail(auth, emailLog.value)
+            .then(() => {
+                notify('Reset password email has been sent')
+            })
+            .catch((error) => {
+                notify(ErrorCodes.get(error.code))
+            });
+
+    }
+
     const ErrorCodes = new Map([
         ['auth/wrong-password', 'Wrong password'],
         ['auth/user-not-found', 'User not found'],
         ['auth/invalid-email', 'Invalid email'],
         ['auth/weak-password', 'Password should be at least 6 characters'],
-        ['auth/email-already-in-use', 'Email already used']
+        ['auth/email-already-in-use', 'Email already used'],
+        ['auth/missing-email', 'Invalid email']
     ])
 
     const logInUser = () => {
@@ -88,7 +105,11 @@ export function LoginPage() {
     }
     return (<div className={"page-login"}>
         {hasAccount && <div className={"modal-login"}>
+            <div>
             <img src={Logo} alt={'logo'} className={'flexpayz-logo'}/>
+            <a className={'how-to-text'} href={'https://www.flexpayz.se/pages/get-started'}>How-to-use guide</a>
+
+            </div>
             <ConfigInput label={"Email"} value={emailLog.value} onChange={emailLog.onChange}
                          error={emailLog.error}></ConfigInput>
             <ConfigInput label={'Password'} type={'password'} value={passwordLog.value} onChange={passwordLog.onChange}
@@ -98,6 +119,7 @@ export function LoginPage() {
                 setHasAccount(false)
             }}>If you are not registered Sign up
             </div>
+            <div onClick={resetPassword} className={'no-account'}> Forgot password?</div>
         </div>}
         {!hasAccount && <div className={"modal-login"}>
             <img src={Logo} alt={'logo'} className={'flexpayz-logo'}/>
