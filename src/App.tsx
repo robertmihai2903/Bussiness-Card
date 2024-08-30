@@ -20,6 +20,8 @@ import {UploadFileSettings, UploadFileSettingsWrapper} from "./components/upload
 import {UploadVideoSettings, UploadVideoSettingsWrapper} from "./components/upload-video-settings";
 import {UploadSongsSettings, UploadSongsSettingsWrapper} from "./components/upload-songs-settings";
 import {SharedContacts} from "./components/shared-contacts";
+import {BabyJournalSettings} from "./components/baby-journal-settings";
+import {AdultJournalSettings} from "./components/adult-journal-settings";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD95KPFA7TG3QepgOl8iJdUM3c9RnEM11Q",
@@ -65,6 +67,8 @@ function App() {
                     <Route path={'/manage-device/upload-video'} element={<UploadVideoSettingsWrapper/>}/>
                     <Route path={'/manage-device/upload-songs'} element={<UploadSongsSettingsWrapper/>}/>
                     <Route path={'/manage-device/shared-contacts'} element={<SharedContacts/>}/>
+                    <Route path={'/manage-device/baby-journal'} element={<BabyJournalSettings/>}/>
+                    <Route path={'/manage-device/adult-journal'} element={<AdultJournalSettings/>}/>
                     <Route path={'/show-product'} element={<ShowProduct/>}/>
                 </Routes>
             </MainContext.Provider>

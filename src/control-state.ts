@@ -145,7 +145,7 @@ export const useProductInformation = () => {
 
         // notify(`Don't forget to save after changes`)
     }, []);
-    console.log({productState, setProductState})
+    // console.log({productState, setProductState})
     return {productState, setProductState, invalidFields}
 }
 export const useEditState = () => {

@@ -30,6 +30,7 @@ import UploadVideoIcon from "../assets/category-upload-video.svg"
 import UploadSongsIcon from "../assets/category-upload-songs.svg"
 // import SharedContactsIcon from "../assets/affiliate-ui-web-svgrepo-com.svg"
 import classNames from "classnames";
+import {PermissionContext, PermissionContextProvider, Permissions} from "../components/usePermission";
 
 const enum Section {
     BUSINESS_CARD = 'business_card',
@@ -96,42 +97,50 @@ export function ManageDevice() {
 const value = useProductInformation()
 const navigate = useNavigate()
     return (<div className={'page-manager-wrapper'}>
-        <ManageProductContext.Provider value={value}>
-        <div className={"page-manager"}>
-            <div className={'manage-devices-header'}>
-                <img className={'back-button'} onClick={() => {navigate('/manage-devices')}} src={BackArrowIcon}/>
-                <img className={'manage-logo'} src={Logo}/>
-            </div>
+        <PermissionContextProvider>
+            <ManageProductContext.Provider value={value}>
+                <div className={"page-manager"}>
+                    <div className={'manage-devices-header'}>
+                        <img className={'back-button'} onClick={() => {
+                            navigate('/manage-devices')
+                        }} src={BackArrowIcon}/>
+                        <img className={'manage-logo'} src={Logo}/>
+                    </div>
 
-            <div>
-                <GeneralDeviceActions/>
-            </div>
-            <h2 className={'pinline'}><span>DEVICE NAME</span></h2>
-            <EditName/>
-            <h2 className={'pinline'}><span>PREVIEW SETTINGS</span></h2>
-            <PreviewSettings/>
+                    <div>
+                        <GeneralDeviceActions/>
+                    </div>
+                    <h2 className={'pinline'}><span>DEVICE NAME</span></h2>
+                    <EditName/>
+                    <h2 className={'pinline'}><span>PREVIEW SETTINGS</span></h2>
+                    <PreviewSettings/>
 
-            <h2 className={'pinline'}><span>CONTENT PAGES</span></h2>
+                    <h2 className={'pinline'}><span>CONTENT PAGES</span></h2>
 
-            <div className={'page-categories'}>
-                <PageCategory category={'business-card'} icon={BusinessCardIcon}
-                              title={'Business Card'} description={'Fill out your contact details'}/>
-                <PageCategory category={'custom-link'} icon={CustomLinkIcon}
-                              title={'Custom Link'} description={'Introduce the URL link'}/>
-                <PageCategory category={'upload-files'} icon={UploadFilesIcon}
-                              title={'Upload Files'} description={'Introduce the Youtube link'}/>
-                <PageCategory category={'upload-video'} icon={UploadVideoIcon}
-                              title={'Upload Video'} description={'Upload 3 different PDF files '}/>
-                <PageCategory category={'upload-songs'} icon={UploadSongsIcon}
-                              title={'Upload Songs'} description={'Upload 3 different audio tracks'}/>
-            </div>
-            <h2 className={'pinline'}><span>SHARED CONTACTS</span></h2>
-            <div className={'page-categories'}>
-                <PageCategory category={'shared-contacts'} icon={BusinessCardIcon}
-                              title={'Shared Contacts'} description={'View shared contacts'}/>
-            </div>
-        </div>
-        </ManageProductContext.Provider>
+                    <div className={'page-categories'}>
+                        <PageCategory permission={"business_card"} category={'business-card'} icon={BusinessCardIcon}
+                                      title={'Business Card'} description={'Fill out your contact details'}/>
+                        <PageCategory permission={"custom_link"} category={'custom-link'} icon={CustomLinkIcon}
+                                      title={'Custom Link'} description={'Introduce the URL link'}/>
+                        <PageCategory permission={"upload_files"} category={'upload-files'} icon={UploadFilesIcon}
+                                      title={'Upload Files'} description={'Introduce the Youtube link'}/>
+                        <PageCategory permission={"upload_video"} category={'upload-video'} icon={UploadVideoIcon}
+                                      title={'Upload Video'} description={'Upload 3 different PDF files '}/>
+                        <PageCategory permission={"upload_songs"} category={'upload-songs'} icon={UploadSongsIcon}
+                                      title={'Upload Songs'} description={'Upload 3 different audio tracks'}/>
+                        <PageCategory permission={"baby_journal"} category={'baby-journal'} icon={BusinessCardIcon}
+                                      title={'Baby Journal'} description={'Have a journal for your baby'}/>
+                        <PageCategory permission={"adult_journal"} category={'adult-journal'} icon={BusinessCardIcon}
+                                      title={'Adult Journal'} description={'Have a journal for your baby'}/>
+                    </div>
+                    <h2 className={'pinline'}><span>SHARED CONTACTS</span></h2>
+                    <div className={'page-categories'}>
+                        <PageCategory permission={"business_card"} category={'shared-contacts'} icon={BusinessCardIcon}
+                                      title={'Shared Contacts'} description={'View shared contacts'}/>
+                    </div>
+                </div>
+            </ManageProductContext.Provider>
+        </PermissionContextProvider>
     </div>)
 }
 
@@ -153,15 +162,19 @@ interface PageCategoryProps {
     icon: string,
     title: string,
     description: string,
-    category: string
+    category: string,
+    permission: keyof Permissions
 }
 
-function PageCategory({icon, title, description, category}: PageCategoryProps) {
+function PageCategory({permission, icon, title, description, category}: PageCategoryProps) {
     const productId = getProductIdFromURL()
     const navigate = useNavigate()
+    const permissions = useContext(PermissionContext)
     const goToSettings = useCallback(() => {
         navigate(`/manage-device/${category}?product_id=${productId}`)
     }, [navigate, category])
+
+    if (!permissions[permission]) return null
     return (<div className={classNames('page-category-box', category)} onClick={goToSettings}>
         <div className={classNames(`page-category-icon-wrapper`, `${category}-background-color`)}>
             <img src={icon} className={'page-category-icon'}/>

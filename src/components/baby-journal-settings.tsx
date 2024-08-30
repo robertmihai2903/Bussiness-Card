@@ -1,0 +1,611 @@
+import {createContext, useContext, useEffect, useState} from "react";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {doc, getDoc, updateDoc} from "firebase/firestore";
+import {db} from "../App";
+import {JOURNAL_SEGMENTS, JournalNavbar} from "./journal-navbar";
+import {HomeJournalSegment} from "./home-journal-segment";
+import dayjs, {Dayjs} from "dayjs";
+import {HealthJournalSegment} from "./health-journal-segment";
+import {notify} from "../Pages/login-page";
+import {getProductIdFromURL} from "../utils";
+import {SaveJournalButton} from "./save-journal-button";
+import {LoadingScreen, LoadingScreenContext} from "./loading-sreen";
+import {ModificationJournalContextProvider} from "./adult-journal-settings";
+import {NotSavedScreen} from "./not-saved-screen";
+
+// import {InvestigationsJournalSegment} from "./investigations-journal-segment";
+
+export enum DB_COLLECTIONS {
+    BABY_JOURNALS = 'baby_journals',
+    ADULT_JOURNALS = 'adult_journals',
+    PERMISSIONS = 'permissions'
+}
+
+export enum DB_STORAGE {
+    BABY_JOURNAL = 'baby_journal',
+    ADULT_JOURNAL = 'adult_journal',
+}
+
+export interface Asset {
+    name: string,
+    url: string
+}
+
+interface Investigation {
+    name: string,
+    details: string,
+    assets: Asset[]
+}
+
+interface BabyJournalInformation {
+    name: string,
+    gender: string,
+    birthDate: string,
+    timeOfBirth: string,
+    apgar: string,
+    weightOnBirth: string,
+    heightOnBirth: string,
+    placeOfBirth: string,
+    biography: string,
+    firstHeadHold: string,
+    firstRoll: string,
+    firstSit: string,
+    firstSteps: string,
+    firstRun: string,
+    firstBreastfeeding: string,
+    firstFormula: string,
+    introductionOfCereal: string,
+    firstSolidFeeding: string,
+    foodPreferences: string,
+    foodAversions: string,
+    daySleeping: string,
+    nightSleeping: string,
+    waysOfSleeping: string,
+    nightSleepingProgress: string,
+    mother: {
+        profilePicture: Asset[]
+        name: string,
+        allergies: string,
+        diseases: string,
+        chronicAversions: string,
+    },
+    father: {
+        profilePicture: Asset[]
+        name: string,
+        allergies: string,
+        diseases: string,
+        chronicAversions: string,
+    },
+    healthProblems: string,
+    vaccines: string,
+    allergies: string,
+    medication: string,
+    chronicAversions: string,
+    otherHealthConditions: string,
+    medicalRecords: Asset[],
+    profilePicture: Asset[]
+
+    // investigations: Investigation[]
+}
+
+interface useBabyJournalEditInterface {
+    name: EditContext<string>,
+    gender: EditContext<string>,
+    birthDate: EditContext<string>,
+    timeOfBirth: EditContext<string>
+    apgar: EditContext<string>,
+    weightOnBirth: EditContext<string>,
+    heightOnBirth: EditContext<string>,
+    placeOfBirth: EditContext<string>,
+    biography: EditContext<string>,
+    firstHeadHold: EditContext<string>,
+    firstRoll: EditContext<string>,
+    firstSit: EditContext<string>,
+    firstSteps: EditContext<string>,
+    firstRun: EditContext<string>,
+    firstBreastfeeding: EditContext<string>,
+    firstFormula: EditContext<string>,
+    introductionOfCereal: EditContext<string>,
+    firstSolidFeeding: EditContext<string>,
+    foodPreferences: EditContext<string>,
+    foodAversions: EditContext<string>,
+    daySleeping: EditContext<string>,
+    nightSleeping: EditContext<string>,
+    waysOfSleeping: EditContext<string>,
+    nightSleepingProgress: EditContext<string>,
+    // investigations: any,
+    mother: {
+        profilePicture: EditContext<Asset[]>
+        name: EditContext<string>,
+        allergies: EditContext<string>,
+        diseases: EditContext<string>,
+        chronicAversions: EditContext<string>,
+    },
+    father: {
+        profilePicture: EditContext<Asset[]>
+        name: EditContext<string>,
+        allergies: EditContext<string>,
+        diseases: EditContext<string>,
+        chronicAversions: EditContext<string>,
+    },
+    healthProblems: EditContext<string>,
+    vaccines: EditContext<string>,
+    allergies: EditContext<string>,
+    medication: EditContext<string>,
+    chronicAversions: EditContext<string>,
+    otherHealthConditions: EditContext<string>,
+    medicalRecords: EditContext<Asset[]>
+    profilePicture: EditContext<Asset[]>
+}
+
+export function BabyJournalSettings() {
+    const [activeSegment, setActiveSegment] = useState<JOURNAL_SEGMENTS>(JOURNAL_SEGMENTS.HOME)
+    const [isLoading, setIsLoading] = useState(false)
+    return <div style={{position: "relative", maxWidth: "1000px", margin: "0 auto"}}>
+        <LoadingScreenContext.Provider value={{isLoading, setIsLoading}}>
+            <BabyJournalStateContextProvider>
+                <BabyJournalEditContextProvider>
+                    <ModificationJournalContextProvider journalType={'baby'}>
+                        <JournalNavbar activeSegment={activeSegment} setActiveSegment={setActiveSegment} home health/>
+                        {isLoading && <LoadingScreen/>}
+                        {activeSegment === JOURNAL_SEGMENTS.HOME && <HomeJournalSegment/>}
+                        {/*{activeSegment === JOURNAL_SEGMENTS.INVESTIGATIONS && <InvestigationsJournalSegment/>}*/}
+                        {activeSegment === JOURNAL_SEGMENTS.HEALTH && <HealthJournalSegment/>}
+                        <SaveJournalButton collection={DB_COLLECTIONS.BABY_JOURNALS}/>
+                        <NotSavedScreen/>
+                    </ModificationJournalContextProvider>
+                </BabyJournalEditContextProvider>
+            </BabyJournalStateContextProvider>
+        </LoadingScreenContext.Provider>
+    </div>
+}
+
+const defaultInvestigation: Investigation = {
+    name: "",
+    details: "",
+    assets: []
+}
+
+const defaultInformation: BabyJournalInformation = {
+    name: "",
+    gender: "",
+    birthDate: "",
+    timeOfBirth: "",
+    apgar: "",
+    weightOnBirth: "",
+    heightOnBirth: "",
+    placeOfBirth: "",
+    biography: "",
+    firstHeadHold: "",
+    firstRoll: "",
+    firstSit: "",
+    firstSteps: "",
+    firstRun: "",
+    firstBreastfeeding: "",
+    firstFormula: "",
+    introductionOfCereal: "",
+    firstSolidFeeding: "",
+    foodPreferences: "",
+    foodAversions: "",
+    daySleeping: "",
+    nightSleeping: "",
+    waysOfSleeping: "",
+    nightSleepingProgress: "",
+    // investigations: [defaultInvestigation],
+    mother: {
+        profilePicture: [],
+        name: "",
+        allergies: "",
+        diseases: "",
+        chronicAversions: "",
+    },
+    father: {
+        profilePicture: [],
+        name: "",
+        allergies: "",
+        diseases: "",
+        chronicAversions: "",
+    },
+    healthProblems: "",
+    vaccines: "",
+    allergies: "",
+    medication: "",
+    chronicAversions: "",
+    otherHealthConditions: "",
+    medicalRecords: [],
+    profilePicture: []
+}
+
+interface useBabyJournalInformation {
+    babyJournalState: BabyJournalInformation,
+    setBabyJournalState: any,
+    originalBabyJournalState: BabyJournalInformation,
+    setOriginalBabyJournalState: any,
+}
+
+export function useBabyJournalInformation(): useBabyJournalInformation {
+
+    const [babyJournalState, setBabyJournalState] = useState<BabyJournalInformation>(defaultInformation)
+    const [originalBabyJournalState, setOriginalBabyJournalState] = useState<BabyJournalInformation>(defaultInformation)
+
+    const {setIsLoading} = useContext(LoadingScreenContext)
+
+    useEffect(() => {
+            (async () => {
+                setIsLoading(true)
+                const auth = getAuth();
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                    } else {
+                        // navigate('/app')
+                    }
+                });
+
+                const urlParams = new URLSearchParams(window.location.search)
+                const productId = urlParams.get('product_id')
+                if (productId) {
+                    const productRef = doc(db, DB_COLLECTIONS.BABY_JOURNALS, productId)
+                    const docSnap = await getDoc(productRef);
+                    console.log(docSnap, docSnap.exists(), docSnap.data())
+                    if (docSnap.exists()) {
+                        setBabyJournalState((prev: BabyJournalInformation) => ({...prev, ...docSnap.data() as BabyJournalInformation}))
+                        setIsLoading(false)
+                        setOriginalBabyJournalState((prev: BabyJournalInformation) => ({...prev, ...docSnap.data() as BabyJournalInformation}))
+                    }
+                }
+            })()
+            // notify(`Don't forget to save after changes`)
+        }, []
+    );
+    return {babyJournalState, setBabyJournalState, originalBabyJournalState, setOriginalBabyJournalState}
+}
+
+export interface EditContext<T> {
+    value: T,
+    onChange: (value: T) => void
+}
+
+function useBabyJournalEdit(): useBabyJournalEditInterface {
+    const {babyJournalState, setBabyJournalState} = useContext(BabyJournalStateContext)
+    // const investigationsHandler = useGenerateInvestigationsHandler()
+
+    return {
+        name: {
+            value: babyJournalState.name,
+            onChange: (name: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, name}))
+            }
+        },
+        gender: {
+            value: babyJournalState.gender,
+            onChange: (gender: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, gender}))
+            }
+        },
+        birthDate: {
+            value: babyJournalState.birthDate,
+            onChange: (birthDate: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, birthDate}))
+            }
+        },
+        timeOfBirth: {
+            value: babyJournalState.timeOfBirth,
+            onChange: (timeOfBirth: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, timeOfBirth}))
+            }
+        },
+        apgar: {
+            value: babyJournalState.apgar,
+            onChange: (apgar: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, apgar}))
+            }
+        },
+        weightOnBirth: {
+            value: babyJournalState.weightOnBirth,
+            onChange: (weightOnBirth: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, weightOnBirth}))
+            }
+        },
+        heightOnBirth: {
+            value: babyJournalState.heightOnBirth,
+            onChange: (heightOnBirth: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, heightOnBirth}))
+            }
+        },
+        placeOfBirth: {
+            value: babyJournalState.placeOfBirth,
+            onChange: (placeOfBirth: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, placeOfBirth}))
+            }
+        },
+        biography: {
+            value: babyJournalState.biography,
+            onChange: (biography: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, biography}))
+            }
+        },
+        firstHeadHold: {
+            value: babyJournalState.firstHeadHold,
+            onChange: (firstHeadHold: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, firstHeadHold}))
+            }
+        },
+        firstRoll: {
+            value: babyJournalState.firstRoll,
+            onChange: (firstRoll: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, firstRoll}))
+            }
+        },
+        firstSit: {
+            value: babyJournalState.firstSit,
+            onChange: (firstSit: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, firstSit}))
+            }
+        },
+        firstSteps: {
+            value: babyJournalState.firstSteps,
+            onChange: (firstSteps: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, firstSteps}))
+            }
+        },
+        firstRun: {
+            value: babyJournalState.firstRun,
+            onChange: (firstRun: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, firstRun}))
+            }
+        },
+        firstBreastfeeding: {
+            value: babyJournalState.firstBreastfeeding,
+            onChange: (firstBreastfeeding: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, firstBreastfeeding}))
+            }
+        },
+        firstFormula: {
+            value: babyJournalState.firstFormula,
+            onChange: (firstFormula: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, firstFormula}))
+            }
+        },
+        introductionOfCereal: {
+            value: babyJournalState.introductionOfCereal,
+            onChange: (introductionOfCereal: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, introductionOfCereal}))
+            }
+        },
+        firstSolidFeeding: {
+            value: babyJournalState.firstSolidFeeding,
+            onChange: (firstSolidFeeding: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, firstSolidFeeding}))
+            }
+        },
+        foodPreferences: {
+            value: babyJournalState.foodPreferences,
+            onChange: (foodPreferences: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, foodPreferences}))
+            }
+        },
+        foodAversions: {
+            value: babyJournalState.foodAversions,
+            onChange: (foodAversions: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, foodAversions}))
+            }
+        },
+        daySleeping: {
+            value: babyJournalState.daySleeping,
+            onChange: (daySleeping: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, daySleeping}))
+            }
+        },
+        nightSleeping: {
+            value: babyJournalState.nightSleeping,
+            onChange: (nightSleeping: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, nightSleeping}))
+            }
+        },
+        waysOfSleeping: {
+            value: babyJournalState.waysOfSleeping,
+            onChange: (waysOfSleeping: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, waysOfSleeping}))
+            }
+        },
+        nightSleepingProgress: {
+            value: babyJournalState.nightSleepingProgress,
+            onChange: (nightSleepingProgress: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, nightSleepingProgress}))
+            }
+        },
+        // investigations: investigationsHandler,
+        mother: {
+            profilePicture: {
+                value: babyJournalState.mother.profilePicture,
+                onChange: (profilePicture: Asset[]) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({
+                        ...prev,
+                        mother: {...prev.mother, profilePicture}
+                    }))
+                }
+            },
+            name: {
+                value: babyJournalState.mother.name,
+                onChange: (name: string) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({...prev, mother: {...prev.mother, name}}))
+                }
+            },
+            allergies: {
+                value: babyJournalState.mother.allergies,
+                onChange: (allergies: string) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({
+                        ...prev,
+                        mother: {...prev.mother, allergies}
+                    }))
+                }
+            },
+            diseases: {
+                value: babyJournalState.mother.diseases,
+                onChange: (diseases: string) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({
+                        ...prev,
+                        mother: {...prev.mother, diseases}
+                    }))
+                }
+            },
+            chronicAversions: {
+                value: babyJournalState.mother.chronicAversions,
+                onChange: (chronicAversions: string) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({
+                        ...prev,
+                        mother: {...prev.mother, chronicAversions}
+                    }))
+                }
+            }
+        },
+        father: {
+            profilePicture: {
+                value: babyJournalState.father.profilePicture,
+                onChange: (profilePicture: Asset[]) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({
+                        ...prev,
+                        father: {...prev.father, profilePicture}
+                    }))
+                }
+            },
+            name: {
+                value: babyJournalState.father.name,
+                onChange: (name: string) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({...prev, father: {...prev.father, name}}))
+                }
+            },
+            allergies: {
+                value: babyJournalState.father.allergies,
+                onChange: (allergies: string) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({
+                        ...prev,
+                        father: {...prev.father, allergies}
+                    }))
+                }
+            },
+            diseases: {
+                value: babyJournalState.father.diseases,
+                onChange: (diseases: string) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({
+                        ...prev,
+                        father: {...prev.father, diseases}
+                    }))
+                }
+            },
+            chronicAversions: {
+                value: babyJournalState.father.chronicAversions,
+                onChange: (chronicAversions: string) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({
+                        ...prev,
+                        father: {...prev.father, chronicAversions}
+                    }))
+                }
+            }
+        },
+        healthProblems: {
+            value: babyJournalState.healthProblems,
+            onChange: (healthProblems: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, healthProblems}))
+            }
+        },
+        vaccines: {
+            value: babyJournalState.vaccines,
+            onChange: (vaccines: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, vaccines}))
+            }
+        },
+        allergies: {
+            value: babyJournalState.allergies,
+            onChange: (allergies: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, allergies}))
+            }
+        },
+        medication: {
+            value: babyJournalState.medication,
+            onChange: (medication: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, medication}))
+            }
+        },
+        chronicAversions: {
+            value: babyJournalState.chronicAversions,
+            onChange: (chronicAversions: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, chronicAversions}))
+            }
+        },
+        otherHealthConditions: {
+            value: babyJournalState.otherHealthConditions,
+            onChange: (otherHealthConditions: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, otherHealthConditions}))
+            }
+        },
+        medicalRecords: {
+            value: babyJournalState.medicalRecords,
+            onChange: (medicalRecords: Asset[]) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, medicalRecords}))
+            }
+        },
+        profilePicture: {
+            value: babyJournalState.profilePicture,
+            onChange: (profilePicture: Asset[]) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, profilePicture}))
+            }
+        }
+
+    }
+}
+
+// function useGenerateInvestigationsHandler() {
+//     const {babyJournalState, setBabyJournalState} = useBabyJournalInformation()
+//     return babyJournalState.investigations.map((investigation, index) => {
+//         return {
+//             name: {
+//                 value: investigation.name,
+//                 onChange: (name: string) => {
+//                     setBabyJournalState((prev: BabyJournalInformation) => {
+//                         const tempInvestigations = prev.investigations
+//                         tempInvestigations[index].name = name
+//                         return tempInvestigations
+//                     })
+//                 }
+//             },
+//             details: {
+//                 value: investigation.details,
+//                 onChange: (details: string) => {
+//                     setBabyJournalState((prev: BabyJournalInformation) => {
+//                         const tempInvestigations = prev.investigations
+//                         tempInvestigations[index].details = details
+//                         return tempInvestigations
+//                     })
+//                 }
+//             },
+//         }
+//     })
+//
+// }
+
+export const BabyJournalEditContext = createContext<useBabyJournalEditInterface | null>(null)
+export const BabyJournalStateContext = createContext<useBabyJournalInformation>({
+    babyJournalState: defaultInformation,
+    setBabyJournalState: () => {
+    },
+    originalBabyJournalState: defaultInformation,
+    setOriginalBabyJournalState: () => {
+    },
+})
+
+export function BabyJournalStateContextProvider({children}: any) {
+    const value = useBabyJournalInformation()
+    if (!value) return null
+    return <BabyJournalStateContext.Provider value={value}>
+        {children}
+    </BabyJournalStateContext.Provider>
+}
+
+export function BabyJournalEditContextProvider({children}: any) {
+    const value = useBabyJournalEdit()
+    if (!value) return null
+    return <BabyJournalEditContext.Provider value={value}>
+        {children}
+    </BabyJournalEditContext.Provider>
+}

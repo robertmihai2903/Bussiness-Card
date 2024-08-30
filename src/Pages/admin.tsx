@@ -3,17 +3,22 @@ import {Button, Checkbox, Input} from "@mui/material";
 import {useNavigate} from "react-router";
 import {useContext, useEffect, useState} from "react";
 import {MainContext} from "../contexts";
-import {doc, setDoc, addDoc, collection, query, where, getDocs, updateDoc} from "firebase/firestore"
+import {doc, setDoc, addDoc, collection, query, where, getDocs, updateDoc, getDoc} from "firebase/firestore"
 import './admin.css'
 import {notify} from "./login-page";
 import {db} from "../App";
+import {DB_COLLECTIONS, DB_STORAGE} from "../components/baby-journal-settings";
+import {defaultPermissions, Permissions} from "../components/usePermission";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 export enum Preview {
     BUSINESS_CARD = 'business_card',
     CUSTOM_LINK = 'custom_link',
     UPLOAD_FILE = 'upload_file',
     UPLOAD_VIDEO = "upload_video",
-    UPLOAD_SONGS = "upload-songs"
+    UPLOAD_SONGS = "upload-songs",
+    BABY_JOURNAL = "baby-journal",
+    ADULT_JOURNAL = "adult-journal"
 }
 
 const random_hex_code = () => {
@@ -44,6 +49,9 @@ export function AdminPage() {
                     preview: Preview.BUSINESS_CARD,
                     processed: false
                 }])
+                setDoc(doc(db, DB_COLLECTIONS.PERMISSIONS, data.id), defaultPermissions)
+                setDoc(doc(db, DB_COLLECTIONS.ADULT_JOURNALS, data.id), {})
+                setDoc(doc(db, DB_COLLECTIONS.BABY_JOURNALS, data.id), {})
             })
         }
         notify(`You created ${orderedProducts} products.`)
@@ -64,6 +72,8 @@ export function AdminPage() {
 console.log(products)
     }, [])
 
+    const [changePermissionsProduct, setChangePermissionsProduct] = useState<string>("")
+
     return (<div className={"page"}>
         <div className={"modal"}>
             <Input value={orderedProducts} type={'number'} onChange={(e: any) => {
@@ -71,18 +81,66 @@ console.log(products)
             }}/>
             <Button onClick={createProducts}>get products</Button>
             <div className={"admin-products"}>
-                {products.map((product) => (<Product key={`product-${product.id}`} product={product}/>
+                {products.map((product) => (<Product key={`product-${product.id}`} product={product}
+                                                     onChangePermissions={setChangePermissionsProduct}/>
 
             ))}
             </div>
         </div>
+        <ChangePermissionsModal product={changePermissionsProduct}/>
 
 
     </div>)
 }
 
+function ChangePermissionsModal({product}: { product: string }) {
+    const [currentPermissions, setCurrentPermissions] = useState(defaultPermissions)
+    useEffect(() => {
+        (async () => {
+            if (product) {
+                const productRef = doc(db, DB_COLLECTIONS.PERMISSIONS, product)
+                const docSnap = await getDoc(productRef);
+                if (docSnap.exists()) {
+                    setCurrentPermissions((prev: Permissions) => ({...prev, ...docSnap.data() as Permissions}))
+                }
+            }
+        })()
+    }, [product]);
 
-const Product = ({product}: any) => {
+    const onSave = async () => {
+        const docRef = doc(db, DB_COLLECTIONS.PERMISSIONS, product)
+        await updateDoc(docRef, {...currentPermissions})
+    }
+
+    return <div className={"permission-modal"}>
+        <h1>Change Permissions</h1>
+        <div>BUSINESS CARD <Checkbox checked={currentPermissions.business_card} onChange={() => {
+            setCurrentPermissions((prev: Permissions) => ({...prev, business_card: !prev.business_card}))
+        }}/></div>
+        <div>CUSTOM LINK <Checkbox checked={currentPermissions.custom_link} onChange={() => {
+            setCurrentPermissions((prev: Permissions) => ({...prev, custom_link: !prev.custom_link}))
+        }}/></div>
+        <div>UPLOAD FILES <Checkbox checked={currentPermissions.upload_files} onChange={() => {
+            setCurrentPermissions((prev: Permissions) => ({...prev, upload_files: !prev.upload_files}))
+        }}/></div>
+        <div>UPLOAD VIDEO <Checkbox checked={currentPermissions.upload_video} onChange={() => {
+            setCurrentPermissions((prev: Permissions) => ({...prev, upload_video: !prev.upload_video}))
+        }}/></div>
+        <div>UPLOAD SONGS <Checkbox checked={currentPermissions.upload_songs} onChange={() => {
+            setCurrentPermissions((prev: Permissions) => ({...prev, upload_songs: !prev.upload_songs}))
+        }}/></div>
+        <div>BABY JOURNAL <Checkbox checked={currentPermissions.baby_journal} onChange={() => {
+            setCurrentPermissions((prev: Permissions) => ({...prev, baby_journal: !prev.baby_journal}))
+        }}/></div>
+        <div>ADULT JOURNAL <Checkbox checked={currentPermissions.adult_journal} onChange={() => {
+            setCurrentPermissions((prev: Permissions) => ({...prev, adult_journal: !prev.adult_journal}))
+        }}/></div>
+        <Button onClick={onSave}>SAVE PERMISSIONS</Button>
+    </div>
+}
+
+
+const Product = ({product, onChangePermissions}: any) => {
     const copyLink = (productId: string) => {
         navigator.clipboard.writeText(`https://flexpayz.com/show-product?product_id=${productId}`)
     }
@@ -111,7 +169,11 @@ const Product = ({product}: any) => {
             copyLink(product.id)
         }}>Link</Button>
         <Checkbox checked={processed} onChange={onProcessedProduct}/>
+        <Button onClick={() => {
+            onChangePermissions(product.id)
+        }}>PERMISSIONS</Button>
         <br/>
         <br/>
+
     </div>)
 }
