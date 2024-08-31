@@ -16,7 +16,8 @@ export function HealthJournalSegment() {
         medication,
         chronicAversions,
         otherHealthConditions,
-        medicalRecords
+        medicalRecords,
+        europeanHealthCard,
     } = useContext(BabyJournalEditContext)! //TODO
     return <div className={"j-segment-container"}>
         <h1 className={"j-segment-title"}>Medical Records</h1>
@@ -48,6 +49,10 @@ export function HealthJournalSegment() {
                    maxRows={7}
         />
 
+        <h1 className={"j-preview-title"}>European Health Card</h1>
+        <AssetUpload3 value={europeanHealthCard.value} onChange={europeanHealthCard.onChange}
+                      storageFolder={DB_STORAGE.BABY_JOURNAL}/>
+
         <h1 className={"j-segment-title"}>Mom</h1>
         <ProfileUpload value={mother.profilePicture.value} onChange={mother.profilePicture.onChange}
                        storageFolder={DB_STORAGE.BABY_JOURNAL}/>
@@ -60,7 +65,8 @@ export function HealthJournalSegment() {
         <TextField label={'Diseases'} value={mother.diseases.value} className={"j-segment-textfield"}
                    onChange={onChangeWrapper(mother.diseases)} variant={"outlined"} size={"small"}
         />
-        <TextField label={'Chronic Adverse Reaction'} value={mother.chronicAversions.value} className={"j-segment-textfield"}
+        <TextField label={'Chronic Adverse Reaction'} value={mother.chronicAversions.value}
+                   className={"j-segment-textfield"}
                    onChange={onChangeWrapper(mother.chronicAversions)} variant={"outlined"} size={"small"}
         />
         <TextField label={'Blood Type'} value={mother.bloodType.value} className={"j-segment-textfield"}
@@ -79,7 +85,8 @@ export function HealthJournalSegment() {
         <TextField label={'Diseases'} value={father.diseases.value} className={"j-segment-textfield"}
                    onChange={onChangeWrapper(father.diseases)} variant={"outlined"} size={"small"}
         />
-        <TextField label={'Chronic Adverse Reaction'} value={father.chronicAversions.value} className={"j-segment-textfield"}
+        <TextField label={'Chronic Adverse Reaction'} value={father.chronicAversions.value}
+                   className={"j-segment-textfield"}
                    onChange={onChangeWrapper(father.chronicAversions)} variant={"outlined"} size={"small"}
         />
         <TextField label={'Blood Type'} value={father.bloodType.value} className={"j-segment-textfield"}

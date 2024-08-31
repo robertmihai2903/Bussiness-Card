@@ -7,7 +7,7 @@ import {MediaPreview} from "./media-preview";
 
 export function HealthBabyJournalPreview() {
     const {babyJournalState} = useContext(BabyJournalStateContext)
-    const {mother, father, healthProblems, vaccines, allergies, medication, chronicAversions, otherHealthConditions, medicalRecords} = babyJournalState
+    const {mother, father, healthProblems, vaccines, allergies, medication, chronicAversions, otherHealthConditions, medicalRecords, europeanHealthCard} = babyJournalState
     return <div className={"j-segment-container"}>
         <h2 className={"j-preview-title"}>Medical Records</h2>
         <MediaPreview value={medicalRecords}/>
@@ -19,6 +19,9 @@ export function HealthBabyJournalPreview() {
         <SmallInfoPreview label={"medication"} info={medication}/>
         <SmallInfoPreview label={"chronic aversions"} info={chronicAversions}/>
         <LargeInfoPreview label={"Other"} info={otherHealthConditions}/>
+
+        <h1 className={"j-preview-title"}>European Health Card</h1>
+        <MediaPreview value={europeanHealthCard}/>
 
         <h2 className={"j-preview-title"}>Mom</h2>
         <ProfilePicturePreview asset={mother.profilePicture[0]}/>

@@ -2,12 +2,9 @@ import React, {useContext} from "react";
 import {TextField} from "@mui/material";
 import {onChangeWrapper} from "../utils";
 import "./journal-segment.css"
-import {DatePickerConverted} from "./date-picker-converted";
-import {TimePickerConverted} from "./time-picker-converted";
 import AssetUpload3 from "./asset-upload-3";
-import {ProfileUpload} from "./profile-upload";
 import {AdultJournalEditContext} from "./adult-journal-settings";
-import {DB_COLLECTIONS, DB_STORAGE} from "./baby-journal-settings";
+import {DB_STORAGE} from "./baby-journal-settings";
 
 export function HealthAdultJournalSegment() {
     const {
@@ -19,7 +16,8 @@ export function HealthAdultJournalSegment() {
         pulse,
         temperature,
         respiratoryRate,
-        generalPhysicalExamination
+        generalPhysicalExamination,
+        europeanHealthCard
     } = useContext(AdultJournalEditContext)! //TODO
     return <div className={"j-segment-container"}>
         <h1 className={"j-segment-title"}>Medical History</h1>
@@ -44,6 +42,10 @@ export function HealthAdultJournalSegment() {
                    onChange={onChangeWrapper(familyHistory)} variant={"outlined"} size={"small"} multiline minRows={3}
                    maxRows={7}
         />
+
+        <h1 className={"j-preview-title"}>European Health Card</h1>
+        <AssetUpload3 value={europeanHealthCard.value} onChange={europeanHealthCard.onChange} storageFolder={DB_STORAGE.ADULT_JOURNAL}/>
+
         <h1 className={"j-segment-title"}>Clinical Examination</h1>
         <TextField label={'General Physical Examination'} placeholder={"General Physical Examination"}
                    value={generalPhysicalExamination.value}
@@ -52,6 +54,7 @@ export function HealthAdultJournalSegment() {
                    minRows={3}
                    maxRows={7}
         />
+
         <h3 className={"j-segment-subtitle"}>Vital Signs</h3>
         <TextField label={'Blood Pressure'} placeholder={"Blood Presure"} value={bloodPressure.value}
                    className={"j-segment-textfield"}

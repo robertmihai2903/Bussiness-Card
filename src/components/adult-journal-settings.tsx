@@ -101,6 +101,7 @@ interface AdultJournalInformation {
     appointments: string,
     monitoringProgress: string,
     bloodType: string,
+    europeanHealthCard: Asset[]
 }
 
 const defaultInformation: AdultJournalInformation = {
@@ -156,6 +157,7 @@ const defaultInformation: AdultJournalInformation = {
     appointments: "",
     monitoringProgress: "",
     bloodType: "",
+    europeanHealthCard: []
 }
 
 export interface InvestigationHandler {
@@ -215,7 +217,8 @@ interface useAdultJournalEditInterface {
     lifestyleRecommendations: EditContext<string>,
     appointments: EditContext<string>,
     monitoringProgress: EditContext<string>,
-    bloodType:EditContext<string>
+    bloodType: EditContext<string>,
+    europeanHealthCard: EditContext<Asset[]>
 }
 
 interface useAdultJournalInformation {
@@ -471,6 +474,12 @@ function useAdultJournalEdit(): useAdultJournalEditInterface {
             value: adultJournalState.bloodType,
             onChange: (bloodType: string) => {
                 setAdultJournalState((prev: AdultJournalInformation) => ({...prev, bloodType}))
+            }
+        },
+        europeanHealthCard: {
+            value: adultJournalState.europeanHealthCard,
+            onChange: (europeanHealthCard: Asset[]) => {
+                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, europeanHealthCard}))
             }
         }
     }

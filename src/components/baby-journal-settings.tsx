@@ -87,6 +87,7 @@ interface BabyJournalInformation {
     medicalRecords: Asset[],
     profilePicture: Asset[],
     bloodType: string,
+    europeanHealthCard: Asset[]
 
     // investigations: Investigation[]
 }
@@ -141,7 +142,9 @@ interface useBabyJournalEditInterface {
     otherHealthConditions: EditContext<string>,
     medicalRecords: EditContext<Asset[]>,
     profilePicture: EditContext<Asset[]>,
-    bloodType: EditContext<string>
+    bloodType: EditContext<string>,
+    europeanHealthCard: EditContext<Asset[]>
+
 }
 
 export function BabyJournalSettings() {
@@ -222,7 +225,8 @@ const defaultInformation: BabyJournalInformation = {
     otherHealthConditions: "",
     medicalRecords: [],
     profilePicture: [],
-    bloodType: ""
+    bloodType: "",
+    europeanHealthCard: [],
 }
 
 interface useBabyJournalInformation {
@@ -582,6 +586,12 @@ function useBabyJournalEdit(): useBabyJournalEditInterface {
             value: babyJournalState.bloodType,
             onChange: (bloodType: string) => {
                 setBabyJournalState((prev: BabyJournalInformation) => ({...prev, bloodType}))
+            }
+        },
+        europeanHealthCard: {
+            value: babyJournalState.europeanHealthCard,
+            onChange: (europeanHealthCard: Asset[]) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, europeanHealthCard}))
             }
         },
     }
