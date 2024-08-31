@@ -68,6 +68,7 @@ interface BabyJournalInformation {
         allergies: string,
         diseases: string,
         chronicAversions: string,
+        bloodType: string
     },
     father: {
         profilePicture: Asset[]
@@ -75,6 +76,7 @@ interface BabyJournalInformation {
         allergies: string,
         diseases: string,
         chronicAversions: string,
+        bloodType: string
     },
     healthProblems: string,
     vaccines: string,
@@ -83,7 +85,8 @@ interface BabyJournalInformation {
     chronicAversions: string,
     otherHealthConditions: string,
     medicalRecords: Asset[],
-    profilePicture: Asset[]
+    profilePicture: Asset[],
+    bloodType: string,
 
     // investigations: Investigation[]
 }
@@ -120,6 +123,7 @@ interface useBabyJournalEditInterface {
         allergies: EditContext<string>,
         diseases: EditContext<string>,
         chronicAversions: EditContext<string>,
+        bloodType: EditContext<string>,
     },
     father: {
         profilePicture: EditContext<Asset[]>
@@ -127,6 +131,7 @@ interface useBabyJournalEditInterface {
         allergies: EditContext<string>,
         diseases: EditContext<string>,
         chronicAversions: EditContext<string>,
+        bloodType: EditContext<string>
     },
     healthProblems: EditContext<string>,
     vaccines: EditContext<string>,
@@ -134,8 +139,9 @@ interface useBabyJournalEditInterface {
     medication: EditContext<string>,
     chronicAversions: EditContext<string>,
     otherHealthConditions: EditContext<string>,
-    medicalRecords: EditContext<Asset[]>
-    profilePicture: EditContext<Asset[]>
+    medicalRecords: EditContext<Asset[]>,
+    profilePicture: EditContext<Asset[]>,
+    bloodType: EditContext<string>
 }
 
 export function BabyJournalSettings() {
@@ -198,6 +204,7 @@ const defaultInformation: BabyJournalInformation = {
         allergies: "",
         diseases: "",
         chronicAversions: "",
+        bloodType: ""
     },
     father: {
         profilePicture: [],
@@ -205,6 +212,7 @@ const defaultInformation: BabyJournalInformation = {
         allergies: "",
         diseases: "",
         chronicAversions: "",
+        bloodType: ""
     },
     healthProblems: "",
     vaccines: "",
@@ -213,7 +221,8 @@ const defaultInformation: BabyJournalInformation = {
     chronicAversions: "",
     otherHealthConditions: "",
     medicalRecords: [],
-    profilePicture: []
+    profilePicture: [],
+    bloodType: ""
 }
 
 interface useBabyJournalInformation {
@@ -457,6 +466,15 @@ function useBabyJournalEdit(): useBabyJournalEditInterface {
                         mother: {...prev.mother, chronicAversions}
                     }))
                 }
+            },
+            bloodType: {
+                value: babyJournalState.mother.bloodType,
+                onChange: (bloodType: string) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({
+                        ...prev,
+                        mother: {...prev.mother, bloodType}
+                    }))
+                }
             }
         },
         father: {
@@ -499,6 +517,15 @@ function useBabyJournalEdit(): useBabyJournalEditInterface {
                     setBabyJournalState((prev: BabyJournalInformation) => ({
                         ...prev,
                         father: {...prev.father, chronicAversions}
+                    }))
+                }
+            },
+            bloodType: {
+                value: babyJournalState.father.bloodType,
+                onChange: (bloodType: string) => {
+                    setBabyJournalState((prev: BabyJournalInformation) => ({
+                        ...prev,
+                        father: {...prev.father, bloodType}
                     }))
                 }
             }
@@ -550,8 +577,13 @@ function useBabyJournalEdit(): useBabyJournalEditInterface {
             onChange: (profilePicture: Asset[]) => {
                 setBabyJournalState((prev: BabyJournalInformation) => ({...prev, profilePicture}))
             }
-        }
-
+        },
+        bloodType: {
+            value: babyJournalState.bloodType,
+            onChange: (bloodType: string) => {
+                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, bloodType}))
+            }
+        },
     }
 }
 

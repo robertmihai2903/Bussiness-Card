@@ -12,7 +12,7 @@ export function HomeAdultJournalPreview() {
         personalIdNumber,
         address,
         phone,
-        medicalRecordNumber
+        medicalRecordNumber,
     } = adultJournalState
     return <div className={"j-segment-container"}>
         <h1 className={"j-segment-title"}>{name}</h1>

@@ -35,6 +35,10 @@ export function HealthJournalSegment() {
         <TextField label={'Chronic Aversions'} value={mother.chronicAversions.value} className={"j-segment-textfield"}
                    onChange={onChangeWrapper(mother.chronicAversions)} variant={"outlined"} size={"small"}
         />
+        <TextField label={'Blood Type'} value={mother.bloodType.value} className={"j-segment-textfield"}
+                   onChange={onChangeWrapper(mother.bloodType)} variant={"outlined"} size={"small"}
+        />
+
         <h1 className={"j-segment-title"}>Dad</h1>
         <ProfileUpload value={father.profilePicture.value} onChange={father.profilePicture.onChange} storageFolder={DB_STORAGE.BABY_JOURNAL}/>
         <TextField label={'Full name'} value={father.name.value} className={"j-segment-textfield"}
@@ -49,6 +53,10 @@ export function HealthJournalSegment() {
         <TextField label={'Chronic Aversions'} value={father.chronicAversions.value} className={"j-segment-textfield"}
                    onChange={onChangeWrapper(father.chronicAversions)} variant={"outlined"} size={"small"}
         />
+        <TextField label={'Blood Type'} value={father.bloodType.value} className={"j-segment-textfield"}
+                   onChange={onChangeWrapper(father.bloodType)} variant={"outlined"} size={"small"}
+        />
+
         <h1 className={"j-segment-title"}>Allergies, Health Info, Vaccines</h1>
         <TextField label={'Health Problems'} placeholder={"Health Problems"} value={healthProblems.value}
                    className={"j-segment-textfield"}

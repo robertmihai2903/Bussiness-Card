@@ -17,6 +17,7 @@ export function HealthBabyJournalPreview() {
         <SmallInfoPreview label={"allergies"} info={mother.allergies}/>
         <SmallInfoPreview label={"diseases"} info={mother.diseases}/>
         <SmallInfoPreview label={"chronic aversions"} info={mother.chronicAversions}/>
+        <SmallInfoPreview label={"Blood type"} info={mother.bloodType}/>
 
         <h2 className={"j-preview-title"}>Dad</h2>
         <ProfilePicturePreview asset={father.profilePicture[0]}/>
@@ -24,6 +25,7 @@ export function HealthBabyJournalPreview() {
         <SmallInfoPreview label={"allergies"} info={father.allergies}/>
         <SmallInfoPreview label={"diseases"} info={father.diseases}/>
         <SmallInfoPreview label={"chronic aversions"} info={father.chronicAversions}/>
+        <SmallInfoPreview label={"Blood type"} info={father.bloodType}/>
 
 
 

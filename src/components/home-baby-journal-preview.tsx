@@ -68,7 +68,8 @@ export function HomeBabyJournalPreview() {
         nightSleepingProgress,
         nightSleeping,
         waysOfSleeping,
-        profilePicture
+        profilePicture,
+        bloodType
     } = babyJournalState
     return <div className={"j-segment-container"}>
         <h1 className={"j-segment-title"}>{name}</h1>
@@ -78,6 +79,7 @@ export function HomeBabyJournalPreview() {
         <SmallInfoPreview label={"date of birth"} info={birthDate}/>
         <SmallInfoPreview label={"time of birth"} info={timeOfBirth}/>
         <SmallInfoPreview label={"APGAR"} info={apgar}/>
+        <SmallInfoPreview label={"Blood type"} info={bloodType}/>
         <SmallInfoPreview label={"weight at birth"} info={weightOnBirth}/>
         <SmallInfoPreview label={"height at  birth"} info={heightOnBirth}/>
         <SmallInfoPreview label={"place of birth"} info={placeOfBirth}/>

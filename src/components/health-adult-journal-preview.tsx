@@ -4,7 +4,7 @@ import {LargeInfoPreview, ProfilePicturePreview, SmallInfoPreview} from "./home-
 
 export function HealthAdultJournalPreview() {
     const {adultJournalState} = useContext(AdultJournalStateContext)
-    const {previousConditions, medication, allergies, familyHistory, generalPhysicalExamination, bloodPressure, pulse, temperature, respiratoryRate} = adultJournalState
+    const {previousConditions, medication, allergies, familyHistory, generalPhysicalExamination, bloodPressure, pulse, temperature, respiratoryRate, bloodType} = adultJournalState
     return <div className={"j-segment-container"}>
         <h1 className={"j-preview-title"}>Medical History</h1>
         <LargeInfoPreview label={"previous conditions"} info={previousConditions}/>
@@ -17,6 +17,7 @@ export function HealthAdultJournalPreview() {
 
         <h3 className={"j-preview-title"}>Vital Signs</h3>
         <SmallInfoPreview label={"blood pressure"} info={bloodPressure}/>
+        <SmallInfoPreview label={"blood type"} info={bloodType}/>
         <SmallInfoPreview label={"pulse"} info={pulse}/>
         <SmallInfoPreview label={"temperature"} info={temperature}/>
         <SmallInfoPreview label={"respiratory rate"} info={respiratoryRate}/>

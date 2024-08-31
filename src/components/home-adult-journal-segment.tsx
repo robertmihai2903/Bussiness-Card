@@ -18,7 +18,8 @@ export function HomeAdultJournalSegment() {
         medicalRecordNumber,
         gender,
         address,
-        phone
+        phone,
+        bloodType
     } = useContext(AdultJournalEditContext)! //TODO
     return <div className={"j-segment-container"}>
         <h1 className={"j-segment-title"}>Personal Data</h1>
@@ -38,5 +39,8 @@ export function HomeAdultJournalSegment() {
                    onChange={onChangeWrapper(phone)} variant={"outlined"} size={"small"}/>
         <TextField label={'Medical Record Number'} value={medicalRecordNumber.value} className={"j-segment-textfield"}
                    onChange={onChangeWrapper(medicalRecordNumber)} variant={"outlined"} size={"small"}/>
+
+        <TextField label={'Blood Type'} value={bloodType.value} className={"j-segment-textfield"}
+                   onChange={onChangeWrapper(bloodType)} variant={"outlined"} size={"small"}/>
     </div>
 }

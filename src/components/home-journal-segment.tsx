@@ -33,7 +33,7 @@ export function HomeJournalSegment() {
         introductionOfCereal,
         daySleeping,
         nightSleepingProgress,
-        nightSleeping, waysOfSleeping, profilePicture
+        nightSleeping, waysOfSleeping, profilePicture, bloodType
     } = useContext(BabyJournalEditContext)! //TODO
     return <div className={"j-segment-container"}>
         <h1 className={"j-segment-title"}>Personal Data</h1>
@@ -47,7 +47,9 @@ export function HomeJournalSegment() {
         />
         <DatePickerConverted label={"Birth Date"} value={birthDate.value} onChange={birthDate.onChange}
                              className={"j-segment-date-picker"}/>
-
+        <TextField label={'Blood Type'} placeholder={"Blood Type"} value={bloodType.value} className={"j-segment-textfield"}
+                   onChange={onChangeWrapper(bloodType)} variant={"outlined"} size={"small"}
+        />
         <TimePickerConverted label={"Time of birth"} value={timeOfBirth.value} onChange={timeOfBirth.onChange}
                              className={"j-segment-time-picker"}/>
         <TextField label={'APGAR'} placeholder={"APGAR"} value={apgar.value} className={"j-segment-textfield"}
