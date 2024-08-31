@@ -12,6 +12,7 @@ import {SaveJournalButton} from "./save-journal-button";
 import {LoadingScreen, LoadingScreenContext} from "./loading-sreen";
 import {ModificationJournalContextProvider} from "./adult-journal-settings";
 import {NotSavedScreen} from "./not-saved-screen";
+import {useNavigate} from "react-router";
 
 // import {InvestigationsJournalSegment} from "./investigations-journal-segment";
 
@@ -240,7 +241,7 @@ export function useBabyJournalInformation(): useBabyJournalInformation {
 
     const [babyJournalState, setBabyJournalState] = useState<BabyJournalInformation>(defaultInformation)
     const [originalBabyJournalState, setOriginalBabyJournalState] = useState<BabyJournalInformation>(defaultInformation)
-
+    const navigate = useNavigate()
     const {setIsLoading} = useContext(LoadingScreenContext)
 
     useEffect(() => {
@@ -250,7 +251,7 @@ export function useBabyJournalInformation(): useBabyJournalInformation {
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                     } else {
-                        // navigate('/app')
+                        navigate('/app')
                     }
                 });
 

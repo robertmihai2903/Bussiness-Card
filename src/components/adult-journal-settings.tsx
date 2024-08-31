@@ -257,6 +257,7 @@ function useAdultJournalInformation(): useAdultJournalInformation {
 
     const [adultJournalState, setAdultJournalState] = useState<AdultJournalInformation>(defaultInformation)
     const [originalJournalState, setOriginalJournalState] = useState<AdultJournalInformation>(defaultInformation)
+    const navigate = useNavigate()
     console.log()
     const {setIsLoading} = useContext(LoadingScreenContext)
 
@@ -267,7 +268,7 @@ function useAdultJournalInformation(): useAdultJournalInformation {
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                     } else {
-                        // navigate('/app')
+                        navigate('/app')
                     }
                 });
 
