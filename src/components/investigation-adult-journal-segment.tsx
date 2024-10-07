@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {TextField} from "@mui/material";
+import {Button, TextField} from "@mui/material";
 import {onChangeWrapper} from "../utils";
 import "./journal-segment.css"
 import {DatePickerConverted} from "./date-picker-converted";
@@ -8,16 +8,32 @@ import AssetUpload3 from "./asset-upload-3";
 import {ProfileUpload} from "./profile-upload";
 import {AdultJournalEditContext, InvestigationHandler} from "./adult-journal-settings";
 import {DB_COLLECTIONS, DB_STORAGE} from "./baby-journal-settings";
+import classNames from "classnames";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {MultipleInvestigationsInput} from "./home-adult-journal-segment";
 
 interface InvestigationInputProps {
-    label: string,
+    label?: string,
     handler: InvestigationHandler,
     descriptionPlaceholder?: string,
+    classname?: string,
+    onDelete?: () => void
 }
 
-export function InvestigationInput({label, handler, descriptionPlaceholder = ""}: InvestigationInputProps) {
-    return <div className={"j-segment-investigation-input"}>
-        <h4 className={"j-segment-investigation-input-label"}>{label}</h4>
+export function InvestigationInput({
+                                       onDelete,
+                                       classname,
+                                       label,
+                                       handler,
+                                       descriptionPlaceholder = ""
+                                   }: InvestigationInputProps) {
+    if (!handler) return null
+    return <div className={classNames("j-segment-investigation-input", classname)}>
+        {label && <h4 className={"j-segment-investigation-input-label"}>{label}</h4>}
+        {onDelete && <IconButton onClick={onDelete} style={{alignSelf: "end"}} aria-label="delete">
+            <DeleteIcon/>
+        </IconButton>}
         <TextField label={"Description"} value={handler.description.value}
                    placeholder={descriptionPlaceholder}
                    className={"j-segment-investigation-input-textfield"}
@@ -58,39 +74,39 @@ export function InvestigationsAdultJournalSegment() {
     } = useContext(AdultJournalEditContext)! //TODO
     return <div className={"j-segment-container"}>
         <h1 className={"j-segment-title"}>Paraclinical Investigations</h1>
-        <InvestigationInput label={"Laboratory Tests"} handler={laboratoryTests}/>
-        <InvestigationInput label={"Blood Tests"} handler={bloodTests}/>
-        <InvestigationInput label={"Biochemistry"} handler={biochemistry}/>
-        <InvestigationInput label={"Inflammatory Markers"} handler={inflammatoryMarkers}/>
-        <InvestigationInput label={"Tumor Markers"} handler={tumorMarkers}/>
-        <InvestigationInput label={"Hormonal Profiles"} handler={hormonalProfiles}/>
-        <InvestigationInput label={"Urine Tests"} handler={urineTests}/>
-        <InvestigationInput label={"Stool Tests"} handler={stoolTests}/>
-        <InvestigationInput label={"Coagulation Tests"} handler={coagulationTests}/>
-        <InvestigationInput label={"INR"} handler={INR}/>
+        <MultipleInvestigationsInput label={"Laboratory Tests"} handler={laboratoryTests}/>
+        <MultipleInvestigationsInput label={"Blood Tests"} handler={bloodTests}/>
+        <MultipleInvestigationsInput label={"Biochemistry"} handler={biochemistry}/>
+        <MultipleInvestigationsInput label={"Inflammatory Markers"} handler={inflammatoryMarkers}/>
+        <MultipleInvestigationsInput label={"Tumor Markers"} handler={tumorMarkers}/>
+        <MultipleInvestigationsInput label={"Hormonal Profiles"} handler={hormonalProfiles}/>
+        <MultipleInvestigationsInput label={"Urine Tests"} handler={urineTests}/>
+        <MultipleInvestigationsInput label={"Stool Tests"} handler={stoolTests}/>
+        <MultipleInvestigationsInput label={"Coagulation Tests"} handler={coagulationTests}/>
+        <MultipleInvestigationsInput label={"INR"} handler={INR}/>
 
         <h1 className={"j-segment-title"}>High-Performance Investigations</h1>
-        <InvestigationInput label={"X-ray"} handler={xRay}/>
-        <InvestigationInput label={"Ultrasound"} handler={ultrasound}/>
-        <InvestigationInput label={"Computed Tomography (CT)"} handler={computedTomography}/>
-        <InvestigationInput label={"Magnetic Resonance Imaging (MRI)"} handler={magneticResonanceImaging}/>
-        <InvestigationInput label={"Scintigraphy"} handler={scintigraphy}/>
+        <MultipleInvestigationsInput label={"X-ray"} handler={xRay}/>
+        <MultipleInvestigationsInput label={"Ultrasound"} handler={ultrasound}/>
+        <MultipleInvestigationsInput label={"Computed Tomography (CT)"} handler={computedTomography}/>
+        <MultipleInvestigationsInput label={"Magnetic Resonance Imaging (MRI)"} handler={magneticResonanceImaging}/>
+        <MultipleInvestigationsInput label={"Scintigraphy"} handler={scintigraphy}/>
 
         <h1 className={"j-segment-title"}>Endoscopic Procedures</h1>
-        <InvestigationInput label={"Upper Digestive Endoscopy"} handler={upperDigestiveEndoscopy}/>
-        <InvestigationInput label={"Colonoscopy"} handler={colonoscopy}/>
-        <InvestigationInput label={"Bronchoscopy"} handler={bronchoscopy}/>
+        <MultipleInvestigationsInput label={"Upper Digestive Endoscopy"} handler={upperDigestiveEndoscopy}/>
+        <MultipleInvestigationsInput label={"Colonoscopy"} handler={colonoscopy}/>
+        <MultipleInvestigationsInput label={"Bronchoscopy"} handler={bronchoscopy}/>
 
         <h1 className={"j-segment-title"}>Functional Tests</h1>
-        <InvestigationInput label={"Electrocardiogram (ECG)"} handler={electrocardiogram}/>
-        <InvestigationInput label={"Echocardiography"} handler={echocardiography}/>
-        <InvestigationInput label={"Spirometry"} handler={spirometry}/>
-        <InvestigationInput label={"Stress Test (Ergometry)"} handler={stressTest}/>
+        <MultipleInvestigationsInput label={"Electrocardiogram (ECG)"} handler={electrocardiogram}/>
+        <MultipleInvestigationsInput label={"Echocardiography"} handler={echocardiography}/>
+        <MultipleInvestigationsInput label={"Spirometry"} handler={spirometry}/>
+        <MultipleInvestigationsInput label={"Stress Test (Ergometry)"} handler={stressTest}/>
 
         <h1 className={"j-segment-title"}>Advanced Genetic and Molecular Biology</h1>
-        <InvestigationInput label={"Genetic Tests"} handler={geneticTests}/>
-        <InvestigationInput label={"PCR Tests"} handler={pcrTests}/>
-        <InvestigationInput label={"Bone Densitometry (DEXA)"} handler={boneDensitometry}/>
+        <MultipleInvestigationsInput label={"Genetic Tests"} handler={geneticTests}/>
+        <MultipleInvestigationsInput label={"PCR Tests"} handler={pcrTests}/>
+        <MultipleInvestigationsInput label={"Bone Densitometry (DEXA)"} handler={boneDensitometry}/>
 
     </div>
 }

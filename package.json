@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.14.1",
     "@mui/x-date-pickers": "^7.13.0",
     "@react-pdf-viewer/core": "^3.12.0",
@@ -30,7 +31,6 @@
     "filepond-plugin-image-resize": "^2.0.10",
     "filepond-plugin-image-transform": "^3.8.7",
     "firebase": "^10.1.0",
-    "pdfjs-dist": "^4.5.136",
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0",

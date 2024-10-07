@@ -1,4 +1,4 @@
-import {createContext, useContext, useEffect, useState} from "react";
+import {createContext, useCallback, useContext, useEffect, useMemo, useState} from "react";
 import {LoadingScreen, LoadingScreenContext} from "./loading-sreen";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {doc, getDoc} from "firebase/firestore";
@@ -13,7 +13,6 @@ import {ProceduresAdultJournalSegment} from "./procedures-adult-journal-segment"
 import {NotSavedScreen} from "./not-saved-screen";
 import {useNavigate} from "react-router";
 import {getProductIdFromURL} from "../utils";
-
 export function AdultJournalSettings() {
     const [activeSegment, setActiveSegment] = useState<JOURNAL_SEGMENTS>(JOURNAL_SEGMENTS.HOME)
     const [isLoading, setIsLoading] = useState(false)
@@ -43,10 +42,15 @@ export interface Investigation {
     assets: Asset[]
 }
 
+export interface MultipleInvestigations {
+    [key: string]: Investigation
+}
+
 const defaultInvestigation: Investigation = {
     description: "",
     assets: []
 }
+const defaultMultipleInvestigations: MultipleInvestigations = {}
 
 interface AdultJournalInformation {
     profilePicture: Asset[],
@@ -66,31 +70,31 @@ interface AdultJournalInformation {
     temperature: string,
     respiratoryRate: string,
     generalPhysicalExamination: string,
-    laboratoryTests: Investigation,
-    bloodTests: Investigation,
-    biochemistry: Investigation,
-    inflammatoryMarkers: Investigation,
-    tumorMarkers: Investigation,
-    hormonalProfiles: Investigation,
-    urineTests: Investigation,
-    stoolTests: Investigation,
-    coagulationTests: Investigation,
-    INR: Investigation,
-    xRay: Investigation,
-    ultrasound: Investigation,
-    computedTomography: Investigation,
-    magneticResonanceImaging: Investigation,
-    scintigraphy: Investigation,
-    upperDigestiveEndoscopy: Investigation,
-    colonoscopy: Investigation,
-    bronchoscopy: Investigation,
-    electrocardiogram: Investigation,
-    echocardiography: Investigation,
-    spirometry: Investigation,
-    stressTest: Investigation,
-    geneticTests: Investigation,
-    pcrTests: Investigation,
-    boneDensitometry: Investigation,
+    laboratoryTests: MultipleInvestigations,
+    bloodTests: MultipleInvestigations,
+    biochemistry: MultipleInvestigations,
+    inflammatoryMarkers: MultipleInvestigations,
+    tumorMarkers: MultipleInvestigations,
+    hormonalProfiles: MultipleInvestigations,
+    urineTests: MultipleInvestigations,
+    stoolTests: MultipleInvestigations,
+    coagulationTests: MultipleInvestigations,
+    INR: MultipleInvestigations,
+    xRay: MultipleInvestigations,
+    ultrasound: MultipleInvestigations,
+    computedTomography: MultipleInvestigations,
+    magneticResonanceImaging: MultipleInvestigations,
+    scintigraphy: MultipleInvestigations,
+    upperDigestiveEndoscopy: MultipleInvestigations,
+    colonoscopy: MultipleInvestigations,
+    bronchoscopy: MultipleInvestigations,
+    electrocardiogram: MultipleInvestigations,
+    echocardiography: MultipleInvestigations,
+    spirometry: MultipleInvestigations,
+    stressTest: MultipleInvestigations,
+    geneticTests: MultipleInvestigations,
+    pcrTests: MultipleInvestigations,
+    boneDensitometry: MultipleInvestigations,
     interdisciplinaryConsultations: string,
     recommendations: string,
     primaryDiagnosis: string,
@@ -101,7 +105,8 @@ interface AdultJournalInformation {
     appointments: string,
     monitoringProgress: string,
     bloodType: string,
-    europeanHealthCard: Asset[]
+    europeanHealthCard: Asset[],
+    testMultiple: MultipleInvestigations
 }
 
 const defaultInformation: AdultJournalInformation = {
@@ -122,31 +127,31 @@ const defaultInformation: AdultJournalInformation = {
     temperature: "",
     respiratoryRate: "",
     generalPhysicalExamination: "",
-    laboratoryTests: defaultInvestigation,
-    bloodTests: defaultInvestigation,
-    biochemistry: defaultInvestigation,
-    inflammatoryMarkers: defaultInvestigation,
-    tumorMarkers: defaultInvestigation,
-    hormonalProfiles: defaultInvestigation,
-    urineTests: defaultInvestigation,
-    stoolTests: defaultInvestigation,
-    coagulationTests: defaultInvestigation,
-    INR: defaultInvestigation,
-    xRay: defaultInvestigation,
-    ultrasound: defaultInvestigation,
-    computedTomography: defaultInvestigation,
-    magneticResonanceImaging: defaultInvestigation,
-    scintigraphy: defaultInvestigation,
-    upperDigestiveEndoscopy: defaultInvestigation,
-    colonoscopy: defaultInvestigation,
-    bronchoscopy: defaultInvestigation,
-    electrocardiogram: defaultInvestigation,
-    echocardiography: defaultInvestigation,
-    spirometry: defaultInvestigation,
-    stressTest: defaultInvestigation,
-    geneticTests: defaultInvestigation,
-    pcrTests: defaultInvestigation,
-    boneDensitometry: defaultInvestigation,
+    laboratoryTests: defaultMultipleInvestigations,
+    bloodTests: defaultMultipleInvestigations,
+    biochemistry: defaultMultipleInvestigations,
+    inflammatoryMarkers: defaultMultipleInvestigations,
+    tumorMarkers: defaultMultipleInvestigations,
+    hormonalProfiles: defaultMultipleInvestigations,
+    urineTests: defaultMultipleInvestigations,
+    stoolTests: defaultMultipleInvestigations,
+    coagulationTests: defaultMultipleInvestigations,
+    INR: defaultMultipleInvestigations,
+    xRay: defaultMultipleInvestigations,
+    ultrasound: defaultMultipleInvestigations,
+    computedTomography: defaultMultipleInvestigations,
+    magneticResonanceImaging: defaultMultipleInvestigations,
+    scintigraphy: defaultMultipleInvestigations,
+    upperDigestiveEndoscopy: defaultMultipleInvestigations,
+    colonoscopy: defaultMultipleInvestigations,
+    bronchoscopy: defaultMultipleInvestigations,
+    electrocardiogram: defaultMultipleInvestigations,
+    echocardiography: defaultMultipleInvestigations,
+    spirometry: defaultMultipleInvestigations,
+    stressTest: defaultMultipleInvestigations,
+    geneticTests: defaultMultipleInvestigations,
+    pcrTests: defaultMultipleInvestigations,
+    boneDensitometry: defaultMultipleInvestigations,
     interdisciplinaryConsultations: "",
     recommendations: "",
     primaryDiagnosis: "",
@@ -157,7 +162,8 @@ const defaultInformation: AdultJournalInformation = {
     appointments: "",
     monitoringProgress: "",
     bloodType: "",
-    europeanHealthCard: []
+    europeanHealthCard: [],
+    testMultiple: defaultMultipleInvestigations
 }
 
 export interface InvestigationHandler {
@@ -183,31 +189,31 @@ interface useAdultJournalEditInterface {
     temperature: EditContext<string>,
     respiratoryRate: EditContext<string>,
     generalPhysicalExamination: EditContext<string>,
-    laboratoryTests: InvestigationHandler,
-    bloodTests: InvestigationHandler,
-    biochemistry: InvestigationHandler,
-    inflammatoryMarkers: InvestigationHandler,
-    tumorMarkers: InvestigationHandler,
-    hormonalProfiles: InvestigationHandler,
-    urineTests: InvestigationHandler,
-    stoolTests: InvestigationHandler,
-    coagulationTests: InvestigationHandler,
-    INR: InvestigationHandler,
-    xRay: InvestigationHandler,
-    ultrasound: InvestigationHandler,
-    computedTomography: InvestigationHandler,
-    magneticResonanceImaging: InvestigationHandler,
-    scintigraphy: InvestigationHandler,
-    upperDigestiveEndoscopy: InvestigationHandler,
-    colonoscopy: InvestigationHandler,
-    bronchoscopy: InvestigationHandler,
-    electrocardiogram: InvestigationHandler,
-    echocardiography: InvestigationHandler,
-    spirometry: InvestigationHandler,
-    stressTest: InvestigationHandler,
-    geneticTests: InvestigationHandler,
-    pcrTests: InvestigationHandler,
-    boneDensitometry: InvestigationHandler,
+    laboratoryTests: MultipleInvestigationsHandler,
+    bloodTests: MultipleInvestigationsHandler,
+    biochemistry: MultipleInvestigationsHandler,
+    inflammatoryMarkers: MultipleInvestigationsHandler,
+    tumorMarkers: MultipleInvestigationsHandler,
+    hormonalProfiles: MultipleInvestigationsHandler,
+    urineTests: MultipleInvestigationsHandler,
+    stoolTests: MultipleInvestigationsHandler,
+    coagulationTests: MultipleInvestigationsHandler,
+    INR: MultipleInvestigationsHandler,
+    xRay: MultipleInvestigationsHandler,
+    ultrasound: MultipleInvestigationsHandler,
+    computedTomography: MultipleInvestigationsHandler,
+    magneticResonanceImaging: MultipleInvestigationsHandler,
+    scintigraphy: MultipleInvestigationsHandler,
+    upperDigestiveEndoscopy: MultipleInvestigationsHandler,
+    colonoscopy: MultipleInvestigationsHandler,
+    bronchoscopy: MultipleInvestigationsHandler,
+    electrocardiogram: MultipleInvestigationsHandler,
+    echocardiography: MultipleInvestigationsHandler,
+    spirometry: MultipleInvestigationsHandler,
+    stressTest: MultipleInvestigationsHandler,
+    geneticTests: MultipleInvestigationsHandler,
+    pcrTests: MultipleInvestigationsHandler,
+    boneDensitometry: MultipleInvestigationsHandler,
     interdisciplinaryConsultations: EditContext<string>,
     recommendations: EditContext<string>,
     primaryDiagnosis: EditContext<string>,
@@ -218,7 +224,8 @@ interface useAdultJournalEditInterface {
     appointments: EditContext<string>,
     monitoringProgress: EditContext<string>,
     bloodType: EditContext<string>,
-    europeanHealthCard: EditContext<Asset[]>
+    europeanHealthCard: EditContext<Asset[]>,
+    testMultiple: MultipleInvestigationsHandler
 }
 
 interface useAdultJournalInformation {
@@ -228,7 +235,91 @@ interface useAdultJournalInformation {
     setOriginalJournalState: any
 }
 
-function useCreateInvestigationHandler(field: keyof AdultJournalInformation) {
+export interface MultipleInvestigationsHandler {
+    onDelete: (dateKey: string) => void
+    onAdd: (dateKey: string) => void,
+    investigations: {
+        [key: string]: InvestigationHandler
+    }
+}
+
+function useCreateMultipleInvestigationsHandler(field: keyof AdultJournalInformation): MultipleInvestigationsHandler {
+    const {adultJournalState, setAdultJournalState} = useContext(AdultJournalStateContext)
+    let tempInvestigations: { [key: string]: InvestigationHandler } = {}
+    const useGetInvestigations = () => {
+        return (): { [key: string]: InvestigationHandler } => {
+            const keys = Object.keys(adultJournalState[field])
+            tempInvestigations = {}
+            keys.forEach((key: string) => {
+                tempInvestigations[key] = {
+                    description: {
+                        value: (adultJournalState[field] as MultipleInvestigations)[key].description,
+                        onChange: (description: string) => {
+                            setAdultJournalState((prev: AdultJournalInformation) => ({
+                                ...prev,
+                                [field]: {
+                                    ...(prev[field] as MultipleInvestigations),
+                                    [key]: {
+                                        ...(prev[field] as MultipleInvestigations)[key],
+                                        description
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                    assets: {
+                        value: (adultJournalState[field] as MultipleInvestigations)[key].assets,
+                        onChange: (assets: Asset[]) => {
+                            setAdultJournalState((prev: AdultJournalInformation) => ({
+                                ...prev,
+                                [field]: {
+                                    ...(prev[field] as MultipleInvestigations),
+                                    [key]: {
+                                        ...(prev[field] as MultipleInvestigations)[key],
+                                        assets
+                                    }
+                                }
+                            }))
+                        }
+                    }
+
+                }
+            })
+            return tempInvestigations
+        }
+    }
+
+    const onAdd = useCallback((dateKey: string) => {
+        setAdultJournalState((prev: AdultJournalInformation) => ({
+            ...prev,
+            [field]: {
+                ...(prev[field] as MultipleInvestigations),
+                [dateKey]: defaultInvestigation
+            }
+        }))
+    }, [])
+
+    const onDelete = useCallback((dateKey: string) => {
+        setAdultJournalState((prev: AdultJournalInformation) => {
+            const {[dateKey]: _, ...investigationsLeft} = prev[field] as MultipleInvestigations
+            return {
+                ...prev,
+                [field]: investigationsLeft
+            }
+        })
+    }, [])
+
+    const getInvestigations = useGetInvestigations()
+    // console.log("Multiple, inves", investigations)
+    return useMemo(() => ({
+        onDelete,
+        onAdd,
+        investigations: getInvestigations()
+    }), [onAdd, getInvestigations, onDelete])
+}
+
+
+function useCreateInvestigationHandler(field: keyof AdultJournalInformation): InvestigationHandler {
     const {adultJournalState, setAdultJournalState} = useContext(AdultJournalStateContext)
 
     return {
@@ -397,31 +488,31 @@ function useAdultJournalEdit(): useAdultJournalEditInterface {
                 setAdultJournalState((prev: AdultJournalInformation) => ({...prev, generalPhysicalExamination}))
             }
         },
-        laboratoryTests: useCreateInvestigationHandler("laboratoryTests"),
-        bloodTests: useCreateInvestigationHandler("bloodTests"),
-        biochemistry: useCreateInvestigationHandler("biochemistry"),
-        inflammatoryMarkers: useCreateInvestigationHandler("inflammatoryMarkers"),
-        tumorMarkers: useCreateInvestigationHandler("tumorMarkers"),
-        hormonalProfiles: useCreateInvestigationHandler("hormonalProfiles"),
-        urineTests: useCreateInvestigationHandler("urineTests"),
-        stoolTests: useCreateInvestigationHandler("stoolTests"),
-        coagulationTests: useCreateInvestigationHandler("coagulationTests"),
-        INR: useCreateInvestigationHandler("INR"),
-        xRay: useCreateInvestigationHandler("xRay"),
-        ultrasound: useCreateInvestigationHandler("ultrasound"),
-        computedTomography: useCreateInvestigationHandler("computedTomography"),
-        magneticResonanceImaging: useCreateInvestigationHandler("magneticResonanceImaging"),
-        scintigraphy: useCreateInvestigationHandler("scintigraphy"),
-        upperDigestiveEndoscopy: useCreateInvestigationHandler("upperDigestiveEndoscopy"),
-        colonoscopy: useCreateInvestigationHandler("colonoscopy"),
-        bronchoscopy: useCreateInvestigationHandler("bronchoscopy"),
-        electrocardiogram: useCreateInvestigationHandler("electrocardiogram"),
-        echocardiography: useCreateInvestigationHandler("echocardiography"),
-        spirometry: useCreateInvestigationHandler("spirometry"),
-        stressTest: useCreateInvestigationHandler("stressTest"),
-        geneticTests: useCreateInvestigationHandler("geneticTests"),
-        pcrTests: useCreateInvestigationHandler("pcrTests"),
-        boneDensitometry: useCreateInvestigationHandler("boneDensitometry"),
+        laboratoryTests: useCreateMultipleInvestigationsHandler("laboratoryTests"),
+        bloodTests: useCreateMultipleInvestigationsHandler("bloodTests"),
+        biochemistry: useCreateMultipleInvestigationsHandler("biochemistry"),
+        inflammatoryMarkers: useCreateMultipleInvestigationsHandler("inflammatoryMarkers"),
+        tumorMarkers: useCreateMultipleInvestigationsHandler("tumorMarkers"),
+        hormonalProfiles: useCreateMultipleInvestigationsHandler("hormonalProfiles"),
+        urineTests: useCreateMultipleInvestigationsHandler("urineTests"),
+        stoolTests: useCreateMultipleInvestigationsHandler("stoolTests"),
+        coagulationTests: useCreateMultipleInvestigationsHandler("coagulationTests"),
+        INR: useCreateMultipleInvestigationsHandler("INR"),
+        xRay: useCreateMultipleInvestigationsHandler("xRay"),
+        ultrasound: useCreateMultipleInvestigationsHandler("ultrasound"),
+        computedTomography: useCreateMultipleInvestigationsHandler("computedTomography"),
+        magneticResonanceImaging: useCreateMultipleInvestigationsHandler("magneticResonanceImaging"),
+        scintigraphy: useCreateMultipleInvestigationsHandler("scintigraphy"),
+        upperDigestiveEndoscopy: useCreateMultipleInvestigationsHandler("upperDigestiveEndoscopy"),
+        colonoscopy: useCreateMultipleInvestigationsHandler("colonoscopy"),
+        bronchoscopy: useCreateMultipleInvestigationsHandler("bronchoscopy"),
+        electrocardiogram: useCreateMultipleInvestigationsHandler("electrocardiogram"),
+        echocardiography: useCreateMultipleInvestigationsHandler("echocardiography"),
+        spirometry: useCreateMultipleInvestigationsHandler("spirometry"),
+        stressTest: useCreateMultipleInvestigationsHandler("stressTest"),
+        geneticTests: useCreateMultipleInvestigationsHandler("geneticTests"),
+        pcrTests: useCreateMultipleInvestigationsHandler("pcrTests"),
+        boneDensitometry: useCreateMultipleInvestigationsHandler("boneDensitometry"),
         interdisciplinaryConsultations: {
             value: adultJournalState.interdisciplinaryConsultations,
             onChange: (interdisciplinaryConsultations: string) => {
@@ -482,7 +573,8 @@ function useAdultJournalEdit(): useAdultJournalEditInterface {
             onChange: (europeanHealthCard: Asset[]) => {
                 setAdultJournalState((prev: AdultJournalInformation) => ({...prev, europeanHealthCard}))
             }
-        }
+        },
+        testMultiple: useCreateMultipleInvestigationsHandler("testMultiple")
     }
 }
 

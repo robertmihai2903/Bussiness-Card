@@ -1,8 +1,9 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import {Asset, BabyJournalStateContext} from "./baby-journal-settings";
 import "./home-baby-journal-preview.css"
-import {Investigation} from "./adult-journal-settings";
+import {Investigation, MultipleInvestigations} from "./adult-journal-settings";
 import {MediaPreview} from "./media-preview";
+import {MenuItem, Select, SelectChangeEvent} from "@mui/material";
 
 interface SmallInfoPreviewProps {
     label: string,
@@ -33,11 +34,58 @@ export function ProfilePicturePreview({asset}: { asset: Asset }) {
     return <img className={"profile-preview-image"} src={asset.url} alt={asset.name}/>
 }
 
-export function InvestigationPreview({investigation, label}: { investigation: Investigation, label: string }) {
-    return <div style={{width: "100%", marginTop: "20px"}}>
-        <h4 style={{margin: 0}}>{label}</h4>
+export function InvestigationPreview({investigation, label, classname}: {
+    investigation: Investigation,
+    label?: string,
+    classname?: string
+}) {
+    return <div className={classname} style={{width: "100%", marginTop: "20px"}}>
+        {label && <h4 style={{margin: 0}}>{label}</h4>}
         <LargeInfoPreview info={investigation.description}/>
         <MediaPreview value={investigation.assets}/>
+    </div>
+}
+
+export function MultipleInvestigationPreview({investigations, label}: {
+    investigations: MultipleInvestigations,
+    label: string
+}) {
+    const filledDays = useMemo(() => Object.keys(investigations), [investigations])
+    const [selectedDay, setSelectedDay] = useState("")
+
+    useEffect(() => {
+        console.log("insideEffect", selectedDay, filledDays[0])
+        // if (!filledDays.includes(selectedDay)) {
+        setSelectedDay(filledDays[0] || "")
+        // }
+    }, [filledDays]);
+
+
+    const onSelectChange = (event: SelectChangeEvent) => {
+        setSelectedDay(event.target.value);
+    };
+
+    return <div style={{width: "100%"}}>
+        <div className={"multiple-investigation-header"}>
+            <h4 className={"preview-multiple-investigation-title"}>{label}</h4>
+            {filledDays.length > 0 ? <Select size={"small"} className={"preview-select"} value={selectedDay}
+                                             onChange={onSelectChange} variant={"standard"}>
+                <MenuItem style={{display: "none"}} value={""}>None</MenuItem>
+                {filledDays.map((day: string) => (<MenuItem value={day}>{day}</MenuItem>))}
+            </Select> : <div style={{alignSelf: "center"}}>NONE</div>}
+        </div>
+        {filledDays.length > 0 && <>
+            <div className={"multiple-investigation-content"}>
+                {
+                    filledDays.map((day: string) => (
+                        <InvestigationPreview key={`investigation-preview-${label}-${day}`}
+                                              classname={day !== selectedDay ? "disappear" : ""}
+                                              investigation={investigations[day]}
+                        />))
+                }
+            </div>
+
+        </>}
     </div>
 }
 

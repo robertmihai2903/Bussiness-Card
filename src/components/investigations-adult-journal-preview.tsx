@@ -1,6 +1,11 @@
 import React, {useContext} from "react";
 import {AdultJournalStateContext} from "./adult-journal-settings";
-import {InvestigationPreview, LargeInfoPreview, SmallInfoPreview} from "./home-baby-journal-preview";
+import {
+    InvestigationPreview,
+    LargeInfoPreview,
+    MultipleInvestigationPreview,
+    SmallInfoPreview
+} from "./home-baby-journal-preview";
 
 export function InvestigationsAdultJournalPreview() {
     const {adultJournalState} = useContext(AdultJournalStateContext)
@@ -10,38 +15,38 @@ laboratoryTests, bloodTests, biochemistry, inflammatoryMarkers, tumorMarkers, ho
     electrocardiogram, echocardiography, spirometry, stressTest, geneticTests, pcrTests, boneDensitometry} = adultJournalState
     return <div className={"j-segment-container"}>
         <h1 className={"j-preview-title"}>Paraclinical Investigations</h1>
-        <InvestigationPreview investigation={laboratoryTests} label={"Laboratory Tests"}/>
-        <InvestigationPreview investigation={bloodTests} label={"Blood Tests"}/>
-        <InvestigationPreview investigation={biochemistry} label={"Biochemistry"}/>
-        <InvestigationPreview investigation={inflammatoryMarkers} label={"Inflammatory Markers"}/>
-        <InvestigationPreview investigation={tumorMarkers} label={"Tumor Markers"}/>
-        <InvestigationPreview investigation={hormonalProfiles} label={"Hormonal Profiles"}/>
-        <InvestigationPreview investigation={urineTests} label={"Urine Tests"}/>
-        <InvestigationPreview investigation={stoolTests} label={"Stool Tests"}/>
-        <InvestigationPreview investigation={coagulationTests} label={"Coagulation Tests"}/>
-        <InvestigationPreview investigation={INR} label={"INR"}/>
+        <MultipleInvestigationPreview investigations={laboratoryTests} label={"Laboratory Tests"}/>
+        <MultipleInvestigationPreview investigations={bloodTests} label={"Blood Tests"}/>
+        <MultipleInvestigationPreview investigations={biochemistry} label={"Biochemistry"}/>
+        <MultipleInvestigationPreview investigations={inflammatoryMarkers} label={"Inflammatory Markers"}/>
+        <MultipleInvestigationPreview investigations={tumorMarkers} label={"Tumor Markers"}/>
+        <MultipleInvestigationPreview investigations={hormonalProfiles} label={"Hormonal Profiles"}/>
+        <MultipleInvestigationPreview investigations={urineTests} label={"Urine Tests"}/>
+        <MultipleInvestigationPreview investigations={stoolTests} label={"Stool Tests"}/>
+        <MultipleInvestigationPreview investigations={coagulationTests} label={"Coagulation Tests"}/>
+        <MultipleInvestigationPreview investigations={INR} label={"INR"}/>
 
         <h1 className={"j-preview-title"}>High-Performance Investigations</h1>
-        <InvestigationPreview investigation={xRay} label={"X-Ray"}/>
-        <InvestigationPreview investigation={ultrasound} label={"Ultrasound"}/>
-        <InvestigationPreview investigation={computedTomography} label={"Computed Tomography (CT)"}/>
-        <InvestigationPreview investigation={magneticResonanceImaging} label={"Magnetic Resonance Imaging (MRI)"}/>
-        <InvestigationPreview investigation={scintigraphy} label={"Scintigraphy"}/>
+        <MultipleInvestigationPreview investigations={xRay} label={"X-Ray"}/>
+        <MultipleInvestigationPreview investigations={ultrasound} label={"Ultrasound"}/>
+        <MultipleInvestigationPreview investigations={computedTomography} label={"Computed Tomography (CT)"}/>
+        <MultipleInvestigationPreview investigations={magneticResonanceImaging} label={"Magnetic Resonance Imaging (MRI)"}/>
+        <MultipleInvestigationPreview investigations={scintigraphy} label={"Scintigraphy"}/>
 
         <h1 className={"j-preview-title"}>Endoscopic Procedures</h1>
-        <InvestigationPreview investigation={upperDigestiveEndoscopy} label={"Upper Digestive Endoscopy"}/>
-        <InvestigationPreview investigation={colonoscopy} label={"Colonoscopy"}/>
-        <InvestigationPreview investigation={bronchoscopy} label={"Bronchoscopy"}/>
+        <MultipleInvestigationPreview investigations={upperDigestiveEndoscopy} label={"Upper Digestive Endoscopy"}/>
+        <MultipleInvestigationPreview investigations={colonoscopy} label={"Colonoscopy"}/>
+        <MultipleInvestigationPreview investigations={bronchoscopy} label={"Bronchoscopy"}/>
 
         <h1 className={"j-preview-title"}>Functional Tests</h1>
-        <InvestigationPreview investigation={electrocardiogram} label={"Electrocardiogram (ECG)"}/>
-        <InvestigationPreview investigation={echocardiography} label={"Echocardiography"}/>
-        <InvestigationPreview investigation={spirometry} label={"Spirometry"}/>
-        <InvestigationPreview investigation={stressTest} label={"Stress Test (Ergometry)"}/>
+        <MultipleInvestigationPreview investigations={electrocardiogram} label={"Electrocardiogram (ECG)"}/>
+        <MultipleInvestigationPreview investigations={echocardiography} label={"Echocardiography"}/>
+        <MultipleInvestigationPreview investigations={spirometry} label={"Spirometry"}/>
+        <MultipleInvestigationPreview investigations={stressTest} label={"Stress Test (Ergometry)"}/>
 
         <h1 className={"j-preview-title"}>Advanced Genetic and Molecular Biology</h1>
-        <InvestigationPreview investigation={geneticTests} label={"Genetic Tests"}/>
-        <InvestigationPreview investigation={pcrTests} label={"PCR Tests"}/>
-        <InvestigationPreview investigation={boneDensitometry} label={"Bone Densiometry (DEXA)"}/>
+        <MultipleInvestigationPreview investigations={geneticTests} label={"Genetic Tests"}/>
+        <MultipleInvestigationPreview investigations={pcrTests} label={"PCR Tests"}/>
+        <MultipleInvestigationPreview investigations={boneDensitometry} label={"Bone Densiometry (DEXA)"}/>
     </div>
 }
