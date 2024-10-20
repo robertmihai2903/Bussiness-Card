@@ -5,6 +5,7 @@ import {BabyJournalEditContext, DB_STORAGE} from "./baby-journal-settings";
 import "./journal-segment.css"
 import AssetUpload3 from "./asset-upload-3";
 import {ProfileUpload} from "./profile-upload";
+import {MultipleInvestigationsInput} from "./home-adult-journal-segment";
 
 export function HealthJournalSegment() {
     const {
@@ -25,23 +26,12 @@ export function HealthJournalSegment() {
                       storageFolder={DB_STORAGE.BABY_JOURNAL}/>
 
         <h1 className={"j-segment-title"}>Allergies, Health Info, Vaccines</h1>
-        <TextField label={'Health Problems'} placeholder={"Health Problems"} value={healthProblems.value}
-                   className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(healthProblems)} variant={"outlined"} size={"small"} multiline minRows={3}
-                   maxRows={7}
-        />
-        <TextField label={'Vaccines'} value={vaccines.value} className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(vaccines)} variant={"outlined"} size={"small"}
-        />
-        <TextField label={'Allergies'} value={allergies.value} className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(allergies)} variant={"outlined"} size={"small"}
-        />
-        <TextField label={'Medication'} value={medication.value} className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(medication)} variant={"outlined"} size={"small"}
-        />
-        <TextField label={'Chronic Aversions'} value={chronicAversions.value} className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(chronicAversions)} variant={"outlined"} size={"small"}
-        />
+        <MultipleInvestigationsInput label={"Health Problems"} handler={healthProblems}/>
+        <MultipleInvestigationsInput label={"Vaccines"} handler={vaccines}/>
+        <MultipleInvestigationsInput label={"Allergies"} handler={allergies}/>
+        <MultipleInvestigationsInput label={"Medication"} handler={medication}/>
+        <MultipleInvestigationsInput label={"Chronic Aversions"} handler={chronicAversions}/>
+
         <TextField label={'Other'} placeholder={"Other"} value={otherHealthConditions.value}
                    className={"j-segment-textfield"}
                    onChange={onChangeWrapper(otherHealthConditions)} variant={"outlined"} size={"small"} multiline

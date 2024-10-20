@@ -1,17 +1,24 @@
 import React, {useContext, useEffect, useMemo, useState} from "react";
 import {Asset, BabyJournalStateContext} from "./baby-journal-settings";
 import "./home-baby-journal-preview.css"
-import {Investigation, MultipleInvestigations} from "./adult-journal-settings";
+import {
+    Investigation,
+    MultipleInvestigations,
+    MultipleVitalSigns,
+    MultipleVitalSignsHandler
+} from "./adult-journal-settings";
 import {MediaPreview} from "./media-preview";
 import {MenuItem, Select, SelectChangeEvent} from "@mui/material";
+import classNames from "classnames";
 
 interface SmallInfoPreviewProps {
     label: string,
-    info: string
+    info: string,
+    className?: string
 }
 
-export function SmallInfoPreview({label, info}: SmallInfoPreviewProps) {
-    return <div className={"small-info-wrapper"}>
+export function SmallInfoPreview({label, info, className}: SmallInfoPreviewProps) {
+    return <div className={classNames("small-info-wrapper", className)}>
         <h4 className={"small-info-label"}>{label.toUpperCase()}</h4>
         <h4 className={"small-info-info"}>{info || "-"}</h4>
     </div>
@@ -82,6 +89,54 @@ export function MultipleInvestigationPreview({investigations, label}: {
                                               classname={day !== selectedDay ? "disappear" : ""}
                                               investigation={investigations[day]}
                         />))
+                }
+            </div>
+
+        </>}
+    </div>
+}
+
+export function MultipleVitalSignsPreview({signs}: {
+    signs: MultipleVitalSigns
+}) {
+    const filledDays = useMemo(() => Object.keys(signs), [signs])
+    const [selectedDay, setSelectedDay] = useState("")
+
+    useEffect(() => {
+        console.log("insideEffect", selectedDay, filledDays[0])
+        // if (!filledDays.includes(selectedDay)) {
+        setSelectedDay(filledDays[0] || "")
+        // }
+    }, [filledDays]);
+
+
+    const onSelectChange = (event: SelectChangeEvent) => {
+        setSelectedDay(event.target.value);
+    };
+
+    return <div style={{width: "100%"}}>
+        <div className={"multiple-investigation-header"}>
+            {filledDays.length > 0 ? <Select size={"small"} className={"preview-select"} value={selectedDay}
+                                             onChange={onSelectChange} variant={"standard"}>
+                <MenuItem style={{display: "none"}} value={""}>None</MenuItem>
+                {filledDays.map((day: string) => (<MenuItem value={day}>{day}</MenuItem>))}
+            </Select> : <div style={{alignSelf: "center"}}>NONE</div>}
+        </div>
+        {filledDays.length > 0 && <>
+            <div className={"multiple-investigation-content"}>
+                {
+                    filledDays.map((day: string) => (
+                        <>
+                            <SmallInfoPreview label={"blood pressure"} info={signs[day].bloodPressure}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                            <SmallInfoPreview label={"pulse"} info={signs[day].pulse}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                            <SmallInfoPreview label={"temperature"} info={signs[day].temperature}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                            <SmallInfoPreview label={"respiratory rate"} info={signs[day].respiratoryRate}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                        </>
+                    ))
                 }
             </div>
 

@@ -1,6 +1,11 @@
 import React, {useContext} from "react";
 import {Asset, BabyJournalStateContext} from "./baby-journal-settings";
-import {LargeInfoPreview, ProfilePicturePreview, SmallInfoPreview} from "./home-baby-journal-preview";
+import {
+    LargeInfoPreview,
+    MultipleInvestigationPreview,
+    ProfilePicturePreview,
+    SmallInfoPreview
+} from "./home-baby-journal-preview";
 import "./home-baby-journal-preview.css"
 import {MediaPreview} from "./media-preview";
 
@@ -13,11 +18,11 @@ export function HealthBabyJournalPreview() {
         <MediaPreview value={medicalRecords}/>
 
         <h2 className={"j-preview-title"}>Allergies, Health Info, Vaccines</h2>
-        <LargeInfoPreview label={"Health Problems"} info={healthProblems}/>
-        <SmallInfoPreview label={"vaccines"} info={vaccines}/>
-        <SmallInfoPreview label={"allergies"} info={allergies}/>
-        <SmallInfoPreview label={"medication"} info={medication}/>
-        <SmallInfoPreview label={"chronic aversions"} info={chronicAversions}/>
+        <MultipleInvestigationPreview investigations={healthProblems} label={"Health Problems"}/>
+        <MultipleInvestigationPreview investigations={vaccines} label={"Vaccines"}/>
+        <MultipleInvestigationPreview investigations={allergies} label={"Allergies"}/>
+        <MultipleInvestigationPreview investigations={medication} label={"Medication"}/>
+        <MultipleInvestigationPreview investigations={chronicAversions} label={"Chronic Aversions"}/>
         <LargeInfoPreview label={"Other"} info={otherHealthConditions}/>
 
         <h1 className={"j-preview-title"}>European Health Card</h1>

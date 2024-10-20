@@ -6,7 +6,11 @@ import {DatePickerConverted} from "./date-picker-converted";
 import {TimePickerConverted} from "./time-picker-converted";
 import AssetUpload3 from "./asset-upload-3";
 import {ProfileUpload} from "./profile-upload";
-import {AdultJournalEditContext, MultipleInvestigationsHandler} from "./adult-journal-settings";
+import {
+    AdultJournalEditContext,
+    MultipleInvestigationsHandler,
+    MultipleVitalSignsHandler
+} from "./adult-journal-settings";
 import {DB_COLLECTIONS, DB_STORAGE} from "./baby-journal-settings";
 import dayjs, {Dayjs} from "dayjs";
 import {DateCalendar, LocalizationProvider} from "@mui/x-date-pickers";
@@ -14,6 +18,9 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import SelectInput from "@mui/material/Select/SelectInput";
 import {InvestigationInput} from "./investigation-adult-journal-segment";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import classNames from "classnames";
 
 export function HomeAdultJournalSegment() {
     const {
@@ -89,6 +96,8 @@ function AddDateKeyEntryButton({onAdd, selectedDays}: any) {
         onAdd(convertedDate)
         onHandleClose()
     }
+
+    console.log("HERE NOWW")
     return <div>
         <Button onClick={onOpen}>Add</Button>
         <Popover
@@ -121,6 +130,7 @@ function AddDateKeyEntryButton({onAdd, selectedDays}: any) {
 
 export function MultipleInvestigationsInput({label, handler}: { label: string, handler: MultipleInvestigationsHandler }) {
     const filledDays = useMemo(() => Object.keys(handler.investigations), [handler.investigations])
+    console.log("FILLED", filledDays)
     const [selectedDay, setSelectedDay] = useState("")
     useEffect(() => {
         console.log("insideEffect", selectedDay, filledDays[0])
@@ -136,7 +146,7 @@ export function MultipleInvestigationsInput({label, handler}: { label: string, h
     const onEntryDelete = (key: string) => {
         return () => {
             if (selectedDay === key) {
-                const firstRemainingDay = filledDays.length ? filledDays[0] : ""
+                const firstRemainingDay = filledDays?.length ? filledDays[0] : ""
                 setSelectedDay(firstRemainingDay)
             }
             handler.onDelete(key)
@@ -163,6 +173,83 @@ export function MultipleInvestigationsInput({label, handler}: { label: string, h
                                             handler={handler.investigations[day]}
                                             onDelete={onEntryDelete(day)}
                         />))
+                }
+            </div>
+
+        </>}
+    </div>
+}
+
+export function MultipleVitalSignsInput({handler}: { handler: MultipleVitalSignsHandler }) {
+    const filledDays = useMemo(() => Object.keys(handler.signs), [handler.signs])
+    const [selectedDay, setSelectedDay] = useState("")
+    useEffect(() => {
+        console.log("insideEffect", selectedDay, filledDays[0])
+        // if (!filledDays.includes(selectedDay)) {
+        setSelectedDay(filledDays[0] || "")
+        // }
+    }, [filledDays]);
+
+    const onSelectChange = (event: SelectChangeEvent) => {
+        setSelectedDay(event.target.value);
+    };
+
+    const onEntryDelete = (key: string) => {
+        return () => {
+            if (selectedDay === key) {
+                const firstRemainingDay = filledDays.length ? filledDays[0] : ""
+                setSelectedDay(firstRemainingDay)
+            }
+            handler.onDelete(key)
+        }
+    }
+    console.log("Filled days", filledDays)
+    console.log("Selected Value", selectedDay)
+    return <div className={"multiple-investigations-wrapper"}>
+        <div className={"multiple-investigation-header"}>
+            <AddDateKeyEntryButton onAdd={handler.onAdd} selectedDays={filledDays}/>
+        </div>
+        {filledDays.length > 0 && <>
+            <Select size={"small"} className={"multiple-investigations-select"} value={selectedDay}
+                    onChange={onSelectChange}>
+                <MenuItem style={{display: "none"}} value={""}>None</MenuItem>
+                {filledDays.map((day: string) => (<MenuItem value={day}>{day}</MenuItem>))}
+            </Select>
+            <div className={"multiple-investigation-content"}>
+                {
+                    filledDays.map((day: string) => {
+                        console.log("day", day)
+
+                        return <>
+                            <IconButton className={day !== selectedDay ? "disappear" : ""} onClick={onEntryDelete(day)}
+                                        style={{alignSelf: "end"}} aria-label="delete">
+                                <DeleteIcon/>
+                            </IconButton>
+                            <TextField label={'Blood Pressure'} placeholder={"Blood Presure"}
+                                       value={handler.signs[day].bloodPressure.value}
+                                       className={classNames("j-segment-textfield", day !== selectedDay ? "disappear" : "")}
+                                       onChange={onChangeWrapper(handler.signs[day].bloodPressure)} variant={"outlined"}
+                                       size={"small"}
+                            />
+                            <TextField label={'Pulse'} placeholder={"Pulse"} value={handler.signs[day].pulse.value}
+                                       className={classNames("j-segment-textfield", day !== selectedDay ? "disappear" : "")}
+                                       onChange={onChangeWrapper(handler.signs[day].pulse)} variant={"outlined"}
+                                       size={"small"}
+                            />
+                            <TextField label={'Temperature'} placeholder={"Temperature"}
+                                       value={handler.signs[day].temperature.value}
+                                       className={classNames("j-segment-textfield", day !== selectedDay ? "disappear" : "")}
+                                       onChange={onChangeWrapper(handler.signs[day].temperature)} variant={"outlined"}
+                                       size={"small"}
+                            />
+                            <TextField label={'Respiratory Rate'} placeholder={"Respiratory Rate"}
+                                       value={handler.signs[day].respiratoryRate.value}
+                                       className={classNames("j-segment-textfield", day !== selectedDay ? "disappear" : "")}
+                                       onChange={onChangeWrapper(handler.signs[day].respiratoryRate)}
+                                       variant={"outlined"} size={"small"}
+                            />
+                        </>
+                    })
                 }
             </div>
 

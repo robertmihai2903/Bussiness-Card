@@ -5,6 +5,7 @@ import "./journal-segment.css"
 import AssetUpload3 from "./asset-upload-3";
 import {AdultJournalEditContext} from "./adult-journal-settings";
 import {DB_STORAGE} from "./baby-journal-settings";
+import {MultipleVitalSignsInput} from "./home-adult-journal-segment";
 
 export function HealthAdultJournalSegment() {
     const {
@@ -12,10 +13,7 @@ export function HealthAdultJournalSegment() {
         medication,
         allergies,
         familyHistory,
-        bloodPressure,
-        pulse,
-        temperature,
-        respiratoryRate,
+        vitalSigns,
         generalPhysicalExamination,
         europeanHealthCard
     } = useContext(AdultJournalEditContext)! //TODO
@@ -56,21 +54,7 @@ export function HealthAdultJournalSegment() {
         />
 
         <h3 className={"j-segment-subtitle"}>Vital Signs</h3>
-        <TextField label={'Blood Pressure'} placeholder={"Blood Presure"} value={bloodPressure.value}
-                   className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(bloodPressure)} variant={"outlined"} size={"small"}
-        />
-        <TextField label={'Pulse'} placeholder={"Pulse"} value={pulse.value}
-                   className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(pulse)} variant={"outlined"} size={"small"}
-        />
-        <TextField label={'Temperature'} placeholder={"Temperature"} value={temperature.value}
-                   className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(temperature)} variant={"outlined"} size={"small"}
-        />
-        <TextField label={'Respiratory Rate'} placeholder={"Respiratory Rate"} value={respiratoryRate.value}
-                   className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(respiratoryRate)} variant={"outlined"} size={"small"}
-        />
+        <MultipleVitalSignsInput handler={vitalSigns}/>
+
     </div>
 }

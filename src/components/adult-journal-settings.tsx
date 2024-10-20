@@ -50,7 +50,25 @@ const defaultInvestigation: Investigation = {
     description: "",
     assets: []
 }
-const defaultMultipleInvestigations: MultipleInvestigations = {}
+
+const defaultVitalSigns: VitalSigns = {
+    bloodPressure: "",
+    pulse: "",
+    temperature: "",
+    respiratoryRate: ""
+}
+export const defaultMultipleInvestigations: MultipleInvestigations = {}
+
+interface VitalSigns {
+    bloodPressure: string,
+    pulse: string,
+    temperature: string,
+    respiratoryRate: string,
+}
+
+export interface MultipleVitalSigns {
+    [key: string]: VitalSigns
+}
 
 interface AdultJournalInformation {
     profilePicture: Asset[],
@@ -65,10 +83,11 @@ interface AdultJournalInformation {
     medication: string,
     allergies: string,
     familyHistory: string,
-    bloodPressure: string,
-    pulse: string,
-    temperature: string,
-    respiratoryRate: string,
+    vitalSigns: MultipleVitalSigns
+    // bloodPressure: string,
+    // pulse: string,
+    // temperature: string,
+    // respiratoryRate: string,
     generalPhysicalExamination: string,
     laboratoryTests: MultipleInvestigations,
     bloodTests: MultipleInvestigations,
@@ -122,10 +141,11 @@ const defaultInformation: AdultJournalInformation = {
     medication: "",
     allergies: "",
     familyHistory: "",
-    bloodPressure: "",
-    pulse: "",
-    temperature: "",
-    respiratoryRate: "",
+    vitalSigns: {},
+    // bloodPressure: "",
+    // pulse: "",
+    // temperature: "",
+    // respiratoryRate: "",
     generalPhysicalExamination: "",
     laboratoryTests: defaultMultipleInvestigations,
     bloodTests: defaultMultipleInvestigations,
@@ -171,6 +191,21 @@ export interface InvestigationHandler {
     assets: EditContext<Asset[]>
 }
 
+export interface VitalSignsHandler {
+    bloodPressure: EditContext<string>,
+    pulse: EditContext<string>,
+    temperature: EditContext<string>,
+    respiratoryRate: EditContext<string>,
+}
+
+export interface MultipleVitalSignsHandler {
+    onDelete: (dateKey: string) => void
+    onAdd: (dateKey: string) => void,
+    signs: {
+        [key: string]: VitalSignsHandler
+    }
+}
+
 interface useAdultJournalEditInterface {
     profilePicture: EditContext<Asset[]>,
     name: EditContext<string>,
@@ -184,10 +219,10 @@ interface useAdultJournalEditInterface {
     medication: EditContext<string>,
     allergies: EditContext<string>,
     familyHistory: EditContext<string>,
-    bloodPressure: EditContext<string>,
-    pulse: EditContext<string>,
-    temperature: EditContext<string>,
-    respiratoryRate: EditContext<string>,
+    // bloodPressure: EditContext<string>,
+    // pulse: EditContext<string>,
+    // temperature: EditContext<string>,
+    // respiratoryRate: EditContext<string>,
     generalPhysicalExamination: EditContext<string>,
     laboratoryTests: MultipleInvestigationsHandler,
     bloodTests: MultipleInvestigationsHandler,
@@ -225,7 +260,8 @@ interface useAdultJournalEditInterface {
     monitoringProgress: EditContext<string>,
     bloodType: EditContext<string>,
     europeanHealthCard: EditContext<Asset[]>,
-    testMultiple: MultipleInvestigationsHandler
+    testMultiple: MultipleInvestigationsHandler,
+    vitalSigns: MultipleVitalSignsHandler,
 }
 
 interface useAdultJournalInformation {
@@ -249,6 +285,7 @@ function useCreateMultipleInvestigationsHandler(field: keyof AdultJournalInforma
     const useGetInvestigations = () => {
         return (): { [key: string]: InvestigationHandler } => {
             const keys = Object.keys(adultJournalState[field])
+            console.log("FUCK", adultJournalState[field])
             tempInvestigations = {}
             keys.forEach((key: string) => {
                 tempInvestigations[key] = {
@@ -310,6 +347,7 @@ function useCreateMultipleInvestigationsHandler(field: keyof AdultJournalInforma
     }, [])
 
     const getInvestigations = useGetInvestigations()
+    console.log("INVEST", getInvestigations())
     // console.log("Multiple, inves", investigations)
     return useMemo(() => ({
         onDelete,
@@ -318,6 +356,110 @@ function useCreateMultipleInvestigationsHandler(field: keyof AdultJournalInforma
     }), [onAdd, getInvestigations, onDelete])
 }
 
+
+function useCreateMultipleVitalSignHandler(): MultipleVitalSignsHandler {
+    const {adultJournalState, setAdultJournalState} = useContext(AdultJournalStateContext)
+    let tempInvestigations: { [key: string]: VitalSignsHandler } = {}
+    const useGetSigns = () => {
+        return (): { [key: string]: VitalSignsHandler } => {
+            const keys = Object.keys(adultJournalState.vitalSigns)
+            tempInvestigations = {}
+            keys.forEach((key: string) => {
+                tempInvestigations[key] = {
+                    bloodPressure: {
+                        value: adultJournalState.vitalSigns[key].bloodPressure,
+                        onChange: (bloodPressure: string) => {
+                            setAdultJournalState((prev: AdultJournalInformation) => ({
+                                ...prev,
+                                vitalSigns: {
+                                    ...prev.vitalSigns,
+                                    [key]: {
+                                        ...prev.vitalSigns[key],
+                                        bloodPressure
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                    pulse: {
+                        value: adultJournalState.vitalSigns[key].pulse,
+                        onChange: (pulse: string) => {
+                            setAdultJournalState((prev: AdultJournalInformation) => ({
+                                ...prev,
+                                vitalSigns: {
+                                    ...prev.vitalSigns,
+                                    [key]: {
+                                        ...prev.vitalSigns[key],
+                                        pulse
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                    temperature: {
+                        value: adultJournalState.vitalSigns[key].temperature,
+                        onChange: (temperature: string) => {
+                            setAdultJournalState((prev: AdultJournalInformation) => ({
+                                ...prev,
+                                vitalSigns: {
+                                    ...prev.vitalSigns,
+                                    [key]: {
+                                        ...prev.vitalSigns[key],
+                                        temperature
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                    respiratoryRate: {
+                        value: adultJournalState.vitalSigns[key].respiratoryRate,
+                        onChange: (respiratoryRate: string) => {
+                            setAdultJournalState((prev: AdultJournalInformation) => ({
+                                ...prev,
+                                vitalSigns: {
+                                    ...prev.vitalSigns,
+                                    [key]: {
+                                        ...prev.vitalSigns[key],
+                                        respiratoryRate
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                }
+            })
+            return tempInvestigations
+        }
+    }
+
+    const onAdd = useCallback((dateKey: string) => {
+        setAdultJournalState((prev: AdultJournalInformation) => ({
+            ...prev,
+            vitalSigns: {
+                ...prev.vitalSigns,
+                [dateKey]: defaultVitalSigns
+            }
+        }))
+    }, [])
+
+    const onDelete = useCallback((dateKey: string) => {
+        setAdultJournalState((prev: AdultJournalInformation) => {
+            const {[dateKey]: _, ...investigationsLeft} = prev.vitalSigns
+            return {
+                ...prev,
+                vitalSigns: investigationsLeft
+            }
+        })
+    }, [])
+
+    const getSigns = useGetSigns()
+    // console.log("Multiple, inves", investigations)
+    return useMemo(() => ({
+        onDelete,
+        onAdd,
+        signs: getSigns()
+    }), [onAdd, getSigns, onDelete])
+}
 
 function useCreateInvestigationHandler(field: keyof AdultJournalInformation): InvestigationHandler {
     const {adultJournalState, setAdultJournalState} = useContext(AdultJournalStateContext)
@@ -458,30 +600,7 @@ function useAdultJournalEdit(): useAdultJournalEditInterface {
                 setAdultJournalState((prev: AdultJournalInformation) => ({...prev, familyHistory}))
             }
         },
-        bloodPressure: {
-            value: adultJournalState.bloodPressure,
-            onChange: (bloodPressure: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, bloodPressure}))
-            }
-        },
-        pulse: {
-            value: adultJournalState.pulse,
-            onChange: (pulse: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, pulse}))
-            }
-        },
-        temperature: {
-            value: adultJournalState.temperature,
-            onChange: (temperature: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, temperature}))
-            }
-        },
-        respiratoryRate: {
-            value: adultJournalState.respiratoryRate,
-            onChange: (respiratoryRate: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, respiratoryRate}))
-            }
-        },
+        vitalSigns: useCreateMultipleVitalSignHandler(),
         generalPhysicalExamination: {
             value: adultJournalState.generalPhysicalExamination,
             onChange: (generalPhysicalExamination: string) => {

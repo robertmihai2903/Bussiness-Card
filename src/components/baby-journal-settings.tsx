@@ -1,4 +1,4 @@
-import {createContext, useContext, useEffect, useState} from "react";
+import {createContext, useCallback, useContext, useEffect, useMemo, useState} from "react";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {doc, getDoc, updateDoc} from "firebase/firestore";
 import {db} from "../App";
@@ -10,7 +10,12 @@ import {notify} from "../Pages/login-page";
 import {getProductIdFromURL} from "../utils";
 import {SaveJournalButton} from "./save-journal-button";
 import {LoadingScreen, LoadingScreenContext} from "./loading-sreen";
-import {ModificationJournalContextProvider} from "./adult-journal-settings";
+import {
+    AdultJournalStateContext,
+    defaultMultipleInvestigations, InvestigationHandler,
+    ModificationJournalContextProvider,
+    MultipleInvestigations, MultipleInvestigationsHandler
+} from "./adult-journal-settings";
 import {NotSavedScreen} from "./not-saved-screen";
 import {useNavigate} from "react-router";
 
@@ -79,11 +84,11 @@ interface BabyJournalInformation {
         chronicAversions: string,
         bloodType: string
     },
-    healthProblems: string,
-    vaccines: string,
-    allergies: string,
-    medication: string,
-    chronicAversions: string,
+    healthProblems: MultipleInvestigations,
+    vaccines: MultipleInvestigations,
+    allergies: MultipleInvestigations,
+    medication: MultipleInvestigations,
+    chronicAversions: MultipleInvestigations,
     otherHealthConditions: string,
     medicalRecords: Asset[],
     profilePicture: Asset[],
@@ -135,11 +140,11 @@ interface useBabyJournalEditInterface {
         chronicAversions: EditContext<string>,
         bloodType: EditContext<string>
     },
-    healthProblems: EditContext<string>,
-    vaccines: EditContext<string>,
-    allergies: EditContext<string>,
-    medication: EditContext<string>,
-    chronicAversions: EditContext<string>,
+    healthProblems: MultipleInvestigationsHandler,
+    vaccines: MultipleInvestigationsHandler,
+    allergies: MultipleInvestigationsHandler,
+    medication: MultipleInvestigationsHandler,
+    chronicAversions: MultipleInvestigationsHandler,
     otherHealthConditions: EditContext<string>,
     medicalRecords: EditContext<Asset[]>,
     profilePicture: EditContext<Asset[]>,
@@ -218,11 +223,11 @@ const defaultInformation: BabyJournalInformation = {
         chronicAversions: "",
         bloodType: ""
     },
-    healthProblems: "",
-    vaccines: "",
-    allergies: "",
-    medication: "",
-    chronicAversions: "",
+    healthProblems: defaultMultipleInvestigations,
+    vaccines: defaultMultipleInvestigations,
+    allergies: defaultMultipleInvestigations,
+    medication: defaultMultipleInvestigations,
+    chronicAversions: defaultMultipleInvestigations,
     otherHealthConditions: "",
     medicalRecords: [],
     profilePicture: [],
@@ -277,6 +282,81 @@ export function useBabyJournalInformation(): useBabyJournalInformation {
 export interface EditContext<T> {
     value: T,
     onChange: (value: T) => void
+}
+
+function useCreateMultipleInvestigationsHandlerBaby(field: keyof BabyJournalInformation): MultipleInvestigationsHandler {
+    const {babyJournalState, setBabyJournalState} = useContext(BabyJournalStateContext)
+    let tempInvestigations: { [key: string]: InvestigationHandler } = {}
+    const useGetInvestigations = () => {
+        return (): { [key: string]: InvestigationHandler } => {
+            const keys = Object.keys(babyJournalState[field])
+            tempInvestigations = {}
+            keys.forEach((key: string) => {
+                tempInvestigations[key] = {
+                    description: {
+                        value: (babyJournalState[field] as MultipleInvestigations)[key].description,
+                        onChange: (description: string) => {
+                            setBabyJournalState((prev: BabyJournalInformation) => ({
+                                ...prev,
+                                [field]: {
+                                    ...(prev[field] as MultipleInvestigations),
+                                    [key]: {
+                                        ...(prev[field] as MultipleInvestigations)[key],
+                                        description
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                    assets: {
+                        value: (babyJournalState[field] as MultipleInvestigations)[key].assets,
+                        onChange: (assets: Asset[]) => {
+                            setBabyJournalState((prev: BabyJournalInformation) => ({
+                                ...prev,
+                                [field]: {
+                                    ...(prev[field] as MultipleInvestigations),
+                                    [key]: {
+                                        ...(prev[field] as MultipleInvestigations)[key],
+                                        assets
+                                    }
+                                }
+                            }))
+                        }
+                    }
+
+                }
+            })
+            return tempInvestigations
+        }
+    }
+
+    const onAdd = useCallback((dateKey: string) => {
+        setBabyJournalState((prev: BabyJournalInformation) => ({
+            ...prev,
+            [field]: {
+                ...(prev[field] as MultipleInvestigations),
+                [dateKey]: defaultInvestigation
+            }
+        }))
+    }, [])
+
+    const onDelete = useCallback((dateKey: string) => {
+        setBabyJournalState((prev: BabyJournalInformation) => {
+            const {[dateKey]: _, ...investigationsLeft} = prev[field] as MultipleInvestigations
+            return {
+                ...prev,
+                [field]: investigationsLeft
+            }
+        })
+    }, [])
+
+    const getInvestigations = useGetInvestigations()
+    // console.log("Multiple, inves", investigations)
+    return useMemo(() => ({
+        onDelete,
+        onAdd,
+        investigations: getInvestigations()
+    }), [onAdd, getInvestigations, onDelete])
 }
 
 function useBabyJournalEdit(): useBabyJournalEditInterface {
@@ -535,36 +615,11 @@ function useBabyJournalEdit(): useBabyJournalEditInterface {
                 }
             }
         },
-        healthProblems: {
-            value: babyJournalState.healthProblems,
-            onChange: (healthProblems: string) => {
-                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, healthProblems}))
-            }
-        },
-        vaccines: {
-            value: babyJournalState.vaccines,
-            onChange: (vaccines: string) => {
-                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, vaccines}))
-            }
-        },
-        allergies: {
-            value: babyJournalState.allergies,
-            onChange: (allergies: string) => {
-                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, allergies}))
-            }
-        },
-        medication: {
-            value: babyJournalState.medication,
-            onChange: (medication: string) => {
-                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, medication}))
-            }
-        },
-        chronicAversions: {
-            value: babyJournalState.chronicAversions,
-            onChange: (chronicAversions: string) => {
-                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, chronicAversions}))
-            }
-        },
+        healthProblems: useCreateMultipleInvestigationsHandlerBaby("healthProblems"),
+        vaccines: useCreateMultipleInvestigationsHandlerBaby("vaccines"),
+        allergies: useCreateMultipleInvestigationsHandlerBaby("allergies"),
+        medication: useCreateMultipleInvestigationsHandlerBaby("medication"),
+        chronicAversions: useCreateMultipleInvestigationsHandlerBaby("chronicAversions"),
         otherHealthConditions: {
             value: babyJournalState.otherHealthConditions,
             onChange: (otherHealthConditions: string) => {

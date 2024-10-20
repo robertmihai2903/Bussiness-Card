@@ -78,9 +78,6 @@
     align-self: start;
 }
 
-.disappear {
-    display: none;
-}
 
 .multiple-investigation-header {
     width: 100%;
@@ -93,4 +90,7 @@
     width: 100%;
     margin: 12px 0px;
     border-radius: 20px;
+}
+.disappear.disappear {
+    display: none;
 }
