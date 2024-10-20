@@ -12,9 +12,13 @@ import {SaveJournalButton} from "./save-journal-button";
 import {LoadingScreen, LoadingScreenContext} from "./loading-sreen";
 import {
     AdultJournalStateContext,
-    defaultMultipleInvestigations, InvestigationHandler,
+    defaultMultipleInvestigations,
+    InvestigationHandler,
     ModificationJournalContextProvider,
-    MultipleInvestigations, MultipleInvestigationsHandler
+    MultipleInvestigations,
+    MultipleInvestigationsHandler,
+    MultipleSleepScheduleHandler,
+    useCreateMultipleSleepScheduleHandler
 } from "./adult-journal-settings";
 import {NotSavedScreen} from "./not-saved-screen";
 import {useNavigate} from "react-router";
@@ -43,7 +47,18 @@ interface Investigation {
     assets: Asset[]
 }
 
-interface BabyJournalInformation {
+export interface SleepSchedule {
+    daySleeping: string,
+    nightSleeping: string,
+    waysOfSleeping: string,
+    nightSleepingProgress: string,
+}
+
+export interface MultipleSleepSchedule {
+    [key: string]: SleepSchedule
+}
+
+export interface BabyJournalInformation {
     name: string,
     gender: string,
     birthDate: string,
@@ -64,10 +79,11 @@ interface BabyJournalInformation {
     firstSolidFeeding: string,
     foodPreferences: string,
     foodAversions: string,
-    daySleeping: string,
-    nightSleeping: string,
-    waysOfSleeping: string,
-    nightSleepingProgress: string,
+    sleepSchedule: MultipleSleepSchedule
+    // daySleeping: string,
+    // nightSleeping: string,
+    // waysOfSleeping: string,
+    // nightSleepingProgress: string,
     mother: {
         profilePicture: Asset[]
         name: string,
@@ -93,7 +109,7 @@ interface BabyJournalInformation {
     medicalRecords: Asset[],
     profilePicture: Asset[],
     bloodType: string,
-    europeanHealthCard: Asset[]
+    europeanHealthCard: Asset[],
 
     // investigations: Investigation[]
 }
@@ -119,10 +135,11 @@ interface useBabyJournalEditInterface {
     firstSolidFeeding: EditContext<string>,
     foodPreferences: EditContext<string>,
     foodAversions: EditContext<string>,
-    daySleeping: EditContext<string>,
-    nightSleeping: EditContext<string>,
-    waysOfSleeping: EditContext<string>,
-    nightSleepingProgress: EditContext<string>,
+    // daySleeping: EditContext<string>,
+    // nightSleeping: EditContext<string>,
+    // waysOfSleeping: EditContext<string>,
+    // nightSleepingProgress: EditContext<string>,
+    sleepSchedule: MultipleSleepScheduleHandler
     // investigations: any,
     mother: {
         profilePicture: EditContext<Asset[]>
@@ -202,10 +219,11 @@ const defaultInformation: BabyJournalInformation = {
     firstSolidFeeding: "",
     foodPreferences: "",
     foodAversions: "",
-    daySleeping: "",
-    nightSleeping: "",
-    waysOfSleeping: "",
-    nightSleepingProgress: "",
+    sleepSchedule: {},
+    // daySleeping: "",
+    // nightSleeping: "",
+    // waysOfSleeping: "",
+    // nightSleepingProgress: "",
     // investigations: [defaultInvestigation],
     mother: {
         profilePicture: [],
@@ -484,30 +502,7 @@ function useBabyJournalEdit(): useBabyJournalEditInterface {
                 setBabyJournalState((prev: BabyJournalInformation) => ({...prev, foodAversions}))
             }
         },
-        daySleeping: {
-            value: babyJournalState.daySleeping,
-            onChange: (daySleeping: string) => {
-                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, daySleeping}))
-            }
-        },
-        nightSleeping: {
-            value: babyJournalState.nightSleeping,
-            onChange: (nightSleeping: string) => {
-                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, nightSleeping}))
-            }
-        },
-        waysOfSleeping: {
-            value: babyJournalState.waysOfSleeping,
-            onChange: (waysOfSleeping: string) => {
-                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, waysOfSleeping}))
-            }
-        },
-        nightSleepingProgress: {
-            value: babyJournalState.nightSleepingProgress,
-            onChange: (nightSleepingProgress: string) => {
-                setBabyJournalState((prev: BabyJournalInformation) => ({...prev, nightSleepingProgress}))
-            }
-        },
+        sleepSchedule: useCreateMultipleSleepScheduleHandler(),
         // investigations: investigationsHandler,
         mother: {
             profilePicture: {

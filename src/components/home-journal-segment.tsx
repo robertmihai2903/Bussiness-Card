@@ -8,6 +8,7 @@ import {TimePickerConverted} from "./time-picker-converted";
 import AssetUpload3 from "./asset-upload-3";
 import {ProfileUpload} from "./profile-upload";
 import MediaViewer, {FileProps} from "./media-viewer";
+import {MultipleSleepScheduleInput} from "./home-adult-journal-segment";
 
 export function HomeJournalSegment() {
     const {
@@ -31,9 +32,11 @@ export function HomeJournalSegment() {
         foodPreferences,
         foodAversions,
         introductionOfCereal,
-        daySleeping,
-        nightSleepingProgress,
-        nightSleeping, waysOfSleeping, profilePicture, bloodType
+        sleepSchedule,
+        // daySleeping,
+        // nightSleepingProgress,
+        // nightSleeping, waysOfSleeping,
+        profilePicture, bloodType
     } = useContext(BabyJournalEditContext)! //TODO
     return <div className={"j-segment-container"}>
         <h1 className={"j-segment-title"}>Personal Data</h1>
@@ -107,27 +110,28 @@ export function HomeJournalSegment() {
                    maxRows={7}
         />
         <h1 className={"j-segment-title"}>Sleep Schedule</h1>
-        <TextField label={'Day Sleeping'} placeholder={"Day sleeping"} value={daySleeping.value}
-                   className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(daySleeping)} variant={"outlined"} size={"small"} multiline minRows={3}
-                   maxRows={7}
-        />
-        <TextField label={'Night Sleeping'} placeholder={"Night Sleeping"} value={nightSleeping.value}
-                   className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(nightSleeping)} variant={"outlined"} size={"small"} multiline minRows={3}
-                   maxRows={7}
-        />
-        <TextField label={'Ways of Sleeping'} placeholder={"Ways of sleeping"} value={waysOfSleeping.value}
-                   className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(waysOfSleeping)} variant={"outlined"} size={"small"} multiline minRows={3}
-                   maxRows={7}
-        />
-        <TextField label={'Night Sleeping Progress'} placeholder={"Night sleeping progress"}
-                   value={nightSleepingProgress.value}
-                   className={"j-segment-textfield"}
-                   onChange={onChangeWrapper(nightSleepingProgress)} variant={"outlined"} size={"small"} multiline
-                   minRows={3}
-                   maxRows={7}
-        />
+        <MultipleSleepScheduleInput handler={sleepSchedule}/>
+        {/*<TextField label={'Day Sleeping'} placeholder={"Day sleeping"} value={daySleeping.value}*/}
+        {/*           className={"j-segment-textfield"}*/}
+        {/*           onChange={onChangeWrapper(daySleeping)} variant={"outlined"} size={"small"} multiline minRows={3}*/}
+        {/*           maxRows={7}*/}
+        {/*/>*/}
+        {/*<TextField label={'Night Sleeping'} placeholder={"Night Sleeping"} value={nightSleeping.value}*/}
+        {/*           className={"j-segment-textfield"}*/}
+        {/*           onChange={onChangeWrapper(nightSleeping)} variant={"outlined"} size={"small"} multiline minRows={3}*/}
+        {/*           maxRows={7}*/}
+        {/*/>*/}
+        {/*<TextField label={'Ways of Sleeping'} placeholder={"Ways of sleeping"} value={waysOfSleeping.value}*/}
+        {/*           className={"j-segment-textfield"}*/}
+        {/*           onChange={onChangeWrapper(waysOfSleeping)} variant={"outlined"} size={"small"} multiline minRows={3}*/}
+        {/*           maxRows={7}*/}
+        {/*/>*/}
+        {/*<TextField label={'Night Sleeping Progress'} placeholder={"Night sleeping progress"}*/}
+        {/*           value={nightSleepingProgress.value}*/}
+        {/*           className={"j-segment-textfield"}*/}
+        {/*           onChange={onChangeWrapper(nightSleepingProgress)} variant={"outlined"} size={"small"} multiline*/}
+        {/*           minRows={3}*/}
+        {/*           maxRows={7}*/}
+        {/*/>*/}
     </div>
 }

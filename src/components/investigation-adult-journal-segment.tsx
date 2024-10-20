@@ -70,7 +70,7 @@ export function InvestigationsAdultJournalSegment() {
         stressTest,
         geneticTests,
         pcrTests,
-        boneDensitometry
+        boneDensitometry,
     } = useContext(AdultJournalEditContext)! //TODO
     return <div className={"j-segment-container"}>
         <h1 className={"j-segment-title"}>Paraclinical Investigations</h1>

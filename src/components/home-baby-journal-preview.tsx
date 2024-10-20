@@ -1,8 +1,9 @@
 import React, {useContext, useEffect, useMemo, useState} from "react";
-import {Asset, BabyJournalStateContext} from "./baby-journal-settings";
+import {Asset, BabyJournalStateContext, MultipleSleepSchedule} from "./baby-journal-settings";
 import "./home-baby-journal-preview.css"
 import {
-    Investigation,
+    Consultation, FollowUp,
+    Investigation, Multiple,
     MultipleInvestigations,
     MultipleVitalSigns,
     MultipleVitalSignsHandler
@@ -26,11 +27,12 @@ export function SmallInfoPreview({label, info, className}: SmallInfoPreviewProps
 
 interface LargeInfoPreviewProps {
     label?: string,
-    info: string
+    info: string,
+    className?: string
 }
 
-export function LargeInfoPreview({label, info}: LargeInfoPreviewProps) {
-    return <div className={"large-info-wrapper"}>
+export function LargeInfoPreview({label, info, className}: LargeInfoPreviewProps) {
+    return <div className={classNames("large-info-wrapper", className)}>
         {label && <h4 className={"large-info-label"}>{label.toUpperCase()}</h4>}
         <p className={"large-info-info"}>{info || "-"}</p>
     </div>
@@ -96,9 +98,7 @@ export function MultipleInvestigationPreview({investigations, label}: {
     </div>
 }
 
-export function MultipleVitalSignsPreview({signs}: {
-    signs: MultipleVitalSigns
-}) {
+export function MultipleVitalSignsPreview({signs}: { signs: MultipleVitalSigns }) {
     const filledDays = useMemo(() => Object.keys(signs), [signs])
     const [selectedDay, setSelectedDay] = useState("")
 
@@ -144,6 +144,139 @@ export function MultipleVitalSignsPreview({signs}: {
     </div>
 }
 
+export function MultipleSleepSchedulePreview({schedules}: { schedules: MultipleSleepSchedule }) {
+    const filledDays = useMemo(() => Object.keys(schedules), [schedules])
+    const [selectedDay, setSelectedDay] = useState("")
+
+    useEffect(() => {
+        console.log("insideEffect", selectedDay, filledDays[0])
+        // if (!filledDays.includes(selectedDay)) {
+        setSelectedDay(filledDays[0] || "")
+        // }
+    }, [filledDays]);
+
+
+    const onSelectChange = (event: SelectChangeEvent) => {
+        setSelectedDay(event.target.value);
+    };
+
+    return <div style={{width: "100%"}}>
+        <div className={"multiple-investigation-header"}>
+            {filledDays.length > 0 ? <Select size={"small"} className={"preview-select"} value={selectedDay}
+                                             onChange={onSelectChange} variant={"standard"}>
+                <MenuItem style={{display: "none"}} value={""}>None</MenuItem>
+                {filledDays.map((day: string) => (<MenuItem value={day}>{day}</MenuItem>))}
+            </Select> : <div style={{alignSelf: "center"}}>NONE</div>}
+        </div>
+        {filledDays.length > 0 && <>
+            <div className={"multiple-investigation-content"}>
+                {
+                    filledDays.map((day: string) => (
+                        <>
+                            <LargeInfoPreview label={"Day Sleeping"} info={schedules[day].daySleeping}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                            <LargeInfoPreview label={"Night Sleeping"} info={schedules[day].nightSleeping}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                            <LargeInfoPreview label={"Ways of Sleeping"} info={schedules[day].waysOfSleeping}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                            <LargeInfoPreview label={"Night Sleeping Progress"}
+                                              info={schedules[day].nightSleepingProgress}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                        </>
+                    ))
+                }
+            </div>
+
+        </>}
+    </div>
+}
+
+export function MultipleConsultationPreview({consultations}: { consultations: Multiple<Consultation> }) {
+    const filledDays = useMemo(() => Object.keys(consultations), [consultations])
+    const [selectedDay, setSelectedDay] = useState("")
+
+    useEffect(() => {
+        console.log("insideEffect", selectedDay, filledDays[0])
+        // if (!filledDays.includes(selectedDay)) {
+        setSelectedDay(filledDays[0] || "")
+        // }
+    }, [filledDays]);
+
+
+    const onSelectChange = (event: SelectChangeEvent) => {
+        setSelectedDay(event.target.value);
+    };
+
+    return <div style={{width: "100%"}}>
+        <div className={"multiple-investigation-header"}>
+            {filledDays.length > 0 ? <Select size={"small"} className={"preview-select"} value={selectedDay}
+                                             onChange={onSelectChange} variant={"standard"}>
+                <MenuItem style={{display: "none"}} value={""}>None</MenuItem>
+                {filledDays.map((day: string) => (<MenuItem value={day}>{day}</MenuItem>))}
+            </Select> : <div style={{alignSelf: "center"}}>NONE</div>}
+        </div>
+        {filledDays.length > 0 && <>
+            <div className={"multiple-investigation-content"}>
+                {
+                    filledDays.map((day: string) => (
+                        <>
+                            <LargeInfoPreview label={"Interdisciplinary Consultation"}
+                                              info={consultations[day].interdisciplinaryConsultation}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                            <LargeInfoPreview label={"Recommendation"} info={consultations[day].recommendation}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                        </>
+                    ))
+                }
+            </div>
+
+        </>}
+    </div>
+}
+
+export function MultipleFollowUpPreview({followUp}: { followUp: Multiple<FollowUp> }) {
+    const filledDays = useMemo(() => Object.keys(followUp), [followUp])
+    const [selectedDay, setSelectedDay] = useState("")
+
+    useEffect(() => {
+        console.log("insideEffect", selectedDay, filledDays[0])
+        // if (!filledDays.includes(selectedDay)) {
+        setSelectedDay(filledDays[0] || "")
+        // }
+    }, [filledDays]);
+
+
+    const onSelectChange = (event: SelectChangeEvent) => {
+        setSelectedDay(event.target.value);
+    };
+
+    return <div style={{width: "100%"}}>
+        <div className={"multiple-investigation-header"}>
+            {filledDays.length > 0 ? <Select size={"small"} className={"preview-select"} value={selectedDay}
+                                             onChange={onSelectChange} variant={"standard"}>
+                <MenuItem style={{display: "none"}} value={""}>None</MenuItem>
+                {filledDays.map((day: string) => (<MenuItem value={day}>{day}</MenuItem>))}
+            </Select> : <div style={{alignSelf: "center"}}>NONE</div>}
+        </div>
+        {filledDays.length > 0 && <>
+            <div className={"multiple-investigation-content"}>
+                {
+                    filledDays.map((day: string) => (
+                        <>
+                            <LargeInfoPreview label={"Appointments"}
+                                              info={followUp[day].appointments}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                            <LargeInfoPreview label={"Monitoring Progress"} info={followUp[day].monitoringProgress}
+                                              className={day !== selectedDay ? "disappear" : ""}/>
+                        </>
+                    ))
+                }
+            </div>
+
+        </>}
+    </div>
+}
+
 export function HomeBabyJournalPreview() {
     const {babyJournalState} = useContext(BabyJournalStateContext)
     const {
@@ -167,12 +300,9 @@ export function HomeBabyJournalPreview() {
         firstSit,
         firstSteps,
         firstRun,
-        daySleeping,
-        nightSleepingProgress,
-        nightSleeping,
-        waysOfSleeping,
         profilePicture,
-        bloodType
+        bloodType,
+        sleepSchedule
     } = babyJournalState
     return <div className={"j-segment-container"}>
         <h1 className={"j-segment-title"}>{name}</h1>
@@ -204,9 +334,6 @@ export function HomeBabyJournalPreview() {
         <LargeInfoPreview label={"food aversions"} info={foodAversions}/>
 
         <h2 className={"j-preview-title"}>Sleep Schedule</h2>
-        <LargeInfoPreview label={"day sleeping"} info={daySleeping}/>
-        <LargeInfoPreview label={"night sleeping"} info={nightSleeping}/>
-        <LargeInfoPreview label={"ways of sleeping"} info={waysOfSleeping}/>
-        <LargeInfoPreview label={"night sleeping progress"} info={nightSleepingProgress}/>
+        <MultipleSleepSchedulePreview schedules={sleepSchedule}/>
     </div>
 }

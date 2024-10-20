@@ -94,3 +94,11 @@
 .disappear.disappear {
     display: none;
 }
+
+.single-add-button {
+    width: 100%;
+    background: lightgrey;
+}
+.multiple-add-container {
+    width: 100%;
+}

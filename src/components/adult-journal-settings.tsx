@@ -3,7 +3,13 @@ import {LoadingScreen, LoadingScreenContext} from "./loading-sreen";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {doc, getDoc} from "firebase/firestore";
 import {db} from "../App";
-import {Asset, BabyJournalStateContext, DB_COLLECTIONS, EditContext} from "./baby-journal-settings";
+import {
+    Asset,
+    BabyJournalInformation,
+    BabyJournalStateContext,
+    DB_COLLECTIONS,
+    EditContext
+} from "./baby-journal-settings";
 import {JOURNAL_SEGMENTS, JournalNavbar} from "./journal-navbar";
 import {SaveJournalButton} from "./save-journal-button";
 import {HomeAdultJournalSegment} from "./home-adult-journal-segment";
@@ -42,6 +48,39 @@ export interface Investigation {
     assets: Asset[]
 }
 
+export interface Multiple<T> {
+    [key: string]: T
+}
+
+export interface MultipleHandler<T> {
+    onDelete: (dateKey: string) => void,
+    onAdd: (dateKey: string) => void,
+    dates: {
+        [key: string]: T
+    }
+}
+
+export interface Consultation {
+    interdisciplinaryConsultation: string,
+    recommendation: string,
+}
+
+export interface ConsultationHandler {
+    interdisciplinaryConsultation: EditContext<string>,
+    recommendation: EditContext<string>,
+}
+
+export interface FollowUp {
+    appointments: string,
+    monitoringProgress: string,
+}
+
+export interface FollowUpHandler {
+    appointments: EditContext<string>,
+    monitoringProgress: EditContext<string>,
+}
+
+
 export interface MultipleInvestigations {
     [key: string]: Investigation
 }
@@ -51,13 +90,39 @@ const defaultInvestigation: Investigation = {
     assets: []
 }
 
+
 const defaultVitalSigns: VitalSigns = {
     bloodPressure: "",
     pulse: "",
     temperature: "",
     respiratoryRate: ""
 }
+
+const defaultConsultation: Consultation = {
+    interdisciplinaryConsultation: "",
+    recommendation: ""
+}
+
+const defaultFollowUp: FollowUp = {
+    appointments: "",
+    monitoringProgress: ""
+}
+
+
+const defaultSleepSchedule: SleepSchedule = {
+    daySleeping: "",
+    nightSleeping: "",
+    waysOfSleeping: "",
+    nightSleepingProgress: "",
+}
 export const defaultMultipleInvestigations: MultipleInvestigations = {}
+
+interface SleepSchedule {
+    daySleeping: string,
+    nightSleeping: string,
+    waysOfSleeping: string,
+    nightSleepingProgress: string,
+}
 
 interface VitalSigns {
     bloodPressure: string,
@@ -114,15 +179,18 @@ interface AdultJournalInformation {
     geneticTests: MultipleInvestigations,
     pcrTests: MultipleInvestigations,
     boneDensitometry: MultipleInvestigations,
-    interdisciplinaryConsultations: string,
-    recommendations: string,
-    primaryDiagnosis: string,
-    secondaryDiagnosis: string,
-    medicationTreatment: Investigation,
-    surgicalInterventions: string,
-    lifestyleRecommendations: string,
-    appointments: string,
-    monitoringProgress: string,
+    // interdisciplinaryConsultations: string,
+    // recommendations: string,
+    consultations: Multiple<Consultation>
+    // primaryDiagnosis: string,
+    // secondaryDiagnosis: string,
+    diagnoses: MultipleInvestigations
+    medicationTreatment: MultipleInvestigations,
+    surgicalInterventions: MultipleInvestigations,
+    lifestyleRecommendations: MultipleInvestigations,
+    // appointments: string,
+    // monitoringProgress: string,
+    followUp: Multiple<FollowUp>
     bloodType: string,
     europeanHealthCard: Asset[],
     testMultiple: MultipleInvestigations
@@ -172,15 +240,18 @@ const defaultInformation: AdultJournalInformation = {
     geneticTests: defaultMultipleInvestigations,
     pcrTests: defaultMultipleInvestigations,
     boneDensitometry: defaultMultipleInvestigations,
-    interdisciplinaryConsultations: "",
-    recommendations: "",
-    primaryDiagnosis: "",
-    secondaryDiagnosis: "",
-    medicationTreatment: defaultInvestigation,
-    surgicalInterventions: "",
-    lifestyleRecommendations: "",
-    appointments: "",
-    monitoringProgress: "",
+    // interdisciplinaryConsultations: "",
+    // recommendations: "",
+    consultations: {},
+    // primaryDiagnosis: "",
+    // secondaryDiagnosis: "",
+    diagnoses: defaultMultipleInvestigations,
+    medicationTreatment: defaultMultipleInvestigations,
+    surgicalInterventions: defaultMultipleInvestigations,
+    lifestyleRecommendations: defaultMultipleInvestigations,
+    followUp: {},
+    // appointments: "",
+    // monitoringProgress: "",
     bloodType: "",
     europeanHealthCard: [],
     testMultiple: defaultMultipleInvestigations
@@ -189,6 +260,13 @@ const defaultInformation: AdultJournalInformation = {
 export interface InvestigationHandler {
     description: EditContext<string>,
     assets: EditContext<Asset[]>
+}
+
+export interface SleepScheduleHandler {
+    daySleeping: EditContext<string>,
+    nightSleeping: EditContext<string>,
+    waysOfSleeping: EditContext<string>,
+    nightSleepingProgress: EditContext<string>,
 }
 
 export interface VitalSignsHandler {
@@ -249,15 +327,18 @@ interface useAdultJournalEditInterface {
     geneticTests: MultipleInvestigationsHandler,
     pcrTests: MultipleInvestigationsHandler,
     boneDensitometry: MultipleInvestigationsHandler,
-    interdisciplinaryConsultations: EditContext<string>,
-    recommendations: EditContext<string>,
-    primaryDiagnosis: EditContext<string>,
-    secondaryDiagnosis: EditContext<string>,
-    medicationTreatment: InvestigationHandler,
-    surgicalInterventions: EditContext<string>,
-    lifestyleRecommendations: EditContext<string>,
-    appointments: EditContext<string>,
-    monitoringProgress: EditContext<string>,
+    // interdisciplinaryConsultations: EditContext<string>,
+    // recommendations: EditContext<string>,
+    consultations: MultipleHandler<ConsultationHandler>
+    // primaryDiagnosis: EditContext<string>,
+    // secondaryDiagnosis: EditContext<string>,
+    diagnoses: MultipleInvestigationsHandler,
+    medicationTreatment: MultipleInvestigationsHandler,
+    surgicalInterventions: MultipleInvestigationsHandler,
+    lifestyleRecommendations: MultipleInvestigationsHandler,
+    // appointments: EditContext<string>,
+    // monitoringProgress: EditContext<string>,
+    followUp: MultipleHandler<FollowUpHandler>,
     bloodType: EditContext<string>,
     europeanHealthCard: EditContext<Asset[]>,
     testMultiple: MultipleInvestigationsHandler,
@@ -276,6 +357,14 @@ export interface MultipleInvestigationsHandler {
     onAdd: (dateKey: string) => void,
     investigations: {
         [key: string]: InvestigationHandler
+    }
+}
+
+export interface MultipleSleepScheduleHandler {
+    onDelete: (dateKey: string) => void
+    onAdd: (dateKey: string) => void,
+    schedules: {
+        [key: string]: SleepScheduleHandler
     }
 }
 
@@ -461,25 +550,278 @@ function useCreateMultipleVitalSignHandler(): MultipleVitalSignsHandler {
     }), [onAdd, getSigns, onDelete])
 }
 
+export function useCreateMultipleSleepScheduleHandler(): MultipleSleepScheduleHandler {
+    const {babyJournalState, setBabyJournalState} = useContext(BabyJournalStateContext)
+    let tempInvestigations: { [key: string]: SleepScheduleHandler } = {}
+    const useGetSchedules = () => {
+        return (): { [key: string]: SleepScheduleHandler } => {
+            const keys = Object.keys(babyJournalState.sleepSchedule)
+            tempInvestigations = {}
+            keys.forEach((key: string) => {
+                tempInvestigations[key] = {
+                    daySleeping: {
+                        value: babyJournalState.sleepSchedule[key].daySleeping,
+                        onChange: (daySleeping: string) => {
+                            setBabyJournalState((prev: BabyJournalInformation) => ({
+                                ...prev,
+                                sleepSchedule: {
+                                    ...prev.sleepSchedule,
+                                    [key]: {
+                                        ...prev.sleepSchedule[key],
+                                        daySleeping
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                    nightSleeping: {
+                        value: babyJournalState.sleepSchedule[key].nightSleeping,
+                        onChange: (nightSleeping: string) => {
+                            setBabyJournalState((prev: BabyJournalInformation) => ({
+                                ...prev,
+                                sleepSchedule: {
+                                    ...prev.sleepSchedule,
+                                    [key]: {
+                                        ...prev.sleepSchedule[key],
+                                        nightSleeping
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                    waysOfSleeping: {
+                        value: babyJournalState.sleepSchedule[key].waysOfSleeping,
+                        onChange: (waysOfSleeping: string) => {
+                            setBabyJournalState((prev: BabyJournalInformation) => ({
+                                ...prev,
+                                sleepSchedule: {
+                                    ...prev.sleepSchedule,
+                                    [key]: {
+                                        ...prev.sleepSchedule[key],
+                                        waysOfSleeping
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                    nightSleepingProgress: {
+                        value: babyJournalState.sleepSchedule[key].nightSleepingProgress,
+                        onChange: (nightSleepingProgress: string) => {
+                            setBabyJournalState((prev: BabyJournalInformation) => ({
+                                ...prev,
+                                sleepSchedule: {
+                                    ...prev.sleepSchedule,
+                                    [key]: {
+                                        ...prev.sleepSchedule[key],
+                                        nightSleepingProgress
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                }
+            })
+            return tempInvestigations
+        }
+    }
+
+    const onAdd = useCallback((dateKey: string) => {
+        setBabyJournalState((prev: BabyJournalInformation) => ({
+            ...prev,
+            sleepSchedule: {
+                ...prev.sleepSchedule,
+                [dateKey]: defaultSleepSchedule
+            }
+        }))
+    }, [])
+
+    const onDelete = useCallback((dateKey: string) => {
+        setBabyJournalState((prev: BabyJournalInformation) => {
+            const {[dateKey]: _, ...investigationsLeft} = prev.sleepSchedule
+            return {
+                ...prev,
+                sleepSchedule: investigationsLeft
+            }
+        })
+    }, [])
+
+    const getSchedules = useGetSchedules()
+    // console.log("Multiple, inves", investigations)
+    return useMemo(() => ({
+        onDelete,
+        onAdd,
+        schedules: getSchedules()
+    }), [onAdd, getSchedules, onDelete])
+}
+
+function useCreateMultipleConsultationHandler(): MultipleHandler<ConsultationHandler> {
+    const {adultJournalState, setAdultJournalState} = useContext(AdultJournalStateContext)
+    let tempInvestigations: { [key: string]: ConsultationHandler } = {}
+    const useGetDates = () => {
+        return (): { [key: string]: ConsultationHandler } => {
+            const keys = Object.keys(adultJournalState.consultations)
+            tempInvestigations = {}
+            keys.forEach((key: string) => {
+                tempInvestigations[key] = {
+                    interdisciplinaryConsultation: {
+                        value: adultJournalState.consultations[key].interdisciplinaryConsultation,
+                        onChange: (interdisciplinaryConsultation: string) => {
+                            setAdultJournalState((prev: AdultJournalInformation) => ({
+                                ...prev,
+                                consultations: {
+                                    ...prev.consultations,
+                                    [key]: {
+                                        ...prev.consultations[key],
+                                        interdisciplinaryConsultation
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                    recommendation: {
+                        value: adultJournalState.consultations[key].recommendation,
+                        onChange: (recommendation: string) => {
+                            setAdultJournalState((prev: AdultJournalInformation) => ({
+                                ...prev,
+                                consultations: {
+                                    ...prev.consultations,
+                                    [key]: {
+                                        ...prev.consultations[key],
+                                        recommendation
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                }
+            })
+            return tempInvestigations
+        }
+    }
+
+    const onAdd = useCallback((dateKey: string) => {
+        setAdultJournalState((prev: AdultJournalInformation) => ({
+            ...prev,
+            consultations: {
+                ...prev.consultations,
+                [dateKey]: defaultConsultation
+            }
+        }))
+    }, [])
+
+    const onDelete = useCallback((dateKey: string) => {
+        setAdultJournalState((prev: AdultJournalInformation) => {
+            const {[dateKey]: _, ...investigationsLeft} = prev.consultations
+            return {
+                ...prev,
+                consultations: investigationsLeft
+            }
+        })
+    }, [])
+
+    const getDates = useGetDates()
+    // console.log("Multiple, inves", investigations)
+    return useMemo(() => ({
+        onDelete,
+        onAdd,
+        dates: getDates()
+    }), [onAdd, getDates, onDelete])
+}
+
+function useCreateMultipleFollowUpHandler(): MultipleHandler<FollowUpHandler> {
+    const {adultJournalState, setAdultJournalState} = useContext(AdultJournalStateContext)
+    let tempInvestigations: { [key: string]: FollowUpHandler } = {}
+    const useGetDates = () => {
+        return (): { [key: string]: FollowUpHandler } => {
+            const keys = Object.keys(adultJournalState.consultations)
+            tempInvestigations = {}
+            keys.forEach((key: string) => {
+                tempInvestigations[key] = {
+                    appointments: {
+                        value: adultJournalState.followUp[key].appointments,
+                        onChange: (appointments: string) => {
+                            setAdultJournalState((prev: AdultJournalInformation) => ({
+                                ...prev,
+                                followUp: {
+                                    ...prev.followUp,
+                                    [key]: {
+                                        ...prev.followUp[key],
+                                        appointments
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                    monitoringProgress: {
+                        value: adultJournalState.followUp[key].monitoringProgress,
+                        onChange: (monitoringProgress: string) => {
+                            setAdultJournalState((prev: AdultJournalInformation) => ({
+                                ...prev,
+                                followUp: {
+                                    ...prev.followUp,
+                                    [key]: {
+                                        ...prev.followUp[key],
+                                        monitoringProgress
+                                    }
+                                }
+                            }))
+                        }
+                    },
+                }
+            })
+            return tempInvestigations
+        }
+    }
+
+    const onAdd = useCallback((dateKey: string) => {
+        setAdultJournalState((prev: AdultJournalInformation) => ({
+            ...prev,
+            followUp: {
+                ...prev.followUp,
+                [dateKey]: defaultFollowUp
+            }
+        }))
+    }, [])
+
+    const onDelete = useCallback((dateKey: string) => {
+        setAdultJournalState((prev: AdultJournalInformation) => {
+            const {[dateKey]: _, ...investigationsLeft} = prev.followUp
+            return {
+                ...prev,
+                followUp: investigationsLeft
+            }
+        })
+    }, [])
+
+    const getDates = useGetDates()
+    // console.log("Multiple, inves", investigations)
+    return useMemo(() => ({
+        onDelete,
+        onAdd,
+        dates: getDates()
+    }), [onAdd, getDates, onDelete])
+}
+
+
 function useCreateInvestigationHandler(field: keyof AdultJournalInformation): InvestigationHandler {
     const {adultJournalState, setAdultJournalState} = useContext(AdultJournalStateContext)
 
     return {
         description: {
-            value: (adultJournalState[field] as Investigation).description,
+            value: (adultJournalState[field] as unknown as Investigation).description,
             onChange: (description: string) => {
                 setAdultJournalState((prev: AdultJournalInformation) => ({
                     ...prev,
-                    [field]: {...prev[field] as Investigation, description}
+                    [field]: {...prev[field] as unknown as Investigation, description}
                 }))
             }
         },
         assets: {
-            value: (adultJournalState[field] as Investigation).assets,
+            value: (adultJournalState[field] as unknown as Investigation).assets,
             onChange: (assets: Asset[]) => {
                 setAdultJournalState((prev: AdultJournalInformation) => ({
                     ...prev,
-                    [field]: {...prev[field] as Investigation, assets}
+                    [field]: {...prev[field] as unknown as Investigation, assets}
                 }))
             }
         }
@@ -632,55 +974,48 @@ function useAdultJournalEdit(): useAdultJournalEditInterface {
         geneticTests: useCreateMultipleInvestigationsHandler("geneticTests"),
         pcrTests: useCreateMultipleInvestigationsHandler("pcrTests"),
         boneDensitometry: useCreateMultipleInvestigationsHandler("boneDensitometry"),
-        interdisciplinaryConsultations: {
-            value: adultJournalState.interdisciplinaryConsultations,
-            onChange: (interdisciplinaryConsultations: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, interdisciplinaryConsultations}))
-            }
-        },
-        recommendations: {
-            value: adultJournalState.recommendations,
-            onChange: (recommendations: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, recommendations}))
-            }
-        },
-        primaryDiagnosis: {
-            value: adultJournalState.primaryDiagnosis,
-            onChange: (primaryDiagnosis: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, primaryDiagnosis}))
-            }
-        },
-        secondaryDiagnosis: {
-            value: adultJournalState.secondaryDiagnosis,
-            onChange: (secondaryDiagnosis: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, secondaryDiagnosis}))
-            }
-        },
-        medicationTreatment: useCreateInvestigationHandler("medicationTreatment"),
-        surgicalInterventions: {
-            value: adultJournalState.surgicalInterventions,
-            onChange: (surgicalInterventions: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, surgicalInterventions}))
-            }
-        },
-        lifestyleRecommendations: {
-            value: adultJournalState.lifestyleRecommendations,
-            onChange: (lifestyleRecommendations: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, lifestyleRecommendations}))
-            }
-        },
-        appointments: {
-            value: adultJournalState.appointments,
-            onChange: (appointments: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, appointments}))
-            }
-        },
-        monitoringProgress: {
-            value: adultJournalState.monitoringProgress,
-            onChange: (monitoringProgress: string) => {
-                setAdultJournalState((prev: AdultJournalInformation) => ({...prev, monitoringProgress}))
-            }
-        },
+        // interdisciplinaryConsultations: {
+        //     value: adultJournalState.interdisciplinaryConsultations,
+        //     onChange: (interdisciplinaryConsultations: string) => {
+        //         setAdultJournalState((prev: AdultJournalInformation) => ({...prev, interdisciplinaryConsultations}))
+        //     }
+        // },
+        // recommendations: {
+        //     value: adultJournalState.recommendations,
+        //     onChange: (recommendations: string) => {
+        //         setAdultJournalState((prev: AdultJournalInformation) => ({...prev, recommendations}))
+        //     }
+        // },
+        consultations: useCreateMultipleConsultationHandler(),
+        // primaryDiagnosis: {
+        //     value: adultJournalState.primaryDiagnosis,
+        //     onChange: (primaryDiagnosis: string) => {
+        //         setAdultJournalState((prev: AdultJournalInformation) => ({...prev, primaryDiagnosis}))
+        //     }
+        // },
+        // secondaryDiagnosis: {
+        //     value: adultJournalState.secondaryDiagnosis,
+        //     onChange: (secondaryDiagnosis: string) => {
+        //         setAdultJournalState((prev: AdultJournalInformation) => ({...prev, secondaryDiagnosis}))
+        //     }
+        // },
+        diagnoses: useCreateMultipleInvestigationsHandler("diagnoses"),
+        medicationTreatment: useCreateMultipleInvestigationsHandler("medicationTreatment"),
+        surgicalInterventions: useCreateMultipleInvestigationsHandler("surgicalInterventions"),
+        lifestyleRecommendations: useCreateMultipleInvestigationsHandler("lifestyleRecommendations"),
+        // appointments: {
+        //     value: adultJournalState.appointments,
+        //     onChange: (appointments: string) => {
+        //         setAdultJournalState((prev: AdultJournalInformation) => ({...prev, appointments}))
+        //     }
+        // },
+        // monitoringProgress: {
+        //     value: adultJournalState.monitoringProgress,
+        //     onChange: (monitoringProgress: string) => {
+        //         setAdultJournalState((prev: AdultJournalInformation) => ({...prev, monitoringProgress}))
+        //     }
+        // },
+        followUp: useCreateMultipleFollowUpHandler(),
         bloodType: {
             value: adultJournalState.bloodType,
             onChange: (bloodType: string) => {
