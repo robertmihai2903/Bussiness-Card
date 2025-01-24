@@ -1,0 +1,54 @@
+.not-saved-screen-wrapper {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.not-saved-screen-dialog-box {
+    width: 90vw;
+    height: 30vh;
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+}
+
+.not-saved-screen-button-box {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+}
+.not-saved-screen-button-exit{
+    width: 120px;
+    height: 40px;
+    border:1px solid  #5A5A5AE3;
+    text-align: center;
+    color: #5A5A5AE3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+.not-saved-screen-button-cancel{
+    width: 120px;
+    height: 40px;
+    background-color: #5A5A5AE3;
+    text-align: center;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}

@@ -28,3 +28,18 @@
     width: 70%;
     margin-bottom: 24px;
 }
+
+.permission-modal {
+    overflow: scroll;
+    max-height: 80vh;
+    max-width: 80vw;
+    width: 500px;
+    height: 500px;
+    background-color: antiquewhite;
+    border-radius: 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 24px
+}

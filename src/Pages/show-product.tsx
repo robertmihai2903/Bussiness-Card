@@ -24,6 +24,8 @@ import {AudioPage} from "../components/audio-page";
 import {useResetDevice} from "../useProductData";
 import {notify} from "./login-page";
 import {translatedText} from "../languages";
+import {BabyJournalPreview} from "../components/baby-journal-preview";
+import {AdultJournalPreview} from "../components/adult-journal-preview";
 
 function addHttps(site: string) {
     if (site.trim().startsWith('http')) {
@@ -502,6 +504,8 @@ export function ShowProduct() {
         {!passwordProtected && product.preview === Preview.UPLOAD_SONGS && <div className={'page-show-product'}>
             <AudioPage songs={songs} language={product.previewLanguage}/>
         </div>}
+        {!passwordProtected && product.preview === Preview.BABY_JOURNAL && <BabyJournalPreview/>}
+        {!passwordProtected && product.preview === Preview.ADULT_JOURNAL && <AdultJournalPreview/>}
     </div>)
 
 }

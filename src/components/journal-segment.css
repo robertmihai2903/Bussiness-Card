@@ -1,0 +1,131 @@
+.j-segment-container .j-segment-textfield {
+    width: 90%;
+    margin-bottom: 24px;
+}
+
+.j-segment-container .j-segment-date-picker {
+    width: 90%;
+    margin-bottom: 24px;
+}
+
+.j-segment-container .j-segment-time-picker {
+    width: 90%;
+    margin-bottom: 24px;
+}
+
+.j-segment-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: calc(100vh - 100px);
+    align-items: center;
+    margin-bottom: 90px;
+}
+
+.j-segment-title {
+    text-align: center;
+    color: #5A5A5AE3;
+    margin-top: 12px;
+}
+
+.j-segment-subtitle {
+    /*text-align: ;*/
+    color: #5A5A5AE3;
+    margin-top: 4px;
+}
+
+.j-segment-investigation-input {
+    width: 100%;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.j-segment-investigation-input .j-segment-investigation-input-textfield {
+    width: 90%;
+    margin-bottom: 12px;
+}
+
+.j-segment-investigation-input-label {
+    color: #606060;
+    text-align: start;
+    width: 90%;
+    margin: 6px
+}
+
+.filepond--credits .filepond--credits .filepond--credits {
+    display: none;
+}
+
+.add-date-key-popover-box {
+    width: fit-content;
+    height: fit-content;
+    background: #f1f0ef;
+}
+
+.multiple-investigations-wrapper {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+}
+
+.multiple-investigations-select {
+    width: 40%;
+    align-self: center;
+}
+
+
+.multiple-investigation-header {
+    width: 100%;
+    display: grid;
+    grid-template-columns:2fr 1fr;
+}
+
+.multiple-choice-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.multiple-investigation-content {
+    background: #f1f0ef;
+    width: 100%;
+    margin: 12px 0px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.disappear.disappear {
+    display: none;
+}
+
+.single-add-button {
+    width: 90%;
+    height: 50px;
+    background: #f1f0ef;
+    padding: 6px;
+    border-radius: 12px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #4f4f4f;
+    margin-bottom: 16px;
+}
+.multiple-add-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.multiple-add-button {
+    width: 50px;
+
+}

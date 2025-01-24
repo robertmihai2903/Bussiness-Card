@@ -11,12 +11,14 @@ import {db} from "../App";
 import {notify} from "../Pages/login-page";
 import BurgerMenuIcon from "../assets/burger-menu.svg"
 import {SelectLanguage} from "../Pages/manage-device";
+import {PermissionContext} from "./usePermission";
 
 export function PreviewSettings() {
     const {productState, setProductState} = useContext(ManageProductContext)
     const {publicPagePassword} = useEditState()
     const [showPassword, setShowPassword] = useState(false)
-
+    const permissions = useContext(PermissionContext)
+    console.log('permissions', permissions)
     const productId = getProductIdFromURL()
     const navigate = useNavigate()
 
@@ -25,6 +27,8 @@ export function PreviewSettings() {
     const setPreviewUploadFile = useSetPreview(Preview.UPLOAD_FILE)
     const setPreviewUploadVideo = useSetPreview(Preview.UPLOAD_VIDEO)
     const setPreviewUploadSongs = useSetPreview(Preview.UPLOAD_SONGS)
+    const setPreviewBabyJournal = useSetPreview(Preview.BABY_JOURNAL)
+    const setPreviewAdultJournal = useSetPreview(Preview.ADULT_JOURNAL)
 
     useEffect(() => {
         setShowPassword(productState.publicPagePasswordActivated)
@@ -51,33 +55,44 @@ export function PreviewSettings() {
         <div className={'check-show-text'}>CHECK TO SHOW ON DEVICE</div>
         <div className={'checkbox-container'}>
             <div className={'left-checkbox-container'}>
-                <div className={'preview-option'}>
+                {permissions.business_card && <div className={'preview-option'}>
                     <input type={'checkbox'} checked={productState.preview === Preview.BUSINESS_CARD}
                            onChange={setPreviewBusiness}/>
                     <span>BUSINESS CARD</span>
-                </div>
-                <div className={'preview-option'}>
+                </div>}
+                {permissions.custom_link && <div className={'preview-option'}>
                     <input type={'checkbox'} checked={productState.preview === Preview.CUSTOM_LINK}
                            onChange={setPreviewCustomLink}/>
                     <span>CUSTOM LINK</span>
-                </div>
-                <div className={'preview-option'}>
+                </div>}
+                {permissions.upload_files && <div className={'preview-option'}>
                     <input type={'checkbox'} checked={productState.preview === Preview.UPLOAD_FILE}
                            onChange={setPreviewUploadFile}/>
                     <span>UPLOAD FILES</span>
-                </div>
-            </div>
-            <div className={'right-checkbox-container'}>
-                <div className={'preview-option'}>
+                </div>}
+                {permissions.upload_video && <div className={'preview-option'}>
                     <input type={'checkbox'} checked={productState.preview === Preview.UPLOAD_VIDEO}
                            onChange={setPreviewUploadVideo}/>
                     <span>UPLOAD VIDEO</span>
-                </div>
-                <div className={'preview-option'}>
+                </div>}
+            </div>
+            <div className={'right-checkbox-container'}>
+
+                {permissions.upload_songs && <div className={'preview-option'}>
                     <input type={'checkbox'} checked={productState.preview === Preview.UPLOAD_SONGS}
                            onChange={setPreviewUploadSongs}/>
                     <span>UPLOAD SONGS</span>
-                </div>
+                </div>}
+                {permissions.baby_journal && <div className={'preview-option'}>
+                    <input type={'checkbox'} checked={productState.preview === Preview.BABY_JOURNAL}
+                           onChange={setPreviewBabyJournal}/>
+                    <span>BABY JOURNAL</span>
+                </div>}
+                {permissions.adult_journal && <div className={'preview-option'}>
+                    <input type={'checkbox'} checked={productState.preview === Preview.ADULT_JOURNAL}
+                           onChange={setPreviewAdultJournal}/>
+                    <span>ADULT JOURNAL</span>
+                </div>}
             </div>
         </div>
         <h2 className={'pinline'}><span>PRIVACY & PASSWORD</span></h2>
