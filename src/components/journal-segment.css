@@ -63,7 +63,7 @@
 .add-date-key-popover-box {
     width: fit-content;
     height: fit-content;
-    background: wheat;
+    background: #f1f0ef;
 }
 
 .multiple-investigations-wrapper {
@@ -75,7 +75,7 @@
 
 .multiple-investigations-select {
     width: 40%;
-    align-self: start;
+    align-self: center;
 }
 
 
@@ -85,20 +85,47 @@
     grid-template-columns:2fr 1fr;
 }
 
+.multiple-choice-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .multiple-investigation-content {
-    background: #EEEDEB;
+    background: #f1f0ef;
     width: 100%;
     margin: 12px 0px;
     border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 .disappear.disappear {
     display: none;
 }
 
 .single-add-button {
-    width: 100%;
-    background: lightgrey;
+    width: 90%;
+    height: 50px;
+    background: #f1f0ef;
+    padding: 6px;
+    border-radius: 12px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #4f4f4f;
+    margin-bottom: 16px;
 }
 .multiple-add-container {
     width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.multiple-add-button {
+    width: 50px;
+
 }

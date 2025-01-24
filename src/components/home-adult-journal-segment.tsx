@@ -70,7 +70,7 @@ export function HomeAdultJournalSegment() {
 }
 
 
-function AddDateKeyEntryButtonInvestigation({onAdd, selectedDays}: any) {
+function AddDateKeyEntryButtonInvestigation({onAdd, selectedDays, setSelectedDay}: any) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const defaultDate = dayjs()
     const [date, setDate] = useState<Dayjs | null>(defaultDate)
@@ -95,11 +95,12 @@ function AddDateKeyEntryButtonInvestigation({onAdd, selectedDays}: any) {
         const convertedDate = date?.format('DD/MM/YYYY')
         onAdd(convertedDate)
         onHandleClose()
+        setSelectedDay(convertedDate)
     }
 
     console.log("HERE NOWW")
     return <div>
-        <Button onClick={onOpen}>Add</Button>
+        <Button style={{color: "#4f4f4f"}} onClick={onOpen}>Add</Button>
         <Popover
             id={id}
             open={open}
@@ -121,13 +122,13 @@ function AddDateKeyEntryButtonInvestigation({onAdd, selectedDays}: any) {
                             return selectedDays.includes(convertedDay)
                         }}/>
                 </LocalizationProvider>
-                <Button onClick={onAddEntry}>Add Entry</Button>
+                <Button style={{color: "#4f4f4f", margin: "4px"}} onClick={onAddEntry}>Add Entry</Button>
             </div>
         </Popover>
     </div>
 }
 
-function AddDateKeyEntryButton({onAdd, selectedDays}: any) {
+function AddDateKeyEntryButton({onAdd, selectedDays, setSelectedDay}: any) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
     const defaultDate = dayjs()
     const [date, setDate] = useState<Dayjs | null>(defaultDate)
@@ -152,11 +153,13 @@ function AddDateKeyEntryButton({onAdd, selectedDays}: any) {
         const convertedDate = date?.format('DD/MM/YYYY')
         onAdd(convertedDate)
         onHandleClose()
+        setSelectedDay(convertedDate)
     }
 
     console.log("HERE NOWW")
     return <div className={'multiple-add-container'}>
         <div className={"single-add-button"} onClick={onOpen}>Add</div>
+        {/*{selectedDays.length !== 0 && <div className={"multiple-add-button"} onClick={onOpen}>Add </div>}*/}
         <Popover
             id={id}
             open={open}
@@ -170,6 +173,7 @@ function AddDateKeyEntryButton({onAdd, selectedDays}: any) {
             <div className={"add-date-key-popover-box"}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DateCalendar
+
                         defaultValue={dayjs()}
                         value={date}
                         onChange={onDateChange}
@@ -178,7 +182,7 @@ function AddDateKeyEntryButton({onAdd, selectedDays}: any) {
                             return selectedDays.includes(convertedDay)
                         }}/>
                 </LocalizationProvider>
-                <Button onClick={onAddEntry}>Add Entry</Button>
+                <Button style={{color: "#4f4f4f", margin: "4px"}} onClick={onAddEntry}>Add Entry</Button>
             </div>
         </Popover>
     </div>
@@ -192,7 +196,7 @@ export function MultipleInvestigationsInput({label, handler}: { label: string, h
     useEffect(() => {
         console.log("insideEffect", selectedDay, filledDays[0])
         // if (!filledDays.includes(selectedDay)) {
-        setSelectedDay(filledDays[0] || "")
+        setSelectedDay(filledDays[filledDays.length - 1] || "")
         // }
     }, [filledDays]);
 
@@ -214,7 +218,8 @@ export function MultipleInvestigationsInput({label, handler}: { label: string, h
     return <div className={"multiple-investigations-wrapper"}>
         <div className={"multiple-investigation-header"}>
             {label && <h4 className={"j-segment-investigation-input-label"}>{label}</h4>}
-            <AddDateKeyEntryButtonInvestigation onAdd={handler.onAdd} selectedDays={filledDays}/>
+            <AddDateKeyEntryButtonInvestigation onAdd={handler.onAdd} selectedDays={filledDays}
+                                                setSelectedDay={setSelectedDay}/>
         </div>
         {filledDays.length > 0 && <>
             <Select size={"small"} className={"multiple-investigations-select"} value={selectedDay}
@@ -243,7 +248,7 @@ export function MultipleVitalSignsInput({handler}: { handler: MultipleVitalSigns
     useEffect(() => {
         console.log("insideEffect", selectedDay, filledDays[0])
         // if (!filledDays.includes(selectedDay)) {
-        setSelectedDay(filledDays[0] || "")
+        setSelectedDay(filledDays[filledDays.length - 1] || "")
         // }
     }, [filledDays]);
 
@@ -263,8 +268,8 @@ export function MultipleVitalSignsInput({handler}: { handler: MultipleVitalSigns
     console.log("Filled days", filledDays)
     console.log("Selected Value", selectedDay)
     return <div className={"multiple-investigations-wrapper"}>
-        <div className={"multiple-investigation-header"}>
-            <AddDateKeyEntryButton onAdd={handler.onAdd} selectedDays={filledDays}/>
+        <div className={"multiple-choice-header"}>
+            <AddDateKeyEntryButton onAdd={handler.onAdd} selectedDays={filledDays} setSelectedDay={setSelectedDay}/>
         </div>
         {filledDays.length > 0 && <>
             <Select size={"small"} className={"multiple-investigations-select"} value={selectedDay}
@@ -320,7 +325,7 @@ export function MultipleSleepScheduleInput({handler}: { handler: MultipleSleepSc
     useEffect(() => {
         console.log("insideEffect", selectedDay, filledDays[0])
         // if (!filledDays.includes(selectedDay)) {
-        setSelectedDay(filledDays[0] || "")
+        setSelectedDay(filledDays[filledDays.length - 1] || "")
         // }
     }, [filledDays]);
 
@@ -332,7 +337,7 @@ export function MultipleSleepScheduleInput({handler}: { handler: MultipleSleepSc
         return () => {
             if (selectedDay === key) {
                 const firstRemainingDay = filledDays.length ? filledDays[0] : ""
-                setSelectedDay(firstRemainingDay)
+                setSelectedDay(filledDays[filledDays.length - 1] || "")
             }
             handler.onDelete(key)
         }
@@ -340,8 +345,8 @@ export function MultipleSleepScheduleInput({handler}: { handler: MultipleSleepSc
     console.log("Filled days", filledDays)
     console.log("Selected Value", selectedDay)
     return <div className={"multiple-investigations-wrapper"}>
-        <div className={"multiple-investigation-header"}>
-            <AddDateKeyEntryButton onAdd={handler.onAdd} selectedDays={filledDays}/>
+        <div className={"multiple-choice-header"}>
+            <AddDateKeyEntryButton onAdd={handler.onAdd} selectedDays={filledDays} setSelectedDay={setSelectedDay}/>
         </div>
         {filledDays.length > 0 && <>
             <Select size={"small"} className={"multiple-investigations-select"} value={selectedDay}
@@ -400,7 +405,7 @@ export function MultipleConsultInput({handler}: { handler: MultipleHandler<Consu
     useEffect(() => {
         console.log("insideEffect", selectedDay, filledDays[0])
         // if (!filledDays.includes(selectedDay)) {
-        setSelectedDay(filledDays[0] || "")
+        setSelectedDay(filledDays[filledDays.length - 1] || "")
         // }
     }, [filledDays]);
 
@@ -420,8 +425,8 @@ export function MultipleConsultInput({handler}: { handler: MultipleHandler<Consu
     console.log("Filled days", filledDays)
     console.log("Selected Value", selectedDay)
     return <div className={"multiple-investigations-wrapper"}>
-        <div className={"multiple-investigation-header"}>
-            <AddDateKeyEntryButton onAdd={handler.onAdd} selectedDays={filledDays}/>
+        <div className={"multiple-choice-header"}>
+            <AddDateKeyEntryButton onAdd={handler.onAdd} selectedDays={filledDays} setSelectedDay={setSelectedDay}/>
         </div>
         {filledDays.length > 0 && <>
             <Select size={"small"} className={"multiple-investigations-select"} value={selectedDay}
@@ -469,7 +474,7 @@ export function MultipleFollowUpInput({handler}: { handler: MultipleHandler<Foll
     useEffect(() => {
         console.log("insideEffect", selectedDay, filledDays[0])
         // if (!filledDays.includes(selectedDay)) {
-        setSelectedDay(filledDays[0] || "")
+        setSelectedDay(filledDays[filledDays.length - 1] || "")
         // }
     }, [filledDays]);
 
@@ -489,8 +494,8 @@ export function MultipleFollowUpInput({handler}: { handler: MultipleHandler<Foll
     console.log("Filled days", filledDays)
     console.log("Selected Value", selectedDay)
     return <div className={"multiple-investigations-wrapper"}>
-        <div className={"multiple-investigation-header"}>
-            <AddDateKeyEntryButton onAdd={handler.onAdd} selectedDays={filledDays}/>
+        <div className={"multiple-choice-header"}>
+            <AddDateKeyEntryButton onAdd={handler.onAdd} selectedDays={filledDays} setSelectedDay={setSelectedDay}/>
         </div>
         {filledDays.length > 0 && <>
             <Select size={"small"} className={"multiple-investigations-select"} value={selectedDay}

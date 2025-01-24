@@ -28,6 +28,8 @@ import CustomLinkIcon from "../assets/category-custom-link.svg"
 import UploadFilesIcon from "../assets/category-upload-files.svg"
 import UploadVideoIcon from "../assets/category-upload-video.svg"
 import UploadSongsIcon from "../assets/category-upload-songs.svg"
+import BabyJournalIcon from "../assets/baby-book-svgrepo-com.svg"
+import AdultJournalIcon from "../assets/moleskine-svgrepo-com.svg"
 // import SharedContactsIcon from "../assets/affiliate-ui-web-svgrepo-com.svg"
 import classNames from "classnames";
 import {PermissionContext, PermissionContextProvider, Permissions} from "../components/usePermission";
@@ -123,15 +125,15 @@ const navigate = useNavigate()
                         <PageCategory permission={"custom_link"} category={'custom-link'} icon={CustomLinkIcon}
                                       title={'Custom Link'} description={'Introduce the URL link'}/>
                         <PageCategory permission={"upload_files"} category={'upload-files'} icon={UploadFilesIcon}
-                                      title={'Upload Files'} description={'Introduce the Youtube link'}/>
+                                      title={'Upload Files'} description={'Upload 3 different PDF files'}/>
                         <PageCategory permission={"upload_video"} category={'upload-video'} icon={UploadVideoIcon}
-                                      title={'Upload Video'} description={'Upload 3 different PDF files '}/>
+                                      title={'Upload Video'} description={'Introduce the Youtube link'}/>
                         <PageCategory permission={"upload_songs"} category={'upload-songs'} icon={UploadSongsIcon}
                                       title={'Upload Songs'} description={'Upload 3 different audio tracks'}/>
-                        <PageCategory permission={"baby_journal"} category={'baby-journal'} icon={BusinessCardIcon}
+                        <PageCategory permission={"baby_journal"} category={'baby-journal'} icon={BabyJournalIcon}
                                       title={'Baby Journal'} description={'Have a journal for your baby'}/>
-                        <PageCategory permission={"adult_journal"} category={'adult-journal'} icon={BusinessCardIcon}
-                                      title={'Adult Journal'} description={'Have a journal for your baby'}/>
+                        <PageCategory permission={"adult_journal"} category={'adult-journal'} icon={AdultJournalIcon}
+                                      title={'Adult Journal'} description={'Have a journal for you'}/>
                     </div>
                     <h2 className={'pinline'}><span>SHARED CONTACTS</span></h2>
                     <div className={'page-categories'}>

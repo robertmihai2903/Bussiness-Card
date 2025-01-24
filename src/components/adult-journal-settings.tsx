@@ -843,7 +843,7 @@ function useAdultJournalInformation(): useAdultJournalInformation {
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                     } else {
-                        navigate('/app')
+                        // navigate('/app')
                     }
                 });
 

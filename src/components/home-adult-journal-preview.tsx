@@ -13,6 +13,7 @@ export function HomeAdultJournalPreview() {
         address,
         phone,
         medicalRecordNumber,
+        bloodType
     } = adultJournalState
     return <div className={"j-segment-container"}>
         <h1 className={"j-segment-title"}>{name}</h1>
@@ -23,5 +24,6 @@ export function HomeAdultJournalPreview() {
         <SmallInfoPreview label={"address"} info={address}/>
         <SmallInfoPreview label={"phone number"} info={phone}/>
         <SmallInfoPreview label={"medical record number"} info={medicalRecordNumber}/>
+        <SmallInfoPreview label={"blood type"} info={bloodType}/>
     </div>
 }

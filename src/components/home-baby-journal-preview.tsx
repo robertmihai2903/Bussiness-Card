@@ -115,7 +115,7 @@ export function MultipleVitalSignsPreview({signs}: { signs: MultipleVitalSigns }
     };
 
     return <div style={{width: "100%"}}>
-        <div className={"multiple-investigation-header"}>
+        <div className={"multiple-choice-header"}>
             {filledDays.length > 0 ? <Select size={"small"} className={"preview-select"} value={selectedDay}
                                              onChange={onSelectChange} variant={"standard"}>
                 <MenuItem style={{display: "none"}} value={""}>None</MenuItem>
@@ -161,7 +161,7 @@ export function MultipleSleepSchedulePreview({schedules}: { schedules: MultipleS
     };
 
     return <div style={{width: "100%"}}>
-        <div className={"multiple-investigation-header"}>
+        <div className={"multiple-choice-header"}>
             {filledDays.length > 0 ? <Select size={"small"} className={"preview-select"} value={selectedDay}
                                              onChange={onSelectChange} variant={"standard"}>
                 <MenuItem style={{display: "none"}} value={""}>None</MenuItem>
@@ -208,7 +208,7 @@ export function MultipleConsultationPreview({consultations}: { consultations: Mu
     };
 
     return <div style={{width: "100%"}}>
-        <div className={"multiple-investigation-header"}>
+        <div className={"multiple-choice-header"}>
             {filledDays.length > 0 ? <Select size={"small"} className={"preview-select"} value={selectedDay}
                                              onChange={onSelectChange} variant={"standard"}>
                 <MenuItem style={{display: "none"}} value={""}>None</MenuItem>
@@ -251,7 +251,7 @@ export function MultipleFollowUpPreview({followUp}: { followUp: Multiple<FollowU
     };
 
     return <div style={{width: "100%"}}>
-        <div className={"multiple-investigation-header"}>
+        <div className={"multiple-choice-header"}>
             {filledDays.length > 0 ? <Select size={"small"} className={"preview-select"} value={selectedDay}
                                              onChange={onSelectChange} variant={"standard"}>
                 <MenuItem style={{display: "none"}} value={""}>None</MenuItem>

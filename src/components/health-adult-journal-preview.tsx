@@ -35,7 +35,6 @@ export function HealthAdultJournalPreview() {
         <LargeInfoPreview label={"General Physical Examination"} info={generalPhysicalExamination}/>
 
         <h3 className={"j-preview-title"}>Vital Signs</h3>
-        <SmallInfoPreview label={"blood type"} info={bloodType}/>
         <MultipleVitalSignsPreview signs={vitalSigns}/>
 
     </div>

@@ -271,12 +271,12 @@ export function useBabyJournalInformation(): useBabyJournalInformation {
             (async () => {
                 setIsLoading(true)
                 const auth = getAuth();
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                    } else {
-                        navigate('/app')
-                    }
-                });
+                // onAuthStateChanged(auth, (user) => {
+                //     if (user) {
+                //     } else {
+                //         navigate('/app')
+                //     }
+                // });
 
                 const urlParams = new URLSearchParams(window.location.search)
                 const productId = urlParams.get('product_id')
