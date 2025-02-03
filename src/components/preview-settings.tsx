@@ -29,6 +29,7 @@ export function PreviewSettings() {
     const setPreviewUploadSongs = useSetPreview(Preview.UPLOAD_SONGS)
     const setPreviewBabyJournal = useSetPreview(Preview.BABY_JOURNAL)
     const setPreviewAdultJournal = useSetPreview(Preview.ADULT_JOURNAL)
+    const setPreviewAnimalTag = useSetPreview(Preview.ANIMAL_TAG)
 
     useEffect(() => {
         setShowPassword(productState.publicPagePasswordActivated)
@@ -92,6 +93,11 @@ export function PreviewSettings() {
                     <input type={'checkbox'} checked={productState.preview === Preview.ADULT_JOURNAL}
                            onChange={setPreviewAdultJournal}/>
                     <span>ADULT JOURNAL</span>
+                </div>}
+                {permissions.animal_tag && <div className={'preview-option'}>
+                    <input type={'checkbox'} checked={productState.preview === Preview.ANIMAL_TAG}
+                           onChange={setPreviewAnimalTag}/>
+                    <span>ANIMAL TAG</span>
                 </div>}
             </div>
         </div>

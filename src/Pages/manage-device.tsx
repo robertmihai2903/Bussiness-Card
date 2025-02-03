@@ -134,6 +134,8 @@ const navigate = useNavigate()
                                       title={'Baby Journal'} description={'Have a journal for your baby'}/>
                         <PageCategory permission={"adult_journal"} category={'adult-journal'} icon={AdultJournalIcon}
                                       title={'Adult Journal'} description={'Have a journal for you'}/>
+                        <PageCategory permission={"animal_tag"} category={"animal-tag"} icon={AdultJournalIcon}
+                                      title={'Animal Tag'} description={'Tag for you beloved animal'}/>
                     </div>
                     <h2 className={'pinline'}><span>SHARED CONTACTS</span></h2>
                     <div className={'page-categories'}>

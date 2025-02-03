@@ -22,6 +22,7 @@ import {UploadSongsSettings, UploadSongsSettingsWrapper} from "./components/uplo
 import {SharedContacts} from "./components/shared-contacts";
 import {BabyJournalSettings} from "./components/baby-journal-settings";
 import {AdultJournalSettings} from "./components/adult-journal-settings";
+import {AnimalTagSettingsWrapper} from "./Pages/animal-tag/animal-tag-settings";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD95KPFA7TG3QepgOl8iJdUM3c9RnEM11Q",
@@ -69,6 +70,8 @@ function App() {
                     <Route path={'/manage-device/shared-contacts'} element={<SharedContacts/>}/>
                     <Route path={'/manage-device/baby-journal'} element={<BabyJournalSettings/>}/>
                     <Route path={'/manage-device/adult-journal'} element={<AdultJournalSettings/>}/>
+                    <Route path={'/manage-device/animal-tag'} element={<AnimalTagSettingsWrapper/>}/>
+
                     <Route path={'/show-product'} element={<ShowProduct/>}/>
                 </Routes>
             </MainContext.Provider>

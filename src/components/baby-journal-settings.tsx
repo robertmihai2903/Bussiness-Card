@@ -28,12 +28,14 @@ import {useNavigate} from "react-router";
 export enum DB_COLLECTIONS {
     BABY_JOURNALS = 'baby_journals',
     ADULT_JOURNALS = 'adult_journals',
-    PERMISSIONS = 'permissions'
+    PERMISSIONS = 'permissions',
+    ANIMAL_TAG = 'animal_tag',
 }
 
 export enum DB_STORAGE {
     BABY_JOURNAL = 'baby_journal',
     ADULT_JOURNAL = 'adult_journal',
+    ANIMAL_TAG = 'animal_tag',
 }
 
 export interface Asset {

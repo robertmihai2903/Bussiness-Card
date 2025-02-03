@@ -18,7 +18,8 @@ export enum Preview {
     UPLOAD_VIDEO = "upload_video",
     UPLOAD_SONGS = "upload-songs",
     BABY_JOURNAL = "baby-journal",
-    ADULT_JOURNAL = "adult-journal"
+    ADULT_JOURNAL = "adult-journal",
+    ANIMAL_TAG = "animal_tag",
 }
 
 const random_hex_code = () => {
