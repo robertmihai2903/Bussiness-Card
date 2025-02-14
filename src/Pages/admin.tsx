@@ -9,7 +9,6 @@ import {notify} from "./login-page";
 import {db} from "../App";
 import {DB_COLLECTIONS, DB_STORAGE} from "../components/baby-journal-settings";
 import {defaultPermissions, Permissions} from "../components/usePermission";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 export enum Preview {
     BUSINESS_CARD = 'business_card',
@@ -53,6 +52,7 @@ export function AdminPage() {
                 setDoc(doc(db, DB_COLLECTIONS.PERMISSIONS, data.id), defaultPermissions)
                 setDoc(doc(db, DB_COLLECTIONS.ADULT_JOURNALS, data.id), {})
                 setDoc(doc(db, DB_COLLECTIONS.BABY_JOURNALS, data.id), {})
+                setDoc(doc(db, DB_COLLECTIONS.ANIMAL_TAG, data.id), {})
             })
         }
         notify(`You created ${orderedProducts} products.`)
@@ -135,6 +135,9 @@ function ChangePermissionsModal({product}: { product: string }) {
         }}/></div>
         <div>ADULT JOURNAL <Checkbox checked={currentPermissions.adult_journal} onChange={() => {
             setCurrentPermissions((prev: Permissions) => ({...prev, adult_journal: !prev.adult_journal}))
+        }}/></div>
+        <div>ANIMAL TAG <Checkbox checked={currentPermissions.animal_tag} onChange={() => {
+            setCurrentPermissions((prev: Permissions) => ({...prev, animal_tag: !prev.animal_tag}))
         }}/></div>
         <Button onClick={onSave}>SAVE PERMISSIONS</Button>
     </div>

@@ -30,6 +30,7 @@ export enum DB_COLLECTIONS {
     ADULT_JOURNALS = 'adult_journals',
     PERMISSIONS = 'permissions',
     ANIMAL_TAG = 'animal_tag',
+    MAIL= 'mail'
 }
 
 export enum DB_STORAGE {

@@ -38,9 +38,9 @@ export function LargeInfoPreview({label, info, className}: LargeInfoPreviewProps
     </div>
 }
 
-export function ProfilePicturePreview({asset}: { asset: Asset }) {
+export function ProfilePicturePreview({className, asset}: { className?: string, asset: Asset }) {
     if (!asset) return null
-    return <img className={"profile-preview-image"} src={asset.url} alt={asset.name}/>
+    return <img className={ classNames("profile-preview-image", className)} src={asset.url} alt={asset.name}/>
 }
 
 export function InvestigationPreview({investigation, label, classname}: {

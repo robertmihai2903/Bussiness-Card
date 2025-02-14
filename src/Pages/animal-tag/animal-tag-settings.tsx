@@ -3,11 +3,13 @@ import {LoadingScreen, LoadingScreenContext} from "../../components/loading-sree
 import {AnimalTagInformationContext, AnimalTagInformationContextProvider} from "./useAnimalTagInformation";
 import {AnimalTagHandlerContext, AnimalTagHandlerContextProvider, useAnimalTagHandler} from "./useAnimalTagHandler";
 import {SaveButton} from "./save-button";
-import {DB_COLLECTIONS} from "../../components/baby-journal-settings";
+import {DB_COLLECTIONS, DB_STORAGE} from "../../components/baby-journal-settings";
 import "./styles.css"
 import {onChangeWrapper} from "../../utils";
-import {TextField} from "@mui/material";
+import {InputLabel, Switch, TextField} from "@mui/material";
 import ReactPhoneInput from 'react-phone-input-material-ui';
+import {ProfileUpload} from "../../components/profile-upload";
+import {Navbar} from "./navbar";
 
 export function AnimalTagSettingsWrapper() {
     const [isLoading, setIsLoading] = useState(false)
@@ -16,19 +18,35 @@ export function AnimalTagSettingsWrapper() {
             <AnimalTagInformationContextProvider>
                 <AnimalTagHandlerContextProvider>
                     {isLoading && <LoadingScreen/>}
+                    <Navbar/>
                     <AnimalTagSettings/>
                     <AnimalTagSaveButton/>
                 </AnimalTagHandlerContextProvider>
             </AnimalTagInformationContextProvider>
         </LoadingScreenContext.Provider>
-        <h1> Animal Tag Settings</h1>
     </div>
 }
 
 function AnimalTagSettings() {
-    const {name, age, breed, color, height, weight, ownerMessage, contact} = useContext(AnimalTagHandlerContext)!
+    const {
+        name,
+        age,
+        breed,
+        color,
+        height,
+        weight,
+        ownerMessage,
+        contact,
+        photo,
+        gender,
+        isLost
+    } = useContext(AnimalTagHandlerContext)!
     return <div className={"settings-box"}>
         <h1>About</h1>
+        <ProfileUpload value={photo.value} onChange={photo.onChange}
+                       storageFolder={DB_STORAGE.ANIMAL_TAG}/>
+        <InputLabel>Is your animal lost?</InputLabel>
+        <Switch checked={isLost.value} onChange={(event, checked) => isLost.onChange(checked)}/>
         <TextField label={'Name'} placeholder={"Name"} value={name.value} className={"textfield"}
                    onChange={onChangeWrapper(name)} variant={"outlined"} size={"small"}/>
         <TextField label={'Age'} placeholder={"Age"} value={age.value} className={"textfield"}
@@ -43,11 +61,18 @@ function AnimalTagSettings() {
                    onChange={onChangeWrapper(weight)} variant={"outlined"} size={"small"}/>
         <TextField label={'Owner Message'} placeholder={"Owner Message"} value={ownerMessage.value}
                    className={"textfield"} onChange={onChangeWrapper(ownerMessage)} variant={"outlined"}
-                   size={"small"}/>
+                   size={"small"} multiline minRows={3} maxRows={7}/>
 
+        <h1>Contact</h1>
+        <TextField label={'Name'} placeholder={"Name"} value={contact.name.value} className={"textfield"}
+                   onChange={onChangeWrapper(contact.name)} variant={"outlined"} size={"small"}/>
         <ReactPhoneInput enableAreaCodes country={"gb"} value={contact.phone.value}
-                         onChange={contact.phone.onChange} component={TextField}
+                         onChange={contact.phone.onChange} component={TextField} containerClass={"textfield"}
                          inputProps={{size: "small"}}/>
+        <TextField label={'Address'} placeholder={"Address"} value={contact.address.value} className={"textfield"}
+                   onChange={onChangeWrapper(contact.address)} variant={"outlined"} size={"small"}/>
+        <TextField label={'Email'} placeholder={"Email"} value={contact.email.value} className={"textfield"}
+                   onChange={onChangeWrapper(contact.email)} variant={"outlined"} size={"small"}/>
     </div>
 }
 
