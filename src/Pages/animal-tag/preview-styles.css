@@ -144,3 +144,53 @@ html {
     background: #5a122f;
     transition: color 0.3s;
 }
+
+.contact-wrapper {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    border: 3px solid #7a1837;
+    border-radius: 20px;
+    height: 110px;
+}
+.contact-wrapper .left-box {
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    text-wrap: auto;
+}
+
+.contact-wrapper .right-box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+}
+
+.contact-wrapper .left-box h4 {
+    text-align: left;
+    color: #333333;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.call-button {
+    margin: 2px;
+    width: 40px;
+    height: 40px;
+    background: #7a1837;
+    border-radius: 5px;
+    color: #FFFFFF;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-decoration: none;
+}

@@ -10,8 +10,8 @@ import {notify} from "../login-page";
 export function AnimalTagPreview() {
     const {state} = useContext(AnimalTagInformationContext)
     const {photo, name, gender, breed, age, ownerMessage, contact, weight, height, color, isLost} = state
-    let locationLink = ""
     const onSendLocation = async () => {
+        let locationLink = ""
         const success = async (position: any) => {
             locationLink = "https://maps.google.com/?q=" + position.coords.latitude + "," + position.coords.longitude
 
@@ -29,6 +29,21 @@ export function AnimalTagPreview() {
         }
         navigator.geolocation.getCurrentPosition(success, error);
     }
+    const onSendSMS = () => {
+        let locationLink = ""
+        const success = async (position: any) => {
+            locationLink = "https://maps.google.com/?q=" + position.coords.latitude + "," + position.coords.longitude
+        }
+        const error = (error: any) => {
+        }
+        navigator.geolocation.getCurrentPosition(success, error);
+        const foundMessage = `Hello, I found ${name}. ${locationLink ? "Here is the location: " + locationLink : "Please contact me for the location"}`
+
+        window.open(`sms:${contact.phone}?body=${foundMessage}`)
+    }
+
+
+
     return <div className={"animal-tag-preview"}>
         <div className={"frame"}>
             <ProfilePicturePreview asset={photo[0]}/>
@@ -59,9 +74,19 @@ export function AnimalTagPreview() {
             </div>
             {isLost && <div>
                 <h3>Contact</h3>
-                <h6>{contact.name}</h6>
-                <h6>{contact.address}</h6>
-                <h6><a href={`tel:${contact.phone}`}>{contact.phone}</a></h6></div>}
+                <div className={"contact-wrapper"}>
+                    <div className={"left-box"}>
+                        <h4>{contact.name}</h4>
+                        <h6>{contact.address}</h6>
+                    </div>
+                    <div className={"right-box"}>
+                        <a style={{textDecoration: "none"}} href={`tel:${contact.phone}`}>
+                            <div className={"call-button"}>CALL</div>
+                        </a>
+                        <div className={"call-button"} onClick={onSendSMS}>SMS</div>
+                    </div>
+                </div>
+            </div>}
         </div>
         {isLost && contact.email &&
             <div className={"send-location-button"} onClick={onSendLocation}>Send location</div>}
