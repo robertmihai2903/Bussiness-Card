@@ -1,7 +1,7 @@
 import {ConfigInput} from "../components/config-input";
 import {Button, Checkbox, Input} from "@mui/material";
 import {useNavigate} from "react-router";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useMemo, useRef, useState} from "react";
 import {MainContext} from "../contexts";
 import {doc, setDoc, addDoc, collection, query, where, getDocs, updateDoc, getDoc} from "firebase/firestore"
 import './admin.css'
@@ -9,6 +9,7 @@ import {notify} from "./login-page";
 import {db} from "../App";
 import {DB_COLLECTIONS, DB_STORAGE} from "../components/baby-journal-settings";
 import {defaultPermissions, Permissions} from "../components/usePermission";
+import {QRCodeCanvas} from "qrcode.react";
 
 export enum Preview {
     BUSINESS_CARD = 'business_card',
@@ -88,32 +89,33 @@ console.log(products)
             ))}
             </div>
         </div>
-        <ChangePermissionsModal product={changePermissionsProduct}/>
+        <ChangePermissionsModal productId={changePermissionsProduct}/>
 
 
     </div>)
 }
 
-function ChangePermissionsModal({product}: { product: string }) {
+function ChangePermissionsModal({productId}: { productId: string }) {
     const [currentPermissions, setCurrentPermissions] = useState(defaultPermissions)
     useEffect(() => {
         (async () => {
-            if (product) {
-                const productRef = doc(db, DB_COLLECTIONS.PERMISSIONS, product)
+            if (productId) {
+                const productRef = doc(db, DB_COLLECTIONS.PERMISSIONS, productId)
                 const docSnap = await getDoc(productRef);
                 if (docSnap.exists()) {
                     setCurrentPermissions((prev: Permissions) => ({...prev, ...docSnap.data() as Permissions}))
                 }
             }
         })()
-    }, [product]);
+    }, [productId]);
 
     const onSave = async () => {
-        const docRef = doc(db, DB_COLLECTIONS.PERMISSIONS, product)
+        const docRef = doc(db, DB_COLLECTIONS.PERMISSIONS, productId)
         await updateDoc(docRef, {...currentPermissions})
     }
 
     return <div className={"permission-modal"}>
+        <QRCodeGenerator productId={productId}/>
         <h1>Change Permissions</h1>
         <div>BUSINESS CARD <Checkbox checked={currentPermissions.business_card} onChange={() => {
             setCurrentPermissions((prev: Permissions) => ({...prev, business_card: !prev.business_card}))
@@ -140,6 +142,31 @@ function ChangePermissionsModal({product}: { product: string }) {
             setCurrentPermissions((prev: Permissions) => ({...prev, animal_tag: !prev.animal_tag}))
         }}/></div>
         <Button onClick={onSave}>SAVE PERMISSIONS</Button>
+    </div>
+}
+
+
+function QRCodeGenerator({productId}: { productId: string }) {
+
+    const qrLink = useMemo(() => `https://flexpayz.com/show-product?product_id=${productId}`, [productId])
+
+    const qrRef = useRef<HTMLCanvasElement>(null);
+
+    const downloadQRCode = () => {
+        if (!qrRef.current) return;
+        const canvas = qrRef.current;
+        const url = canvas.toDataURL("image/png");
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `qr-code-${productId}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
+    return <div className={"qr-code-generator"}>
+        <QRCodeCanvas value={qrLink} size={100} ref={qrRef}/>
+        <Button onClick={downloadQRCode}>Download QR Code</Button>
     </div>
 }
 
