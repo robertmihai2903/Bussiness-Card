@@ -26,7 +26,7 @@ import {notify} from "./login-page";
 import {translatedText} from "../languages";
 import {BabyJournalPreview} from "../components/baby-journal-preview";
 import {AdultJournalPreview} from "../components/adult-journal-preview";
-
+import { AnimalTagPreviewWrapper} from "./animal-tag/animal-tag-preview";
 function addHttps(site: string) {
     if (site.trim().startsWith('http')) {
         return site
@@ -167,7 +167,7 @@ export function ShowProduct() {
                             }
                         });
                 } else {
-                    navigate('/app')
+                    // navigate('/app')
                 }
                 const imageRef = ref(storage, `images/${productId}`)
                 getDownloadURL(imageRef)
@@ -506,6 +506,8 @@ export function ShowProduct() {
         </div>}
         {!passwordProtected && product.preview === Preview.BABY_JOURNAL && <BabyJournalPreview/>}
         {!passwordProtected && product.preview === Preview.ADULT_JOURNAL && <AdultJournalPreview/>}
+        {!passwordProtected && product.preview === Preview.ANIMAL_TAG && <AnimalTagPreviewWrapper/>}
+
     </div>)
 
 }

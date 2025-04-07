@@ -41,6 +41,7 @@ export interface Permissions {
     upload_songs: boolean,
     baby_journal: boolean,
     adult_journal: boolean,
+    animal_tag: boolean,
 }
 
 export const defaultPermissions: Permissions = {
@@ -51,6 +52,7 @@ export const defaultPermissions: Permissions = {
     upload_songs: true,
     baby_journal: true,
     adult_journal: true,
+    animal_tag: true,
 }
 export const PermissionContext = createContext<Permissions>(defaultPermissions)
 
