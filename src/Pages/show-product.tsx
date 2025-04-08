@@ -117,7 +117,7 @@ export function ShowProduct() {
                 if (docSnap.exists()) {
                     console.log("it exists")
                     if (!docSnap.data().activated) {
-                        // navigate('/app')
+                        navigate('/app')
                     }
                     console.log("is activated")
                     setProduct((prev: Product) => ({...prev, ...docSnap.data() as Product}))

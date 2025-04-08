@@ -10,6 +10,8 @@ import {db} from "../App";
 import {DB_COLLECTIONS, DB_STORAGE} from "../components/baby-journal-settings";
 import {defaultPermissions, Permissions} from "../components/usePermission";
 import {QRCodeCanvas} from "qrcode.react";
+import SerialUploader from "../components/serial-number-uploader";
+import ExportSerialsCSVButton from "../components/serial-csv-buton";
 
 export enum Preview {
     BUSINESS_CARD = 'business_card',
@@ -22,7 +24,7 @@ export enum Preview {
     ANIMAL_TAG = "animal_tag",
 }
 
-const random_hex_code = () => {
+export const random_hex_code = () => {
     let n = (Math.random() * 0xfffff * 1000000).toString(16);
     return n.slice(0, 6).toLocaleUpperCase();
 };
@@ -90,7 +92,8 @@ console.log(products)
             </div>
         </div>
         <ChangePermissionsModal productId={changePermissionsProduct}/>
-
+        <SerialUploader setProducts={setProducts}/>
+        <ExportSerialsCSVButton/>
 
     </div>)
 }
