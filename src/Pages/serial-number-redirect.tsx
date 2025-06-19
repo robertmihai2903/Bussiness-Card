@@ -7,7 +7,7 @@ import { DB_COLLECTIONS } from "../components/baby-journal-settings";
 export function SerialNumberRedirect () {
     const navigate = useNavigate()
     const urlParams = new URLSearchParams(window.location.search)
-    const serialNumber = urlParams.get('serial_number') || ""
+    const serialNumber = urlParams.get('serialNumber') || ""
 
     useEffect(() => {
         const fetchProductID = async () => {
